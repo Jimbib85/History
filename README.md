@@ -108,3 +108,18 @@ Two additional topics expand the catalogue to **14 technologies and 48 dated exa
 ### Cloudflare hosting
 
 The current site runs on a Cloudflare Worker named `history` and serves the static files in `public/`, as configured by `wrangler.jsonc`. The hostname is `https://history.bibbybots.ai`. Build tools and databases are unnecessary for the atlas.
+
+
+## Version 0.4: UI stability and separated society/empire timelines
+
+This version prioritises debugging rather than adding more historical content.
+
+- The main timeline has **two distinct graphs** on the same date scale: **Societies** (non-imperial polities and dated communities) and **Empires** (imperial states and major expansionist political formations). These are convenient editorial categories, not rankings.
+- The sidebar has **All / Societies / Empires** filters, which now update the visible map markers and available selections as well as the list.
+- The former single Australia-wide `aboriginal` entry is now an **undated cultural overview**, accessible via a collapsed Cultural background section. It no longer appears as a continuous, all-history society, empire or map marker. Its presence spans many nations and traditions rather than one state and should not be assigned a single lifespan.
+- Changing years or regions now selects an appropriate contemporary entry when available. When the collection has a gap, the interface says so explicitly.
+- The year slider has a consistent **Back** history, typed dates also commit on blur, and technology milestone navigation changes the selected society and date in a single update.
+- Mobile navigation no longer causes header overflow, and mobile Back and randomisation options remain accessible.
+- Asset URLs use `?v=0.4.0` to prevent HTML and JavaScript from different releases being mixed by caching.
+
+This release intentionally does **not** expand historical content. Tests: `npm test`. The optional browser click-through test can be run using Python Playwright and Chromium if installed.
