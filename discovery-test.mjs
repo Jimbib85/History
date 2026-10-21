@@ -1,0 +1,40 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';import vm from 'node:vm';
+const read=p=>fs.readFileSync(new URL(p,import.meta.url),'utf8');
+const context=vm.createContext({URL,console});
+vm.runInContext(read('./public/discovery-data.js'),context);
+vm.runInContext(read('./public/discovery-model.js'),context);
+const M=vm.runInContext('AtlasDiscovery.create(ATLAS_DISCOVERY_DATA)',context);
+assert.equal(M.all.length,88,'Every cultural practice remains included');
+assert.equal(new Set(M.all.map(x=>x.id)).size,88,'IDs unique');
+assert.equal(M.all.filter(r=>r.start===null).length,30,'Undated medieval records are not assigned invented years');
+assert.equal(M.all.filter(r=>r.start!==null).length,58,'Dated records preserve research intervals');
+assert.equal(M.JOURNEYS.length,4);
+for(const guide of M.JOURNEYS){const journey=M.journey(guide.id);assert.ok(journey.steps.length>=4);assert.ok(journey.steps.every(e=>M.get(e.id)===e));}
+const roman=M.get('classical:culture_roman_urban_households');
+assert.ok(roman);assert.equal(roman.start,1);assert.equal(roman.endExclusive,301);
+assert.ok(M.src(roman).length>0);
+assert.equal(M.period(roman),'1 CE – 300 CE');
+const medieval=M.get('medieval:song_urban');
+assert.equal(medieval.start,null);assert.equal(medieval.endExclusive,null);
+assert.equal(M.period(medieval),'Not dated in this research record');
+assert.ok(M.src(medieval).length);
+const modern=M.get('modern:swahili_household');
+assert.ok(modern.start<=1600&&modern.endExclusive>1600);
+for(const y of [200,1600,1800]){
+ const peers=M.peers(y);
+ assert.ok(peers.length>=2,'Enough dated snapshot records at '+y);
+ assert.ok(peers.every(r=>r.start!==null&&r.start<=y&&r.endExclusive>y),'No record shown outside source-dated interval');
+ assert.equal(new Set(peers.map(r=>r.id)).size,peers.length);
+}
+assert.ok(!M.peers(1200).some(r=>r.scope==='Medieval'),'No fabricated medieval cultural-practice dates');
+assert.deepEqual([...M.peers(1600,0)],[]);
+const first=M.random({rng:()=>0}),second=M.random({avoid:[first.id],rng:()=>0});
+assert.ok(first&&second);assert.notEqual(first.id,second.id);
+assert.ok(M.src(first).length&&M.src(second).length);
+assert.ok(M.random({rng:()=>Infinity}));
+const baseline=JSON.stringify(M.all);
+M.peers(1600);M.journey('daily-life');M.random({rng:()=>.5});
+assert.equal(JSON.stringify(M.all),baseline,'Read-only operations never alter research excerpts');
+assert.equal(M.get('nonexistent'),null);
+console.log('PASS discovery: 88 sourced practice records, four curated journeys, honest undated gaps, same-time comparisons and nonrepeating random.');
