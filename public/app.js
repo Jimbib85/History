@@ -206,6 +206,8 @@
     $('mapYear').textContent=compactYear(state.year);
     $('mapStatus').textContent=state.view==='known'?'◉ Illustrative contact points · not a complete known world':historical?'◉ Historical cartography · read dating carefully':`◉ ${CIVILISATIONS.filter(c=>activeAt(c,state.year)&&regionMatch(c,state.region)&&(state.catalogue==='all'||c.kind===state.catalogue)).length} charted entries in this selection`;
     const selectedMap=MAPS[civ.mapId];
+    const worldviewParams=new URLSearchParams({year:String(state.year),civ:state.civ});
+    $('worldviewLink').href='worldview.html?'+worldviewParams.toString();
     const entityURL=safeURL(civ.source);
     const evidenceSummary='<strong>'+escapeHtml(civ.name)+'</strong> · '+escapeHtml(civ.location||'Location not specified')+
       ' · '+escapeHtml(life(civ))+'. This point is an illustrative location, not a measured historical boundary or a documented territorial centre.'+

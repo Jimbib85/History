@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142b38">
+<meta name="description" content="Explore surviving historical maps, manuscript copies, sourced geographical knowledge and documented connections between past societies.">
+<title>Through Their Eyes | World History Atlas</title>
+<link rel="stylesheet" href="worldview.css?v=0.17.0">
+</head>
+<body>
+<a class="skip" href="#records">Skip to evidence</a>
+<header class="topbar">
+ <a class="brand" href="story.html" aria-label="World History Atlas home"><span aria-hidden="true">✳</span><strong>WORLD HISTORY <em>ATLAS</em></strong></a>
+ <nav aria-label="Atlas navigation"><a href="story.html" id="storyNav">Story</a><a id="mapNav" href="index.html">World Map</a><a id="compareNav" href="compare.html">Compare</a><a href="worldview.html" aria-current="page">Their World</a></nav>
+</header>
+<main class="shell">
+ <section class="hero">
+  <div class="eyebrow">CARTOGRAPHY · KNOWLEDGE · EXCHANGE</div>
+  <h1>The world <em>through their eyes</em></h1>
+  <p>What can surviving maps, written accounts and research actually tell us about how people understood the world around them? Follow the evidence — and see where it stops.</p>
+  <p class="hero-note">Not a reconstructed view of what every person knew. Maps made by particular people, dated objects, surviving descriptions and carefully qualified links.</p>
+ </section>
+ <section class="controls" aria-label="Choose historical evidence">
+  <div class="control-row">
+    <label class="control-wide">Explore a society <select id="worldSociety"><option value="all">All recorded societies</option></select></label>
+    <label>Time window <select id="worldPeriod"><option value="all">All recorded periods</option><option value="near">Within about 125 years</option></select></label>
+    <label>Historical year <input type="text" id="worldYear" value="1200 CE" inputmode="text" placeholder="e.g. 500 BCE"></label>
+  </div>
+  <div class="control-row search-row">
+    <label class="control-wide">Find a map, place, society or relationship <input type="search" id="worldSearch" placeholder="Search evidence…"></label>
+    <button type="button" id="resetWorld">Browse all research</button>
+  </div>
+  <div class="period-presets" aria-label="Jump to a research period"><button type="button" data-preset="-170">Han China</button><button type="button" data-preset="200">Classical world</button><button type="button" data-preset="1154">Al-Idrisi</button><button type="button" data-preset="1402">Kangnido</button><button type="button" data-preset="1602">Ricci</button></div>
+  <p id="worldContext" class="control-caption" role="status"></p>
+ </section>
+ <section class="context-strip" aria-label="Evidence principles">
+  <span><b>Object date</b> is not the same as original composition</span>
+  <span><b>Elite accounts</b> do not describe everyone's knowledge</span>
+  <span><b>Contemporaneous</b> does not mean connected</span>
+ </section>
+ <div id="records">
+  <details class="evidence-section" id="mapsSection" open>
+    <summary><span><b>01</b><strong>Maps and surviving artefacts</strong><small>Original objects, later copies and research catalogue entries</small></span><em id="mapsCount">0</em></summary>
+    <div id="mapsRecords" class="record-grid"></div><div id="mapsMore" class="more-row"></div>
+  </details>
+  <details class="evidence-section" id="knowledgeSection">
+    <summary><span><b>02</b><strong>What sources say people knew</strong><small>Distinguish attested, inferred and unsupported geographic claims</small></span><em id="knowledgeCount">0</em></summary>
+    <p class="reader-warning">Unsupported geographical reconstructions are excluded by default. An attested record can still describe only a court, navigator, author or community — not everybody.</p>
+    <div id="knowledgeRecords" class="record-grid"></div><div id="knowledgeMore" class="more-row"></div>
+  </details>
+  <details class="evidence-section" id="connectionsSection">
+    <summary><span><b>03</b><strong>Connections and encounters</strong><small>Political, diplomatic, conflict and exchange records — not speculative routes</small></span><em id="connectionsCount">0</em></summary>
+    <p class="reader-warning">A relationship record may describe direct contact, an indirect network or merely contemporaneity. The evidence label on each entry matters.</p>
+    <div id="connectionsRecords" class="record-grid"></div><div id="connectionsMore" class="more-row"></div>
+  </details>
+ </div>
+ <div class="footer-links"><a id="returnMap" href="index.html">← Return to the selected world's map</a><a id="returnCompare" href="compare.html">Compare these centuries ↗</a></div>
+ <footer>Historical atlas research is selective. Missing evidence is not evidence that people lacked geographical knowledge. Original items and their reproduction permissions remain with their respective collections.</footer>
+</main>
+<script src="data.js"></script>
+<script src="entity-types.js"></script>
+<script src="research-sources.js"></script>
+<script src="research-events-500a.js"></script>
+<script src="research-events-500b.js"></script>
+<script src="research-events-modern.js"></script>
+<script src="research-tech-records.js"></script>
+<script src="research-civilisations.js"></script>
+<script src="research-apply.js"></script>
+<script src="research-1000-1499.js"></script>
+<script src="research-1000-1499-apply.js"></script>
+<script src="research-1500-2026-data.js"></script>
+<script src="research-1500-2026-apply.js"></script>
+<script src="research-classical-data.js"></script>
+<script src="research-classical-apply.js"></script>
+<script src="worldview-model.js?v=0.17.0"></script>
+<script src="worldview.js?v=0.17.0"></script>
+</body>
+</html>
