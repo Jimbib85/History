@@ -201,7 +201,37 @@
     const medievalKnowledge=med?.geographical_knowledge.filter(x=>(aliases[x.society_id]||x.society_id)===c.id && x.start_year<=state.year&&x.end_year_exclusive>state.year)||[];
     const periodMapLinks=medievalMaps.map(x=>{const src=(x.source_ids||[]).map(id=>ATLAS_MEDIEVAL_SOURCES?.[id]?.url).find(Boolean);return '<p class="story-value">'+escapeHtml(x.title)+' ('+escapeHtml(String(x.composition_earliest_year))+') · '+escapeHtml(x.representation_type.replaceAll('_',' '))+(src?' <a class="story-link" href="'+escapeHtml(src)+'" target="_blank" rel="noopener noreferrer">View catalogue ↗</a>':'')+'</p>';}).join('');
     const worldKnowledgeNotes=medievalKnowledge.map(x=>'<p class="story-value">'+escapeHtml(x.region_or_place)+' · '+escapeHtml(x.knowledge_level)+' · '+escapeHtml(x.evidence_basis)+'</p>').join('');
-    const mapNote=isHistorical?(m?`<p class="story-value"><strong>${escapeHtml(m.title)}</strong> (${escapeHtml(m.date)}). ${escapeHtml(m.description)}</p><a class="story-link" target="_blank" rel="noopener noreferrer" href="${escapeHtml(m.page)}">View original Wikimedia record ↗</a>`:(periodMapLinks||'<p class="story-value">No appropriate period map in our collection yet. This is an evidence gap, not proof that its people did not make maps.</p>')):state.view==='known'?`<p class="story-value">${escapeHtml(c.knownText||'Historical geographical understanding is not the same as a modern political boundary. Specific surviving maps or geographical accounts have not been curated for this society yet.')}</p>${worldKnowledgeNotes}`:'<p class="story-value">Map markers are approximate reference locations where documented, not historical borders. Some societies have no reliable location marker.</p>';
+    const ancient=typeof ATLAS_CLASSICAL_PACK!=='undefined'?ATLAS_CLASSICAL_PACK:null;
+    const classics=typeof ATLAS_CLASSICAL_ALIAS!=='undefined'?ATLAS_CLASSICAL_ALIAS:{};
+    const relevantClassical = row => (row.society_ids||row.associated_society_ids||[]).some(id=>(classics[id]||id)===c.id);
+    const classicalSource=row=>(row.source_urls||[]).find(url=>typeof url==='string'&&url.startsWith('https://'))||
+      (row.source_ids||[]).map(id=>ATLAS_CLASSICAL_SOURCES?.[id]?.url).find(Boolean)||'';
+    const classicalMapRows=ancient?.historical_maps.filter(relevantClassical)||[];
+    const classicalGeoRows=ancient?.geographical_knowledge.filter(x=>relevantClassical({society_ids:[x.society_id]})&&x.start_year<=state.year&&x.end_year_exclusive>state.year)||[];
+    const classicalFigures=(ancient?.figures||[]).filter(relevantClassical).sort((a,b)=>Math.abs(a.start_year-state.year)-Math.abs(b.start_year-state.year)).slice(0,3);
+    const classicalPractices=(ancient?.cultural_practices||[]).filter(relevantClassical).sort((a,b)=>Math.abs(a.start_year-state.year)-Math.abs(b.start_year-state.year)).slice(0,3);
+    const classicalLinks=(rows,kind)=>rows.map(x=>{
+      const source=classicalSource(x);
+      return '<p class="story-value"><strong>'+escapeHtml(x.title||x.name)+'</strong> · '+escapeHtml(x.date_label||x.physical_object_date_label||x.summary||'')+
+        (kind==='map'?' · '+escapeHtml(x.map_kind||'catalogue record')+' · no reproduction image bundled':'')+
+        (source?' <a class="story-link" target="_blank" rel="noopener noreferrer" href="'+escapeHtml(source)+'">Source ↗</a>':'')+'</p>';
+    }).join('');
+    const classicalMapDetails=classicalLinks(classicalMapRows,'map');
+    const classicalKnowledgeDetails=classicalGeoRows.map(x=>'<p class="story-value"><strong>'+escapeHtml(x.title)+'</strong> · '+escapeHtml(x.evidence_layer)+' · '+escapeHtml(x.summary)+'</p>').join('');
+    const classicalRelationships=(ancient?.relationships||[]).filter(x=>
+      (classics[x.society_a_id]||x.society_a_id)===c.id||(classics[x.society_b_id]||x.society_b_id)===c.id)
+      .filter(x=>x.start_year<=state.year&&x.end_year_exclusive>state.year).slice(0,3);
+    const classicalRelationshipDetails=classicalRelationships.length?'<div class="story-section"><div class="story-label">⌁ EVIDENCED CONNECTIONS</div>'+classicalRelationships.map(x=>
+      '<p class="story-value"><strong>'+escapeHtml(x.relationship_type.replaceAll('_',' '))+'</strong> · '+escapeHtml(x.summary)+
+      ' · '+escapeHtml(x.direction_evidence)+' · '+escapeHtml(x.confidence)+'</p>').join('')+'</div>':'';
+    const classicalSynchronic=(ancient?.connections||[]).filter(x=>Math.abs(x.display_year-state.year)<=1).slice(0,2);
+    const classicalSynchronicDetails=classicalSynchronic.length?'<div class="story-section"><div class="story-label">✧ MEANWHILE ELSEWHERE</div>'+classicalSynchronic.map(x=>
+      '<p class="story-value"><strong>'+escapeHtml(x.title)+'</strong> · '+escapeHtml(x.summary)+
+      ' <em>'+escapeHtml(x.comparison_caveat)+'</em></p>').join('')+'</div>':'';
+    const classicalResearchDetails=(classicalFigures.length||classicalPractices.length||classicalMapRows.length)?'<div class="story-section"><div class="story-label">◈ SOURCED LIFE, PEOPLE & MAPS</div>'+
+       classicalLinks(classicalFigures,'figure')+classicalLinks(classicalPractices,'culture')+classicalMapDetails+
+       '<p class="story-value" style="font-size:11px;color:#a2a09a">Research leads with provisional confidence; item licences and individual historical claims may require further verification.</p></div>':'';
+    const mapNote=isHistorical?(m?`<p class="story-value"><strong>${escapeHtml(m.title)}</strong> (${escapeHtml(m.date)}). ${escapeHtml(m.description)}</p><a class="story-link" target="_blank" rel="noopener noreferrer" href="${escapeHtml(m.page)}">View original Wikimedia record ↗</a>`:(periodMapLinks||'<p class="story-value">No appropriate period map in our collection yet. This is an evidence gap, not proof that its people did not make maps.</p>')):state.view==='known'?`<p class="story-value">${escapeHtml(c.knownText||'Historical geographical understanding is not the same as a modern political boundary. Specific surviving maps or geographical accounts have not been curated for this society yet.')}</p>${worldKnowledgeNotes}${classicalKnowledgeDetails}`:'<p class="story-value">Map markers are approximate reference locations where documented, not historical borders. Some societies have no reliable location marker.</p>';
     $('storyPanel').innerHTML=`
       <div class="story-overline">${overview?'CULTURAL BACKGROUND':active?'CURRENTLY EXPLORING':'SELECTED HISTORICAL ENTITY'} · ${escapeHtml(groupLabel(c))}</div>
       <h2 class="story-title">${escapeHtml(c.name)}</h2>
@@ -209,7 +239,10 @@
       <p class="story-description">${escapeHtml(c.summary)}</p>
       <div class="story-section"><div class="story-label">⌖ GEOGRAPHICAL FOCUS</div><div class="story-value">${escapeHtml(c.location)}<br><span style="color:#a2a09a">${escapeHtml(c.region)}</span></div></div>
       <div class="story-section"><div class="story-label">▤ ${isHistorical?'HISTORICAL MAP':state.view==='known'?'THEIR GEOGRAPHICAL WORLD':'MAP INTERPRETATION'}</div>${mapNote}</div>
-      ${nearby?`<div class="story-section"><div class="story-label">✦ HISTORICAL MOMENT</div><div class="story-event"><div class="event-year">${compactYear(nearby.year)} · ${escapeHtml(nearby.kind)}</div><strong>${escapeHtml(nearby.title)}</strong><p>${escapeHtml(nearby.detail)}</p><button type="button" class="moment-chip" data-story-year="${nearby.year}">Explore this year →</button></div></div>`:''}
+      ${nearby?`<div class="story-section"><div class="story-label">✦ HISTORICAL MOMENT</div><div class="story-event"><div class="event-year">${escapeHtml(nearby.dateLabel||compactYear(nearby.year))} · ${escapeHtml(nearby.kind)}${nearby.confidence?` · ${escapeHtml(nearby.confidence)} confidence`:``}</div><strong>${escapeHtml(nearby.title)}</strong><p>${escapeHtml(nearby.detail)}</p><button type="button" class="moment-chip" data-story-year="${nearby.year}">Explore this year →</button></div></div>`:''}
+      ${classicalResearchDetails}
+      ${classicalRelationshipDetails}
+      ${classicalSynchronicDetails}
       <div class="story-section"><div class="story-label">↗ FURTHER READING</div><a class="story-link" href="${escapeHtml(c.source)}" target="_blank" rel="noopener noreferrer">Read historical background and sources ↗</a></div>
       <div class="story-callout"><strong>✧ Meanwhile, elsewhere...</strong><p>${escapeHtml(contemporaryNote(c))}</p><button type="button" id="sameYearButton" class="moment-chip" style="margin-top:12px">Random contemporary society ↗</button></div>`;
     const storyYear=$('storyPanel').querySelector('[data-story-year]');if(storyYear)storyYear.addEventListener('click',()=>setYear(+storyYear.dataset.storyYear));

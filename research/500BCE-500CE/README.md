@@ -1,0 +1,5 @@
+# Classical-period research pack: 500 BCE–500 CE
+
+The original `master.json` preserves the complete uploaded data tables, with 153 societies, 83 events, 36 technologies, 63 technology developments, 618 source-to-claim references and the other relationship, cultural, place, figure, map and geographical-knowledge datasets. Dates are astronomical years, with year 0 denoting 1 BCE. This file has not had its historical claims independently peer reviewed. `quality_report.json`, `IMPORT_NOTES.md` and `RESEARCH_REPORT.md` retain the pack's data quality, coverage gaps and editorial caveats.
+
+The static app reads the additive browser adapters `public/research-classical-{data,apply,tech}.js`. Existing atlas records, including imperial Rome, Han China and cultural overviews, are reused rather than overwritten. Research overviews are not misrepresented as dated unitary empires; site points are not historical borders. Cross-batch year-500 data are deduplicated. Full original records without a safe interactive mapping remain available here.

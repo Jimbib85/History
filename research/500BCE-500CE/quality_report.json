@@ -1,0 +1,360 @@
+{
+  "research_window": {
+    "astronomical_start_year_inclusive": -499,
+    "end_year_exclusive": 501,
+    "human_label": "500 BCE-500 CE (1000 years, inclusive)",
+    "research_partitions": [
+      {
+        "start_year": -499,
+        "end_year_exclusive": 1,
+        "label": "500 BCE-1 BCE"
+      },
+      {
+        "start_year": 1,
+        "end_year_exclusive": 501,
+        "label": "1-500 CE"
+      }
+    ],
+    "year_500_ce_overlap_warning": "The prior 500-1000 CE batch begins at 500 CE. Deduplicate shared year-500 records at merge; prefer a single canonical year owner."
+  },
+  "record_counts": {
+    "societies": 153,
+    "events": 83,
+    "technologies": 36,
+    "technology_developments": 63,
+    "technology_dependencies": 11,
+    "figures": 50,
+    "places": 30,
+    "relationships": 41,
+    "cultural_practices": 25,
+    "connections": 12,
+    "historical_maps": 5,
+    "geographical_knowledge": 7,
+    "research_gaps": 22,
+    "source_register": 61,
+    "source_claims": 618
+  },
+  "societies_by_region": {
+    "Andes": 10,
+    "Arabian Peninsula": 5,
+    "Arctic": 3,
+    "Australia": 4,
+    "Caribbean": 1,
+    "Central Africa": 1,
+    "Central Asia": 8,
+    "East Africa": 2,
+    "East Asia": 24,
+    "Eastern Mediterranean": 1,
+    "Europe": 15,
+    "Mesoamerica": 17,
+    "North Africa": 10,
+    "North America": 4,
+    "Northern Andes": 2,
+    "Oceania": 5,
+    "South Asia": 18,
+    "Southeast Asia": 9,
+    "West Africa": 2,
+    "West Asia": 12
+  },
+  "confidence_distributions": {
+    "societies": {
+      "HIGH": 43,
+      "MEDIUM": 86,
+      "LOW": 24
+    },
+    "events": {
+      "HIGH": 60,
+      "DISPUTED": 2,
+      "MEDIUM": 21
+    },
+    "technologies": {
+      "NOT_RATED": 36
+    },
+    "technology_developments": {
+      "HIGH": 23,
+      "MEDIUM": 38,
+      "LOW": 2
+    },
+    "technology_dependencies": {
+      "MEDIUM": 8,
+      "LOW": 3
+    },
+    "figures": {
+      "MEDIUM": 17,
+      "HIGH": 30,
+      "DISPUTED": 3
+    },
+    "places": {
+      "MEDIUM": 30
+    },
+    "relationships": {
+      "HIGH": 19,
+      "MEDIUM": 17,
+      "LOW": 4,
+      "DISPUTED": 1
+    },
+    "cultural_practices": {
+      "MEDIUM": 12,
+      "HIGH": 12,
+      "DISPUTED": 1
+    },
+    "connections": {
+      "MEDIUM": 12
+    },
+    "historical_maps": {
+      "HIGH": 2,
+      "MEDIUM": 3
+    },
+    "geographical_knowledge": {
+      "HIGH": 4,
+      "MEDIUM": 3
+    },
+    "research_gaps": {
+      "NOT_RATED": 22
+    },
+    "source_register": {
+      "NOT_RATED": 61
+    }
+  },
+  "source_count": 61,
+  "sources_cited_by_research_records": 57,
+  "source_access_status_distribution": {
+    "reference_lead_not_individually_page_audited": 36,
+    "web_result_read_or_record_opened": 24,
+    "user_supplied_report_reviewed": 1
+  },
+  "source_validation": {
+    "source_ids_resolve": true,
+    "claim_sources_linked": true,
+    "automatic_validation_is_not_peer_review": true
+  },
+  "validation": {
+    "status": "PASSED",
+    "duplicate_ids": 0,
+    "unresolved_reference_count": 0,
+    "invalid_dates": 0,
+    "out_of_range_coordinates": 0,
+    "geometry_precision_warning_count": 3,
+    "geometry_notes": [
+      "map_mawangdui_city: fragmentary original or later cartographic tradition; distinguish object date from original content",
+      "map_ptolemy_geography: fragmentary original or later cartographic tradition; distinguish object date from original content",
+      "map_tabula_peutingeriana: fragmentary original or later cartographic tradition; distinguish object date from original content"
+    ],
+    "all_historical_boundaries_verified": false,
+    "all_claims_independently_verified": false
+  },
+  "historical_map_originals": 2,
+  "uncertainty_disclosures": [
+    "Society start and end dates are conventionally approximated for many archaeological cultures.",
+    "No historical state boundaries have been generated. Place coordinates are modern illustrative anchors.",
+    "The 500 CE endpoint intentionally overlaps the previously researched [500,1000) batch; import dedup required.",
+    "The first 500 BCE-500 CE report with 48 societies and 29 events was expanded with institution-anchored, not independently peer-reviewed, research seed data.",
+    "Source access_status distinguishes reviewed results from reference-only leads; most claims have a regional survey citation rather than source-specific page and primary evidence.",
+    "Sovereignty, territory, population and geography cannot be inferred from present-day country boundaries.",
+    "Later copies of Roman geographical works must never be presented as preserved first-century originals.",
+    "No Hawai‘i, Rapa Nui or Aotearoa settlement records were backdated to 500 BCE-500 CE.",
+    "Aboriginal Australian overview not a nation-state; community permissions and cultural protocols constrain geographic reuse."
+  ],
+  "research_gaps_count": 22,
+  "research_gaps": [
+    {
+      "id": "gap_underreport_west_africa",
+      "region": "West Africa",
+      "category": "historical_archaeology",
+      "priority": "HIGH",
+      "description": "Few detailed West African local-event chronologies; archaeological city formation cannot be represented as a founding decree.",
+      "recommended_next_step": "Target Jenne-jeno, Nok, Niger Delta and Sahel specialist archaeological papers.",
+      "status": "open"
+    },
+    {
+      "id": "gap_central_africa",
+      "region": "Central Africa",
+      "category": "coverage",
+      "priority": "HIGH",
+      "description": "Regional languages, early iron-working and agriculture cannot be reduced to one pan-Bantu cultural or political actor.",
+      "recommended_next_step": "Research regional dated archaeological sequences and provenance-led entities.",
+      "status": "open"
+    },
+    {
+      "id": "gap_americas_city_borders",
+      "region": "Mesoamerica",
+      "category": "historical_geography",
+      "priority": "HIGH",
+      "description": "Urban influence zones are not surveyed empire borders; unqualified hard polygons would mislead.",
+      "recommended_next_step": "Obtain individual site GIS and peer-reviewed reconstructions with uncertainty.",
+      "status": "open"
+    },
+    {
+      "id": "gap_andean_polities",
+      "region": "Andes",
+      "category": "political_classification",
+      "priority": "HIGH",
+      "description": "Moche, Nazca, Recuay and early Tiwanaku labels span distinct cultural and political units; exact dynastic state claims are often unwarranted.",
+      "recommended_next_step": "Link site-level excavation and settlement histories.",
+      "status": "open"
+    },
+    {
+      "id": "gap_atlantic_cultures",
+      "region": "Caribbean",
+      "category": "regional_coverage",
+      "priority": "HIGH",
+      "description": "Saladoid and other island archaeology requires regional sequence and migration nuance.",
+      "recommended_next_step": "Review dated Caribbean ceramics and regional island settlement studies.",
+      "status": "open"
+    },
+    {
+      "id": "gap_early_mexican_figures",
+      "region": "Mesoamerica",
+      "category": "biographies",
+      "priority": "HIGH",
+      "description": "Most named political actors before late Classic Maya inscriptions are archaeologically anonymous; do not manufacture leaders.",
+      "recommended_next_step": "Use inscription databases and explicitly anonymous actors.",
+      "status": "open"
+    },
+    {
+      "id": "gap_han_kingdoms",
+      "region": "East Asia",
+      "category": "political_timeline",
+      "priority": "MEDIUM",
+      "description": "Han, Western Han, Eastern Han and Xin are separate political phases, not four unrelated civilisations.",
+      "recommended_next_step": "Use shared identity graph with subordinate period entities.",
+      "status": "open"
+    },
+    {
+      "id": "gap_korean_dates",
+      "region": "East Asia",
+      "category": "archaeological_chronology",
+      "priority": "HIGH",
+      "description": "Traditional early Three Kingdoms foundation years are not precise archaeological state-formation years.",
+      "recommended_next_step": "Cross-reference specialist Korean archaeology against later dynastic traditions.",
+      "status": "open"
+    },
+    {
+      "id": "gap_southeast_asia",
+      "region": "Southeast Asia",
+      "category": "textual_vs_archaeology",
+      "priority": "HIGH",
+      "description": "Funan and related first-millennium polity labels mostly arise from later external textual accounts.",
+      "recommended_next_step": "Distinguish excavated sites from historiographical political labels.",
+      "status": "open"
+    },
+    {
+      "id": "gap_pacific_east",
+      "region": "Oceania",
+      "category": "anachronism",
+      "priority": "HIGH",
+      "description": "Remote East Polynesia should not be backdated into first millennium BCE or first five centuries CE from superseded older museum summaries.",
+      "recommended_next_step": "Use radiocarbon-reviewed settlement ranges; reject unsupported early dates.",
+      "status": "open"
+    },
+    {
+      "id": "gap_aboriginal_country",
+      "region": "Australia",
+      "category": "cultural_permissions",
+      "priority": "HIGH",
+      "description": "Modern language maps do not establish boundaries in ancient centuries; living knowledge has cultural protocols.",
+      "recommended_next_step": "Consult region-specific archaeology and Traditional Owner governance before detailed map layers.",
+      "status": "open"
+    },
+    {
+      "id": "gap_torres_strait",
+      "region": "Australia",
+      "category": "regional_archaeology",
+      "priority": "HIGH",
+      "description": "Torres Strait communities need archaeological dating and island-specific historical accounts.",
+      "recommended_next_step": "Collect specialist Queensland and New Guinea archaeology and community sources.",
+      "status": "open"
+    },
+    {
+      "id": "gap_roman_roads",
+      "region": "Europe",
+      "category": "geospatial_uncertainty",
+      "priority": "HIGH",
+      "description": "Itiner-e shows most mapped Roman road lengths conjectural, not certain.",
+      "recommended_next_step": "Preserve segment confidence in any optional route overlay.",
+      "status": "open"
+    },
+    {
+      "id": "gap_rome_fall",
+      "region": "Europe",
+      "category": "historiography",
+      "priority": "HIGH",
+      "description": "476 ended western imperial office not eastern Roman state; avoid disappearance of Roman culture and institutions.",
+      "recommended_next_step": "Model separate western office and continuing eastern polity.",
+      "status": "open"
+    },
+    {
+      "id": "gap_source_depth",
+      "region": "Global",
+      "category": "source_verification",
+      "priority": "HIGH",
+      "description": "Many entity seeds have one institution-wide chronology source; not independently corroborated.",
+      "recommended_next_step": "Perform claim-by-claim specialist source audit; preserve verification status.",
+      "status": "open"
+    },
+    {
+      "id": "gap_hist_maps_rights",
+      "region": "Global",
+      "category": "licensing",
+      "priority": "HIGH",
+      "description": "Catalogued historical maps do not entail permission to reproduce photographs or collection scans.",
+      "recommended_next_step": "Check image rights and copy metadata at item level; never distribute unchecked images.",
+      "status": "open"
+    },
+    {
+      "id": "gap_date_bounds",
+      "region": "Global",
+      "category": "chronological_model",
+      "priority": "HIGH",
+      "description": "Political and cultural dates often conventional, particularly BCE; year 500 CE overlaps the next period's earlier pack.",
+      "recommended_next_step": "Use uncertainty bounds, stable IDs and a single canonical owner for 500 CE on import.",
+      "status": "open"
+    },
+    {
+      "id": "gap_technology_first",
+      "region": "Global",
+      "category": "technology",
+      "priority": "HIGH",
+      "description": "Oldest surviving evidence is not invention; paper, glassblowing and iron need separate invention/adoption/diffusion claims.",
+      "recommended_next_step": "Attach archaeological context and distinguish dated statuses in technology graph.",
+      "status": "open"
+    },
+    {
+      "id": "gap_population",
+      "region": "Global",
+      "category": "historical_demography",
+      "priority": "MEDIUM",
+      "description": "Ancient population figures for cities and empires have extreme model uncertainty.",
+      "recommended_next_step": "Collect methodology, ranges and source debate rather than fixed point estimates.",
+      "status": "open"
+    },
+    {
+      "id": "gap_nonelite_life",
+      "region": "Global",
+      "category": "daily_life",
+      "priority": "MEDIUM",
+      "description": "Elite texts and tombs overrepresent rulers, soldiers and literate households.",
+      "recommended_next_step": "Expand craft, diet, gender, rural labour and household archaeology.",
+      "status": "open"
+    },
+    {
+      "id": "gap_religious_biographies",
+      "region": "South Asia",
+      "category": "source_criticism",
+      "priority": "HIGH",
+      "description": "Buddha, Mahavira and several teachers have disputed lifetimes and hagiographic traditions.",
+      "recommended_next_step": "Model alternative chronologies rather than exact birth dates.",
+      "status": "open"
+    },
+    {
+      "id": "gap_geography_knowledge",
+      "region": "Global",
+      "category": "worldview_maps",
+      "priority": "HIGH",
+      "description": "Indirectly traded objects do not prove full geographic awareness of a network.",
+      "recommended_next_step": "Apply attested / inference / unknown evidence layers by society and date.",
+      "status": "open"
+    }
+  ],
+  "quality_verdict": "Expanded, structurally validated global historical seed; publish only after sampling and specialist verification of important historical assertions."
+}
