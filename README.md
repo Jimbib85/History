@@ -1,15 +1,17 @@
 # World History Atlas
 
-**Version 0.1.0 — a playable personal history toy**
+**Version 0.12.0 — compact, expandable exploration**
 
-Explore what different societies were doing at the same time. The application is a simple static website with no login, database, build pipeline, accounts or paid map services.
+World Map, Compare and Technology now use the Story timeline’s overview-first approach: scan a short heading, open a record, and read its evidence. See [the UX implementation notes](docs/compact-ux.md).
+
+Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
 
 ## Start using it
 
 1. Extract the zip somewhere on your computer.
-2. Open `index.html` in Chrome, Edge or Firefox. It runs directly from the folder.
-3. If your browser restricts local files, run `py -m http.server 5173` from this folder on Windows and visit `http://localhost:5173`.
-4. For public hosting, upload the contents of this folder to a static site host such as Cloudflare Pages. No build command or environment variables are required.
+2. Open `public/story.html` in Chrome, Edge or Firefox. It runs directly from the folder.
+3. If your browser restricts local files, run `py -m http.server 5173 --directory public` from the repository root on Windows and visit `http://localhost:5173`.
+4. For public hosting, `npx wrangler deploy` publishes the `public/` assets to the existing `history` Worker. Run `npm test` first. No application build step or environment variables are required.
 
 The world map, text and chronology work offline. Archived historical map images open from Wikimedia Commons and need an internet connection.
 
@@ -27,7 +29,7 @@ The world map, text and chronology work offline. Archived historical map images 
 
 ## Add your own history
 
-Edit `data.js`, which contains:
+Edit `public/data.js`, which contains:
 
 - `CIVILISATIONS`: society/state names, approximate periods, location, introduction, source URL, region and optional historic map ID.
 - `EVENTS`: notable events linked to societies.

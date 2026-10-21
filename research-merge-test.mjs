@@ -32,7 +32,7 @@ for(const f of ['./public/compare.html','./public/index.html']){
  const html=read(f);for(const res of ['research-sources.js','research-events-modern.js','research-apply.js'])assert.ok(html.includes(res),'Missing imported dataset from '+f);
 }
 const compare=read('./public/compare.js');
-assert.ok(compare.includes('researchEvents')&&compare.includes('data-research-event'),'Missing research events comparison integration');
+assert.ok(compare.includes('researchEvents')&&compare.includes('data-event-key')&&compare.includes('selectEvent'),'Missing accessible research event reader integration');
 assert.ok(compare.includes('HistoryRowOrder'),'Missing custom sorting hook');
 const compareHtml=read('./public/compare.html');
 assert.ok(compareHtml.includes('compare-order.js')&&compareHtml.includes('compare-order.css'),'Custom reorder controls missing');
