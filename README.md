@@ -75,3 +75,15 @@ The priority is to enjoy exploring history and add to the toy when it feels fun.
 5. Subsequent pushes to `main` redeploy automatically.
 
 The app is entirely static and does not require environment variables.
+
+## Version 0.2: Content and comparative technology tree
+
+The atlas now includes **61 societies and communities**, **51 historical events**, and **12 technology topics with 42 dated examples**. The collection covers early farming communities, the Caral–Supe region, Bronze Age states, Sasanian Iran, Srivijaya, Song China, Goryeo Korea, the Swahili coast, Cahokia, the Kingdom of Benin and more.
+
+Select **Technology tree** from the top bar. Choose any historical society and a technology such as papermaking, iron production, writing, navigation or movable type. The viewer compares selected dated evidence among societies and provides links to background sources. Use **Explore this year** to jump back to the main historical map. The tree has its own Random technology button.
+
+The technology diagram deliberately avoids a false technology ladder: adoption, independent development and further refinement are distinct. Dates are approximate evidence points, not claims of exclusive invention. A society without a milestone is simply not documented in this small dataset.
+
+Files: `public/tech-data.js`, `public/technology-tree.js`, `public/technology-tree.css`. Content expansions live in `public/data.js`. Run `npm test` for chronology and content-reference checks.
+
+The repository currently has `wrangler.jsonc` configured for Cloudflare Workers static asset hosting from `./public`, not the repository root. It is a personal passion project, with no login, advertising, database or subscriptions.
