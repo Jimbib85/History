@@ -380,7 +380,7 @@
     if (('mode' in patch || 'region' in patch || 'type' in patch || 'search' in patch) && !('event' in patch)) patch.event = null;
     if ('selected' in patch || 'event' in patch) {ui.sourceLimit=8; ui.cell=null;}
     Object.assign(state,patch);
-    if(['region','type','search'].some(k=>k in patch))state.focusPinned=false;
+    if(!('focusPinned' in patch)&&['region','type','search'].some(k=>k in patch))state.focusPinned=false;
     if (('region' in patch || 'type' in patch || 'search' in patch) && state.mode !== 'events') {
       const eligible = candidates(range());
       if (!eligible.some(c => c.id === state.selected)) state.selected = (eligible.find(c => active(c,state.year)) || eligible[0])?.id || null;
@@ -478,8 +478,6 @@
       if(state.pinned.length<2)return;
       const next=!state.focusPinned;
       change({focusPinned:next,...(next?{region:'all',type:'all',search:''}:{})});
-      if(next)state.focusPinned=true;
-      render();
     });
     $('fitPinned').addEventListener('click',fitPinned);
     $('clearPinned').addEventListener('click',()=>{state.pinned=[];state.focusPinned=false;render();});
