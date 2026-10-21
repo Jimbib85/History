@@ -9,13 +9,13 @@
   <link rel="stylesheet" href="styles.css?v=0.4.0" />
   <link rel="stylesheet" href="technology-tree.css?v=0.4.0" />
   <link rel="stylesheet" href="technology-viz.css?v=0.4.0" />
-</head>
+<style>.compare-nav-link{display:inline-flex;align-items:center;justify-content:center;padding:10px 13px;border-radius:5px;background:#d6b780;color:#172f3c;text-decoration:none;font:700 12px Arial,sans-serif;white-space:nowrap}.compare-nav-link:hover{background:#efcd90}@media(max-width:640px){.compare-nav-link{padding:8px 10px}}</style></head>
 <body>
   <div id="app">
     <header class="topbar">
       <div class="brand"><div class="brand-seal" aria-hidden="true">✳</div><div><div class="brand-name">WORLD HISTORY <em>ATLAS</em></div><div class="brand-caption">A PLACE TO GET LOST IN TIME</div></div></div>
       <div class="topbar-center"><span class="top-dot"></span> AN INTERACTIVE CHRONICLE OF THE HUMAN STORY</div>
-      <div class="top-actions"><button class="ghost-light" id="backButton" type="button" title="Previous discovery" aria-label="Previous discovery">↶ <span>Back</span></button><button id="technologyButton" class="technology-button" type="button" aria-label="Open technology tree" title="Compare technology milestones between civilisations">⌘ Technology tree</button><button id="randomButton" class="surprise-button" type="button">✦ <span>Surprise me</span></button><button class="icon-button" id="moreRandom" type="button" title="Randomisation options" aria-label="Randomisation options">▾</button><div id="randomMenu" class="random-menu hidden"><button data-random="all" type="button">✦ Anywhere, anytime</button><button data-random="year" type="button">◎ New civilisation, same year</button><button data-random="civilisation" type="button">⌛ Same civilisation, another era</button></div><button id="helpButton" class="help-button" title="About this atlas" type="button">?</button></div>
+      <div class="top-actions"><a href="compare.html" class="compare-nav-link" title="Compare historical societies and empires">⇄ Compare</a><button class="ghost-light" id="backButton" type="button" title="Previous discovery" aria-label="Previous discovery">↶ <span>Back</span></button><button id="technologyButton" class="technology-button" type="button" aria-label="Open technology tree" title="Compare technology milestones between civilisations">⌘ Technology tree</button><button id="randomButton" class="surprise-button" type="button">✦ <span>Surprise me</span></button><button class="icon-button" id="moreRandom" type="button" title="Randomisation options" aria-label="Randomisation options">▾</button><div id="randomMenu" class="random-menu hidden"><button data-random="all" type="button">✦ Anywhere, anytime</button><button data-random="year" type="button">◎ New civilisation, same year</button><button data-random="civilisation" type="button">⌛ Same civilisation, another era</button></div><button id="helpButton" class="help-button" title="About this atlas" type="button">?</button></div>
     </header>
     <div class="workspace">
       <aside class="left-panel" aria-label="Explore history">
