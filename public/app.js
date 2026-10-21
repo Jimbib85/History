@@ -162,7 +162,7 @@
     return '<g class="map-marker cluster-marker" data-mapcluster="'+escapeHtml(group.id)+'" tabindex="0" role="button" aria-label="'+escapeHtml(label)+'"><title>'+escapeHtml(label)+'</title><circle class="cluster-halo" cx="'+group.x+'" cy="'+group.y+'" r="18"/><circle class="cluster-core" cx="'+group.x+'" cy="'+group.y+'" r="14"/><text class="cluster-count" x="'+group.x+'" y="'+(group.y+4)+'" text-anchor="middle">'+group.count+'</text></g>';
   }
   function marker(c,selected){
-    if(!Number.isFinite(c.lon)||!Number.isFinite(c.lat))return '';
+    if(!geo.finite(c.lon,c.lat))return '';
     const [x,y]=project(c.lon,c.lat);
     return `<g class="map-marker ${selected?'selected':'not-selected'}" data-mapciv="${escapeHtml(c.id)}" tabindex="0" role="button" aria-label="Explore ${escapeHtml(c.name)}" style="--fill:${c.color}"><title>${escapeHtml(c.name)} · ${escapeHtml(c.location)}</title>${selected?`<circle class="ring" cx="${x}" cy="${y}" r="17"/>`:''}<circle class="core" cx="${x}" cy="${y}" r="${selected?9:6.5}"/>${selected?`<text x="${x+13}" y="${y-11}">${escapeHtml(c.name)}</text>`:''}</g>`;
   }
@@ -179,7 +179,7 @@
   function zoomToCluster(id){
     const group=markerGroups.find(g=>g.id===id);
     if(!group)return;
-    if(state.zoom>=3.95){state.geoMode='points';renderMap();return;}
+    if(state.zoom>=3.95){state.geoMode='points';renderMap();renderTitle();return;}
     state.zoom=Math.min(4,state.zoom*1.8);
     state.tx=600-group.x*state.zoom;
     state.ty=295-group.y*state.zoom;
@@ -432,8 +432,8 @@
     $('zoomIn').addEventListener('click',()=>zoomBy(1.3));
     $('zoomOut').addEventListener('click',()=>zoomBy(1/1.3));
     $('resetMap').addEventListener('click',()=>{Object.assign(state,{zoom:1,tx:0,ty:0});renderMap();});
-    $('groupGeo').addEventListener('click',()=>{state.geoMode=state.geoMode==='groups'?'points':'groups';renderMap();});
-    $('toggleGrid').addEventListener('click',()=>{state.geoGrid=!state.geoGrid;renderMap();});
+    $('groupGeo').addEventListener('click',()=>{state.geoMode=state.geoMode==='groups'?'points':'groups';renderMap();renderTitle();});
+    $('toggleGrid').addEventListener('click',()=>{state.geoGrid=!state.geoGrid;renderMap();renderTitle();});
     $('mapStage').addEventListener('wheel',e=>{if(state.view==='historical')return;e.preventDefault();zoomBy(e.deltaY<0?1.15:1/1.15);},{passive:false});
     const svg=$('worldMap');let drag=null;
     svg.addEventListener('pointerdown',e=>{if(e.target.closest('[data-mapciv],[data-mapcluster]'))return;drag={x:e.clientX,y:e.clientY,tx:state.tx,ty:state.ty};svg.setPointerCapture(e.pointerId);$('mapStage').classList.add('dragging');});
