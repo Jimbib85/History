@@ -26,7 +26,7 @@ for(const t of x.technologies)for(const a of t.appearances){const c=ids.get(a.ci
 for(const id of ['great_zim','maori','mongols','mali','ottomans'])assert.ok(ids.has(x.aliases[id]),'Legacy crosswalk missing '+id);
 const compare=read('./public/compare.js');const app=read('./public/app.js');
 assert.ok(compare.includes('ATLAS_MEDIEVAL_EVENTS'),'Compare must surface imported events');
-assert.ok(app.includes('Number.isFinite(c.lon)'),'Map must guard against missing coordinates');
+assert.ok(app.includes('geo.finite(c.lon,c.lat)') && read('./public/geo-layers.js').includes('Number.isFinite(lon)'),'Map must guard invalid coordinates through the shared geographical helper');
 assertTechnologyCoordinateGuard(context);
 for(const file of ['./public/index.html','./public/compare.html']){
  const content=read(file);for(const script of ['research-1000-1499.js','research-1000-1499-apply.js'])assert.ok(content.includes(script),'Missing import script in '+file);
