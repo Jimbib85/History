@@ -211,3 +211,20 @@ summary:focus-visible{outline:3px solid #c89951;outline-offset:3px;border-radius
 .atlas-journey{display:grid;grid-template-columns:1fr;gap:7px;margin:16px 0;padding-top:12px;border-top:1px solid rgba(135,151,157,.3)}
 .atlas-journey a{display:block;padding:9px 11px;border:1px solid rgba(135,151,157,.32);border-radius:6px;color:inherit;text-decoration:none;font-size:.84rem;font-weight:600}
 .atlas-journey a:hover,.atlas-journey a:focus-visible{border-color:#b58e53;background:rgba(181,142,83,.1)}
+
+/* v0.16: evidence-first geography, reference point grouping and optional coordinate grid. */
+.geo-controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 12px;padding:8px 12px;background:#f4eee1;border-bottom:1px solid #dcd2c0}
+.geo-buttons{display:flex;flex-wrap:wrap;gap:7px}
+.geo-buttons button{min-height:36px;border:1px solid #cdbfa7;border-radius:6px;background:#fffdf5;padding:7px 12px;color:#344f55;font-size:11px;font-weight:700}
+.geo-buttons button[aria-pressed="true"]{background:#214756;color:#fff9eb;border-color:#214756}
+#mapClusterCount{font-size:11px;color:#697977}
+.geo-grid{pointer-events:none;color:#375c60}
+.geo-grid line{stroke:#37646a;stroke-width:.8;stroke-dasharray:4 6;opacity:.44}
+.geo-grid text{fill:#355e60;font:10px 'DM Sans',Arial,sans-serif;stroke:#f4eee5;stroke-width:2;paint-order:stroke;opacity:.87}
+.cluster-marker{cursor:zoom-in}
+.cluster-marker .cluster-halo{fill:#f6dcb1bb;stroke:#fff8e4;stroke-width:1.5}
+.cluster-marker .cluster-core{fill:#265268;stroke:#fff8e4;stroke-width:2}
+.cluster-marker .cluster-count{fill:white;stroke:none;font-weight:800;font-size:12px;paint-order:normal}
+.cluster-marker:hover .cluster-core,.cluster-marker:focus-visible .cluster-core{fill:#aa7744;stroke:#152f3d;stroke-width:3}
+.geographic-caveat{display:block;color:#846b54;font-size:10px;margin-top:3px}
+@media(max-width:620px){.geo-controls{padding:10px;align-items:start}.geo-buttons button{min-height:40px;font-size:12px}#mapClusterCount{font-size:12px}.map-ornament.top-left{max-width:60%}}
