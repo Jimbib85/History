@@ -1,0 +1,220 @@
+{
+  "research_window": {
+    "start_year": 500,
+    "end_year_exclusive": 1000,
+    "year_model": "CE integers; astronomical year numbering for BCE"
+  },
+  "record_counts": {
+    "societies": 115,
+    "events": 93,
+    "technologies": 24,
+    "technology_developments": 51,
+    "figures": 37,
+    "places": 7,
+    "relationships": 32,
+    "historical_maps": 3,
+    "cultural_practices": 20,
+    "connections": 12,
+    "geographical_knowledge": 10
+  },
+  "source_count": 67,
+  "sources_cited_by_records": 60,
+  "sources_registered_not_yet_used": [
+    "bl_star",
+    "met_cac",
+    "met_sogd",
+    "pleiades",
+    "repo",
+    "smith_paper",
+    "unesco_budjbim"
+  ],
+  "societies_by_region": {
+    "Amazonia": 1,
+    "Andes": 6,
+    "Arctic": 2,
+    "Central Africa": 1,
+    "Central Asia": 7,
+    "East Africa": 2,
+    "East Asia": 16,
+    "Eastern Europe": 2,
+    "Eastern Mediterranean": 1,
+    "Eurasian Steppe": 1,
+    "Europe": 11,
+    "Himalayas": 2,
+    "Mesoamerica": 13,
+    "North Africa": 5,
+    "North America": 5,
+    "Northeast Africa": 1,
+    "Northern Andes": 4,
+    "Northern Europe": 2,
+    "Oceania": 3,
+    "South Asia": 10,
+    "Southeast Asia": 8,
+    "West Africa": 5,
+    "West Asia": 7
+  },
+  "confidence_by_category": {
+    "societies": {
+      "HIGH": 56,
+      "LOW": 5,
+      "MEDIUM": 54
+    },
+    "events": {
+      "DISPUTED": 4,
+      "HIGH": 46,
+      "MEDIUM": 43
+    },
+    "technologies": {
+      "NOT_RATED": 24
+    },
+    "technology_developments": {
+      "HIGH": 17,
+      "MEDIUM": 34
+    },
+    "figures": {
+      "HIGH": 21,
+      "LOW": 1,
+      "MEDIUM": 15
+    },
+    "places": {
+      "HIGH": 5,
+      "MEDIUM": 2
+    },
+    "relationships": {
+      "DISPUTED": 1,
+      "HIGH": 16,
+      "LOW": 3,
+      "MEDIUM": 12
+    },
+    "historical_maps": {
+      "HIGH": 1,
+      "MEDIUM": 2
+    },
+    "cultural_practices": {
+      "HIGH": 8,
+      "MEDIUM": 12
+    },
+    "connections": {
+      "HIGH": 9,
+      "MEDIUM": 3
+    },
+    "geographical_knowledge": {
+      "HIGH": 2,
+      "LOW": 2,
+      "MEDIUM": 6
+    }
+  },
+  "validation": {
+    "cross_references": "PASSED",
+    "source_ids": "PASSED",
+    "coordinate_ranges": "PASSED",
+    "warnings": [],
+    "errors": []
+  },
+  "verification_limitations": "Curated first-pass research seed; most records use one institutional regional overview, not two independent specialist assessments. Editorial confidence is not a numerical probability and does not replace further checking. Specific uncertainty is flagged. No politically accurate historical boundary polygons produced.",
+  "uncertainty_count": 16,
+  "major_gaps": [
+    {
+      "id": "gap_gis_polygons",
+      "category": "historical_geography",
+      "priority": "high",
+      "description": "No vetted time-sliced sovereignty polygons. Existing application uses point markers; resist modern-country overlays for early states."
+    },
+    {
+      "id": "gap_tenth_century_local",
+      "category": "chronology",
+      "priority": "high",
+      "description": "Sparse local-event coverage for many African, Pacific, Australian, Amazonian and North American communities reflects evidence and present research limits, not uninhabited land."
+    },
+    {
+      "id": "gap_indigenous_aus",
+      "category": "regional_coverage",
+      "priority": "high",
+      "description": "No single pan-Australian society or empire record. Future Aboriginal and Torres Strait Islander regional case studies require local archaeology and cultural permissions, and should avoid fixed dates without evidence."
+    },
+    {
+      "id": "gap_americas_contacts",
+      "category": "relationship_network",
+      "priority": "high",
+      "description": "Simultaneous American societies must not be represented as having transcontinental or transoceanic contact absent evidence."
+    },
+    {
+      "id": "gap_maya",
+      "category": "politics",
+      "priority": "high",
+      "description": "Cite Maya dynastic rivalry with separate city-state records. Further inscriptions should independently verify Tikal, Copan, Quirigua, Calakmul and Palenque chronology."
+    },
+    {
+      "id": "gap_polynesia",
+      "category": "research_dispute",
+      "priority": "high",
+      "description": "Evidence for settlement of remote East Polynesia has been extensively revised; 500–1000 CE records should not imply Rapa Nui, Aotearoa or Hawai‘i were already inhabited."
+    },
+    {
+      "id": "gap_swahili",
+      "category": "archaeological_chronology",
+      "priority": "medium",
+      "description": "East African coastal settlement and urbanism varies by site; a generic Swahili cultural label is a regional heuristic, not a single polity."
+    },
+    {
+      "id": "gap_madagascar",
+      "category": "research_dispute",
+      "priority": "high",
+      "description": "No definitive first-settlement timestamp for Madagascar derived from the few sources reviewed; keep chronology unresolved."
+    },
+    {
+      "id": "gap_europe",
+      "category": "classification",
+      "priority": "medium",
+      "description": "Carolingian successor states and Anglo-Saxon kingdoms need separate time-dependent political entities when detailed maps are added."
+    },
+    {
+      "id": "gap_india",
+      "category": "regional_coverage",
+      "priority": "medium",
+      "description": "Need finer regional evidence for Deccan, Bengal, Kashmir, Himalayan communities and Sri Lanka beyond dynasty overviews."
+    },
+    {
+      "id": "gap_maps_surviving",
+      "category": "historical_maps",
+      "priority": "high",
+      "description": "Very few surviving 500–1000 CE terrestrial world maps. Later manuscript copies must show composition date and physical copy date separately."
+    },
+    {
+      "id": "gap_technology_diffusion",
+      "category": "technology",
+      "priority": "high",
+      "description": "Missing links are not evidence technology absent. Verify independent innovations versus adoption, and tie milestones to site-specific archaeology where possible."
+    },
+    {
+      "id": "gap_primary_claims",
+      "category": "source_verification",
+      "priority": "high",
+      "description": "Most draft records cite one reliable regional summary; claims need independent, preferably primary or specialised secondary verification before publishing as verified facts."
+    },
+    {
+      "id": "gap_population",
+      "category": "demography",
+      "priority": "medium",
+      "description": "Do not add point-estimate city populations without specialist datasets, definitions, ranges and reliability."
+    },
+    {
+      "id": "gap_image_rights",
+      "category": "permissions",
+      "priority": "high",
+      "description": "No remote media included. Check each museum artefact image, manuscript reproduction and Indigenous cultural protocol independently of descriptive metadata licence."
+    },
+    {
+      "id": "gap_cultural_lives",
+      "category": "daily_life",
+      "priority": "medium",
+      "description": "Commoners, agriculture, gender, housing and family topics need specialised archaeological and social-history coverage."
+    },
+    {
+      "id": "gap_existing_dates",
+      "category": "data_integration",
+      "priority": "high",
+      "description": "Existing repo uses BCE negative-year shorthand and normalises at runtime. This CE-only dataset has no BCE conversion need; future blocks require an explicit importer conversion."
+    }
+  ]
+}

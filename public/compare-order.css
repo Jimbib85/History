@@ -1,0 +1,16 @@
+/* Compact draggable/nudge controls for manual society/empire ordering. */
+.lane{position:relative}
+.lane .lane-order-controls{position:absolute;left:2px;top:50%;transform:translateY(-50%);z-index:8;display:flex;align-items:center;gap:1px;border-radius:4px;background:#f3e8d3;border:1px solid #dfd0b5;box-shadow:0 1px 3px #293f4717}
+.lane-order-controls button{padding:0;border:0;background:transparent;color:#746247;font-weight:800;cursor:pointer}
+.lane-drag-handle{width:19px;height:39px;font-size:17px;touch-action:none;cursor:grab!important}
+.lane-drag-handle:active{cursor:grabbing!important}
+.lane-nudges{display:flex;flex-direction:column;border-left:1px solid #dacbac}
+.lane-nudges button{width:18px;height:19px;line-height:19px;font-size:12px}
+.lane-nudges button:hover,.lane-drag-handle:hover{background:#ddc79b;color:#253b47}
+.lane .lane-name{padding-left:48px}
+.lane.lane-drop-target{outline:2px dashed #a8753b;outline-offset:-2px;background:#fff0ca!important}
+.row-order-reset{border:1px solid #d1bf9e;background:#f6eddb;color:#745938;font-weight:700;font-size:11px;padding:7px 8px;border-radius:4px;white-space:nowrap}
+.row-order-reset:hover{background:#e9d4ac}
+.row-order-caption{font-size:10px;color:#8e7753;line-height:1.4;margin-left:auto}
+@media(max-width:1220px){.lane .lane-name{padding-left:46px}.lane-drag-handle{width:17px}.lane-nudges button{width:16px}}
+@media(max-width:700px){.row-order-caption{display:block;width:100%}.lane .lane-name{padding-left:42px}.lane-order-controls{max-width:35px}.lane-nudges button{font-size:11px}}

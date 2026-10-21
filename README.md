@@ -123,3 +123,13 @@ This version prioritises debugging rather than adding more historical content.
 - Asset URLs use `?v=0.4.0` to prevent HTML and JavaScript from different releases being mixed by caching.
 
 This release intentionally does **not** expand historical content. Tests: `npm test`. The optional browser click-through test can be run using Python Playwright and Chromium if installed.
+
+## v0.6 — Personal row ordering and sourced historical research
+
+Drag Society and Empire rows on the Compare Overlap and Region Lanes views. Up/down arrows make ordering accessible with mouse, keyboard and touch; your preferred order persists in this browser using localStorage. Use **Reset row order** to return to automatic sorting. No account, database or cross-device sync is required.
+
+The additive research import preserves **93** supplied medieval events (500–999 CE), **51** technology-development evidence records and **67** source-register entries. It also introduces **37** provisional timeline anchors extracted from the 1500–2026 prose report, and **61** conservative society/polity reference entries drawn from the supplied reports. Imported period bounds and evidence confidence are preserved; some date spans mark the researched window rather than the founding or end of an entire culture. The two technology evidence records without an appropriate date-and-society match remain available as raw research instead of being displayed as made-up innovations.
+
+The 115-society structured catalogue and modern 60-event structured files mentioned by the reports were **not attached**. We have not claimed to import those absent datasets. Supplied reports and CSVs remain unchanged under [research](research/README.md) for future additions. Global events without one society association are visible in Compare → Events with their source and confidence. Neither a chronological overlap nor shared technology implies direct contact.
+
+Run `npm test` to include `research-merge-test.mjs` after existing regression tests. The web app remains an uncomplicated static Cloudflare Worker deployment with no subscriptions or database.

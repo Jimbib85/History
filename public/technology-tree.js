@@ -27,7 +27,7 @@
   function renderTree(){
     tree.innerHTML = TECH_BRANCHES.map(branch => `<section class="tech-branch"><div class="tech-branch-head"><span aria-hidden="true">${esc(branch.icon)}</span><div><h3>${esc(branch.name)}</h3><p>${esc(branch.intro)}</p></div></div><div class="tech-nodes">${TECHNOLOGIES.filter(t => t.branch===branch.id).map((t,index)=>{
       const milestone=t.appearances.find(a=>a.civ===state.civ);
-      return `<button class="tech-node ${state.tech===t.id?'selected':''} ${milestone?'documented':''}" type="button" data-tech="${esc(t.id)}" aria-pressed="${state.tech===t.id}"><span class="tech-num">${index+1}</span><span class="tech-node-copy"><strong>${esc(t.name)}</strong><small>${milestone?`Sample: ${year(milestone.year)}`:'No entry in this sample'}</small></span><span class="tech-node-arrow">↗</span></button>`;
+      return `<button class="tech-node ${state.tech===t.id?'selected':''} ${milestone?'documented':''}" type="button" data-tech="${esc(t.id)}" aria-pressed="${state.tech===t.id}"><span class="tech-num">${index+1}</span><span class="tech-node-copy"><strong>${esc(t.name)}</strong><small>${milestone?`Sample: ${esc(milestone.dateLabel||year(milestone.year))}`:'No entry in this sample'}</small></span><span class="tech-node-arrow">↗</span></button>`;
     }).join('')}</div></section>`).join('');
   }
   function timeline(t,records){
@@ -35,7 +35,7 @@
     return `<section class="tviz" aria-label="Shared chronological scale"><div class="tviz-scale"><span>${year(min)}</span><span>Same scale across societies</span><span>${year(max)}</span></div>${records.map((a,index)=>{
       const society=civs.get(a.civ),meta=tag(a.status);
       const pos= Math.max(1,Math.min(99,((a.year-min)/span)*100));
-      return `<button type="button" class="tviz-row ${state.civ===a.civ?'chosen':''}" data-compare="${esc(a.civ)}" aria-label="Compare ${esc(society.name)} at ${year(a.year)}"><span class="tviz-name">${esc(society.name)}</span><span class="tviz-track"><i style="left:${pos.toFixed(2)}%;background:${meta.colour}"></i></span><span class="tviz-date">${year(a.year)}</span></button>`;
+      return `<button type="button" class="tviz-row ${state.civ===a.civ?'chosen':''}" data-compare="${esc(a.civ)}" aria-label="Compare ${esc(society.name)} at ${esc(a.dateLabel||year(a.year))}"><span class="tviz-name">${esc(society.name)}</span><span class="tviz-track"><i style="left:${pos.toFixed(2)}%;background:${meta.colour}"></i></span><span class="tviz-date">${esc(a.dateLabel||year(a.year))}</span></button>`;
     }).join('')}</section>`;
   }
   function mapGraphic(t,records){
@@ -53,7 +53,7 @@
     }).join('');
     const points=records.map((record,i)=>{
       const c=civs.get(record.civ),p=project(c),metadata=tag(record.status),chosen=record.civ===selected;
-      return `<g class="tviz-pin ${chosen?'chosen':''}" tabindex="0" role="button" data-compare="${esc(c.id)}" aria-label="Select ${esc(c.name)}, ${year(record.year)}"><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${chosen?16:12}" fill="${metadata.colour}"/><text x="${p.x.toFixed(1)}" y="${(p.y-21).toFixed(1)}" text-anchor="middle">${esc(c.name)}</text><title>${esc(c.name)} · ${year(record.year)} · ${esc(metadata.label)}</title></g>`;
+      return `<g class="tviz-pin ${chosen?'chosen':''}" tabindex="0" role="button" data-compare="${esc(c.id)}" aria-label="Select ${esc(c.name)}, ${esc(record.dateLabel||year(record.year))}"><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${chosen?16:12}" fill="${metadata.colour}"/><text x="${p.x.toFixed(1)}" y="${(p.y-21).toFixed(1)}" text-anchor="middle">${esc(c.name)}</text><title>${esc(c.name)} · ${esc(record.dateLabel||year(record.year))} · ${esc(metadata.label)}</title></g>`;
     }).join('');
     const listing=edges.length?edges.map(edge=>`<div class="tviz-connection"><strong>${esc(civs.get(edge.from)?.name)} → ${esc(civs.get(edge.to)?.name)}</strong><span>${edge.type==='continuity'?'Regional continuity':'Regional transmission'} · illustrative, not a precise route</span><p>${esc(edge.detail)}</p><a href="${esc(edge.source)}" target="_blank" rel="noopener noreferrer">Connection source ↗</a></div>`).join(''):
       '<div class="tviz-empty">No historically supported transmission link has been curated for these examples yet. Dots show evidence in different places, not a proven chain of invention.</div>';
@@ -61,7 +61,7 @@
   }
   function recordCard(record){
     const c=civs.get(record.civ),info=tag(record.status);
-    return `<article class="tech-record ${record.civ===state.civ?'selected':''}"><div class="tech-record-head"><strong>${esc(c.name)}</strong><span>${year(record.year)}</span></div><div class="tech-kind"><span class="tech-status-dot" style="background:${info.colour}"></span>${esc(info.label)} · ${esc(record.label)}</div><p>${esc(record.note)}</p><div class="tech-record-actions"><a href="${esc(record.source)}" target="_blank" rel="noopener noreferrer">Historical source ↗</a><button type="button" data-tech-jump="${esc(record.civ)}" data-tech-year="${Number(record.year)}">Explore this year ↗</button></div></article>`;
+    return `<article class="tech-record ${record.civ===state.civ?'selected':''}"><div class="tech-record-head"><strong>${esc(c.name)}</strong><span>${esc(record.dateLabel||year(record.year))}</span></div><div class="tech-kind"><span class="tech-status-dot" style="background:${info.colour}"></span>${esc(info.label)} · ${esc(record.label)}</div><p>${esc(record.note)}</p><div class="tech-record-actions"><a href="${esc(record.source)}" target="_blank" rel="noopener noreferrer">Historical source ↗</a><button type="button" data-tech-jump="${esc(record.civ)}" data-tech-year="${Number(record.year)}">Explore this year ↗</button></div></article>`;
   }
   function renderDetail(){
     const t=technologies.get(state.tech),society=civs.get(state.civ),records=recordsFor(t);

@@ -5,6 +5,7 @@
   const all = CIVILISATIONS.filter(c => c.kind !== 'overview' && Number.isFinite(c.start) && Number.isFinite(c.end));
   const entities = new Map(all.map(c => [c.id, c]));
   const events = EVENTS.filter(e => entities.has(e.civ) && Number.isFinite(e.year));
+  const researchEvents = typeof ATLAS_RESEARCH_EVENTS !== 'undefined' ? ATLAS_RESEARCH_EVENTS : [];
   const params = new URLSearchParams(location.search);
   const within = (x,min,max) => Math.min(max,Math.max(min,x));
   const parseDate = input => {
@@ -30,7 +31,7 @@
     region:regions.includes(params.get('region'))?params.get('region'):'all',
     type:['all','empire','society'].includes(params.get('type'))?params.get('type'):'all',
     span:[500,1000,2000,4000,12026].includes(Number(params.get('span')))?Number(params.get('span')):1000,
-    limit:[12,24,60].includes(Number(params.get('limit')))?Number(params.get('limit')):24,
+    limit:[12,24,60,150].includes(Number(params.get('limit')))?Number(params.get('limit')):24,
     search:'', pinned:[], event:null
   };
   const active = (c,y) => c.start<=y && y<=c.end;
@@ -56,6 +57,7 @@
       const overlapB=Math.max(0,Math.min(b.end,r.end)-Math.max(b.start,r.start));
       return overlapB-overlapA || a.region.localeCompare(b.region)||a.name.localeCompare(b.name);
     });
+    if(window.HistoryRowOrder) window.HistoryRowOrder.sort(group);
     return {rows:group.slice(0,state.limit),total:group.length};
   }
   function qs(extra={}){
@@ -83,17 +85,42 @@
   }
   function regionsView(r){const {rows}=chooseRows(r);if(!rows.length)return empty('No historical entry matches the selected filters and dates.');
     const grouped=regions.filter(g=>rows.some(c=>c.region===g));
-    return axis(r)+`<div class="comparison-lanes">${grouped.map(group=>{const groupRows=rows.filter(c=>c.region===group).sort((a,b)=>a.start-b.start);return `<div class="regional-title"><i style="background:${regionColours[group]||'#739' }"></i>${safe(group)}<span>${groupRows.length}</span></div>${groupRows.map(c=>bar(c,r)).join('')}`;}).join('')}</div>`;
+    return axis(r)+`<div class="comparison-lanes">${grouped.map(group=>{const groupRows=rows.filter(c=>c.region===group).sort((a,b)=>window.HistoryRowOrder?.compare(a,b) ?? a.start-b.start);return `<div class="regional-title"><i style="background:${regionColours[group]||'#739' }"></i>${safe(group)}<span>${groupRows.length}</span></div>${groupRows.map(c=>bar(c,r)).join('')}`;}).join('')}</div>`;
   }
   function eraView(r){const {rows}=chooseRows(r);if(!rows.length)return empty('No societies or empires overlap this period.');
     const slots=8,w=(r.end-r.start)/slots,groups=regions.filter(g=>rows.some(c=>c.region===g));
     const cells=groups.map(g=>`<div class="era-region"><div class="era-name"><i style="background:${regionColours[g]||'#739'}"></i>${safe(g)}</div>${Array.from({length:slots},(_,i)=>{const lo=r.start+i*w,hi=lo+w;const matches=rows.filter(c=>c.region===g && c.start<=hi && c.end>=lo);return `<div class="era-cell">${matches.slice(0,3).map(c=>`<button type="button" data-civ="${safe(c.id)}" class="era-entry ${c.kind}" style="--bar:${colour(c)}" title="${safe(c.name+' '+yearText(c.start)+' to '+yearText(c.end))}">${safe(c.name)}</button>`).join('')}${matches.length>3?`<small>+${matches.length-3} more</small>`:''}</div>`;}).join('')}</div>`).join('');
     return `<div class="era-explain">A broad look across eight equal time windows. An entry appears in every window intersecting its dated span; columns are not separate civilisations or exact cultural eras.</div><div class="era-grid-scroll"><div class="era-grid"><div class="era-colhead"><span>REGIONS</span>${Array.from({length:slots},(_,i)=>`<div style="--era:${i}"><b>${safe(yearText(Math.round(r.start+i*w)))}</b><small>to ${safe(yearText(Math.round(r.start+(i+1)*w)))}</small></div>`).join('')}</div>${cells}</div></div>`;
   }
-  function eventsView(r){const filtered=events.filter(e=>e.year>=r.start&&e.year<=r.end&&pass(entities.get(e.civ))).sort((a,b)=>Math.abs(a.year-state.year)-Math.abs(b.year-state.year)||a.year-b.year).slice(0,Math.max(24,state.limit));
-    if(!filtered.length)return empty('This sample has no dated events matching the selected period.');
-    const listed=[...filtered].sort((a,b)=>a.year-b.year);
-    return axis(r)+`<div class="events-intro">${listed.length} curated milestones in this window. Select any event to move the atlas to that date.</div><div class="event-lanes">${listed.map(e=>{const c=entities.get(e.civ);return `<button type="button" class="event-lane" data-year="${e.year}" data-civ="${safe(c.id)}" data-event="${safe(e.title)}"><span class="event-year">${safe(yearText(e.year))}</span><span class="event-track"><i style="left:${pct(e.year,r).toFixed(3)}%;background:${colour(c)}"></i>${marker(r)}</span><span class="event-copy"><strong>${safe(e.title)}</strong><small>${safe(c.name)} · ${safe(e.kind)}</small></span></button>`;}).join('')}</div>`;
+  function researchEventDate(e){
+    if(e.humanDate)return e.humanDate;
+    const endExclusive=Number.isFinite(e.endExclusive)?e.endExclusive:e.year+1;
+    const exact=endExclusive===e.year+1;
+    if(!exact)return (e.datePrecision==='approximate'?'c. ':'')+yearText(e.year)+'–'+yearText(endExclusive-1);
+    return (e.datePrecision==='approximate'?'c. ':'')+yearText(e.year);
+  }
+  function eventsView(r){
+    // Native records plus every new research record. Imported native mirrors are omitted to prevent doubles.
+    const combined=[...events.filter(e=>!e.researchId),...researchEvents];
+    const filtered=combined.filter(e=>{
+      if(e.year>r.end||(e.endExclusive||e.year+1)<=r.start)return false;
+      const c=entities.get(e.civ);
+      if(state.region!=='all'&&e.region!==state.region&&(c?.region!==state.region))return false;
+      if(state.type!=='all'&&c?.kind!==state.type)return false;
+      if(state.search&&!`${e.title} ${e.detail} ${e.kind} ${c?.name||''} ${e.region||''}`.toLowerCase().includes(state.search))return false;
+      return true;
+    });
+    const selected=[...filtered].sort((a,b)=>Math.abs(a.year-state.year)-Math.abs(b.year-state.year)||a.year-b.year).slice(0,200);
+    const listed=selected.sort((a,b)=>a.year-b.year);
+    if(!listed.length)return empty('No dated research events match this time period. Try a wider range.');
+    return axis(r)+`<div class="events-intro">${listed.length} of ${filtered.length} sourced or curated milestones in this window. Date windows and editorial confidence are shown; an event is not proof of contact with every contemporary society.</div><div class="event-lanes">${listed.map(e=>{
+      const c=entities.get(e.civ),isResearch=Boolean(e.id&&researchEvents.some(x=>x.id===e.id));
+      const attrs=isResearch?`data-research-event="${safe(e.id)}"`:`data-year="${e.year}" data-civ="${safe(c?.id||'')}" data-event="${safe(e.title)}"`;
+      const label=researchEventDate(e);
+      const color=c?colour(c):(regionColours[e.region]||'#967858');
+      const confidence=e.confidence?` · ${safe(e.confidence)}`:'';
+      return `<button type="button" class="event-lane" ${attrs} title="${safe(e.title)} · ${safe(label)}"><span class="event-year">${safe(label)}</span><span class="event-track"><i style="left:${pct(e.year,r).toFixed(3)}%;background:${color}"></i>${marker(r)}</span><span class="event-copy"><strong>${safe(e.title)}</strong><small>${safe(c?.name||e.originalRegion||e.region||'Global history')} · ${safe(e.kind)}${confidence}</small><span class="event-context">${safe(e.detail||'')}</span></span></button>`;
+    }).join('')}</div>`;
   }
   function cardEvent(e){const c=entities.get(e.civ);return `<button type="button" class="insight-event" data-year="${e.year}" data-civ="${safe(c.id)}" data-event="${safe(e.title)}"><b>${safe(yearText(e.year))}</b><span><strong>${safe(e.title)}</strong><small>${safe(e.detail)}</small></span></button>`;}
   function insight(){const selected=entities.get(state.selected),now=all.filter(c=>active(c,state.year)&&(state.region==='all'||c.region===state.region)&&(state.type==='all'||c.kind===state.type));
@@ -109,6 +136,14 @@
     $('activeNumber').textContent=String(now.length);
     $('concurrentList').innerHTML=concurrent.length?concurrent.map(c=>`<button type="button" data-civ="${safe(c.id)}" class="concurrent"><i style="background:${colour(c)}"></i><span><b>${safe(c.name)}</b><small>${safe(c.region)}</small></span><em>${safe(yearText(c.end))}</em></button>`).join(''):'<p class="small-caption">No other matching entry in this sample. That does not mean the region was uninhabited.</p>';
     $('nearEvents').innerHTML=near.length?near.map(cardEvent).join(''):'<p class="small-caption">No curated events within 200 years in the current region filter.</p>';
+    // Selecting an unlinked research event shows the actual evidence instead of inventing a civilisation.
+    const evidence=researchEvents.find(e=>e.id===state.event);
+    if(evidence){
+      $('selectedName').textContent=evidence.title;
+      $('selectedLife').textContent=researchEventDate(evidence)+' · '+evidence.originalRegion+' · '+evidence.confidence;
+      $('selectedSummary').textContent=evidence.detail+(evidence.datePrecision==='approximate'?' (Approximate dating.)':'');
+      $('selectedActions').innerHTML=evidence.sourceUrl?'<a href="'+safe(evidence.sourceUrl)+'" target="_blank" rel="noopener noreferrer">Read the research source ↗</a>':'';
+    }
   }
   function render(){const r=range(),{total}=chooseRows(r);
     const modes={overlap:['OVERLAPPING HISTORIES','A world of overlapping stories','Societies and empires share one chronological scale. Coloured bars show their approximate duration.'],eras:['BIG-PICTURE COMPARISON','Eight windows across time','Quickly see which societies and empires existed across different broad periods.'],regions:['REGIONAL COMPARISON','Different regions, same time','Track contemporaries by their geographic region.'],events:['HISTORICAL MILESTONES','Important moments in context','Compare dated events on the same time axis, across regions.']};
@@ -121,11 +156,14 @@
     $('comparisonChart').innerHTML=html;
     insight();updateLink();
   }
-  function change(patch){Object.assign(state,patch);if('region' in patch||'type' in patch||'search' in patch){const eligible=candidates(range());if(!eligible.some(c=>c.id===state.selected)){const nearest=eligible.find(c=>active(c,state.year))||eligible[0];state.selected=nearest?.id||null;}}render();}
-  function moveYear(y){if(!Number.isFinite(y))return;change({year:within(Math.round(y),-9999,2026)});}
+  function change(patch){if(('mode' in patch||'region' in patch||'type' in patch||'search' in patch)&&!('event' in patch))patch.event=null;Object.assign(state,patch);if('region' in patch||'type' in patch||'search' in patch){const eligible=candidates(range());if(!eligible.some(c=>c.id===state.selected)){const nearest=eligible.find(c=>active(c,state.year))||eligible[0];state.selected=nearest?.id||null;}}render();}
+  function moveYear(y){if(!Number.isFinite(y))return;change({year:within(Math.round(y),-9999,2026),event:null});}
   function choose(id){if(!entities.has(id))return;change({selected:id,event:null});}
   function togglePin(){const id=state.selected;if(!entities.has(id))return;state.pinned=state.pinned.includes(id)?state.pinned.filter(p=>p!==id):[...state.pinned.slice(-4),id];render();}
-  function navigateFromClick(target){const act=target.closest('[data-action]');if(act){
+  function navigateFromClick(target){
+    const researchLink=target.closest('[data-research-event]');
+    if(researchLink){const e=researchEvents.find(x=>x.id===researchLink.dataset.researchEvent);if(e)change({year:e.year,selected:entities.has(e.civ)?e.civ:state.selected,event:e.id});return;}
+    const act=target.closest('[data-action]');if(act){
     if(act.dataset.action==='reset'){reset();return;}if(act.dataset.action==='pin'){togglePin();return;}
     if(act.dataset.action==='focus'){const c=entities.get(state.selected);if(c){const start=within(c.start,-9999,2026),end=within(c.end,-9999,2026),span=end-start;change({year:within(c.at??Math.round((start+end)/2),-9999,2026),span:[500,1000,2000,4000,12026].find(v=>v>=span)||12026});}return;}
   }
