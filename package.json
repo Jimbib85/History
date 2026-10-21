@@ -1,9 +1,9 @@
 {
   "name": "world-history-atlas",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node test.mjs && node tech-test.mjs"
+    "test": "node test.mjs && node tech-test.mjs && node tech-v03-test.mjs"
   }
 }
