@@ -16,6 +16,6 @@ for (const name of ['index','compare']) {
 }
 for (const name of ['app','compare']) {
   const code=readFileSync(`public/${name}.js`,'utf8');
-  assert.match(code,/AtlasDateScope\.label/);
+  assert.match(code,/AtlasDateScope\?\.label/);
 }
 console.log('Date-scope labels and consumer loading: passed');
