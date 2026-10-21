@@ -61,7 +61,11 @@ if(process.argv.includes('--check')){
  if(start<0||end<start)throw Error('Discovery file format invalid');
  const current=JSON.parse(existing.slice(start+prefix.length,end));
  const compiled=createIndex(packEntries);
- if(JSON.stringify(current)!==JSON.stringify(compiled))throw Error('Discovery data out of date. Run node scripts/build-discovery-data.mjs');
+ if(JSON.stringify(current)!==JSON.stringify(compiled)){
+   const mismatch=compiled.findIndex((item,i)=>JSON.stringify(item)!==JSON.stringify(current[i]));
+   console.error('DISCOVERY_MISMATCH',mismatch,'compiled:',JSON.stringify(compiled[mismatch]).slice(0,1400),'current:',JSON.stringify(current[mismatch]).slice(0,1400));
+   throw Error('Discovery data out of date. Run node scripts/build-discovery-data.mjs');
+ }
  console.log('PASS discovery index matches unchanged source archives');
 }else{
  writeFileSync(output,expected);
