@@ -43,7 +43,7 @@
     const selected=state.civ;
     const arrows=edges.map((edge,i)=>{
       const a=civs.get(edge.from),b=civs.get(edge.to);
-      if(!a||!b)return '';
+      if(!a||!b||!Number.isFinite(a.lon)||!Number.isFinite(a.lat)||!Number.isFinite(b.lon)||!Number.isFinite(b.lat))return '';
       const p=project(a),q=project(b), dx=q.x-p.x,dy=q.y-p.y;
       const bend= Math.max(12,Math.min(65,Math.hypot(dx,dy)*.11));
       const mx=(p.x+q.x)/2-dy/(Math.hypot(dx,dy)||1)*bend;
@@ -51,7 +51,7 @@
       const dashed=edge.type==='continuity'?'stroke-dasharray="8 6"':'stroke-dasharray="5 5"';
       return `<path class="tviz-route" d="M${p.x.toFixed(1)} ${p.y.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${q.x.toFixed(1)} ${q.y.toFixed(1)}" ${dashed} marker-end="url(#techArrow)"><title>${esc(edge.label)}: schematic connection, not a mapped itinerary</title></path>`;
     }).join('');
-    const points=records.map((record,i)=>{
+    const points=records.filter(record=>{const c=civs.get(record.civ);return c&&Number.isFinite(c.lon)&&Number.isFinite(c.lat);}).map((record,i)=>{
       const c=civs.get(record.civ),p=project(c),metadata=tag(record.status),chosen=record.civ===selected;
       return `<g class="tviz-pin ${chosen?'chosen':''}" tabindex="0" role="button" data-compare="${esc(c.id)}" aria-label="Select ${esc(c.name)}, ${esc(record.dateLabel||year(record.year))}"><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${chosen?16:12}" fill="${metadata.colour}"/><text x="${p.x.toFixed(1)}" y="${(p.y-21).toFixed(1)}" text-anchor="middle">${esc(c.name)}</text><title>${esc(c.name)} · ${esc(record.dateLabel||year(record.year))} · ${esc(metadata.label)}</title></g>`;
     }).join('');

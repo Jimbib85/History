@@ -132,6 +132,7 @@
     return visible.map(v=>marker(v,v.id===state.civ)).join('');
   }
   function marker(c,selected){
+    if(!Number.isFinite(c.lon)||!Number.isFinite(c.lat))return '';
     const [x,y]=project(c.lon,c.lat);
     return `<g class="map-marker ${selected?'selected':'not-selected'}" data-mapciv="${c.id}" tabindex="0" role="button" aria-label="Explore ${escapeHtml(c.name)}" style="--fill:${c.color}"><title>${escapeHtml(c.name)} · ${escapeHtml(c.location)}</title>${selected?`<circle class="ring" cx="${x}" cy="${y}" r="17"/>`:''}<circle class="core" cx="${x}" cy="${y}" r="${selected?9:6.5}"/>${selected?`<text x="${x+13}" y="${y-11}">${escapeHtml(c.name)}</text>`:''}</g>`;
   }
@@ -194,11 +195,17 @@
     const overview=c.kind==='overview';
     const active=activeAt(c,state.year);
     const isHistorical=state.view==='historical';const m=MAPS[c.mapId];
-    const mapNote=isHistorical?(m?`<p class="story-value"><strong>${escapeHtml(m.title)}</strong> (${escapeHtml(m.date)}). ${escapeHtml(m.description)}</p><a class="story-link" target="_blank" rel="noopener noreferrer" href="${escapeHtml(m.page)}">View original Wikimedia record ↗</a>`:'<p class="story-value">No appropriate period map in our collection yet. This is an evidence gap, not proof that its people did not make maps.</p>'):state.view==='known'?`<p class="story-value">${escapeHtml(c.knownText||'Historical geographical understanding is not the same as a modern political boundary. Specific surviving maps or geographical accounts have not been curated for this society yet.')}</p>`:'<p class="story-value">The highlighted marker shows an illustrative historical centre, not the borders of the civilisation. Select the map tabs to explore geographical perspectives.</p>';
+    const med=typeof ATLAS_MEDIEVAL_PACK!=='undefined'?ATLAS_MEDIEVAL_PACK:null;
+    const aliases=typeof ATLAS_MEDIEVAL_ALIAS!=='undefined'?ATLAS_MEDIEVAL_ALIAS:{};
+    const medievalMaps=med?.historical_maps.filter(x=>(aliases[x.associated_society_id]||x.associated_society_id)===c.id)||[];
+    const medievalKnowledge=med?.geographical_knowledge.filter(x=>(aliases[x.society_id]||x.society_id)===c.id && x.start_year<=state.year&&x.end_year_exclusive>state.year)||[];
+    const periodMapLinks=medievalMaps.map(x=>{const src=(x.source_ids||[]).map(id=>ATLAS_MEDIEVAL_SOURCES?.[id]?.url).find(Boolean);return '<p class="story-value">'+escapeHtml(x.title)+' ('+escapeHtml(String(x.composition_earliest_year))+') · '+escapeHtml(x.representation_type.replaceAll('_',' '))+(src?' <a class="story-link" href="'+escapeHtml(src)+'" target="_blank" rel="noopener noreferrer">View catalogue ↗</a>':'')+'</p>';}).join('');
+    const worldKnowledgeNotes=medievalKnowledge.map(x=>'<p class="story-value">'+escapeHtml(x.region_or_place)+' · '+escapeHtml(x.knowledge_level)+' · '+escapeHtml(x.evidence_basis)+'</p>').join('');
+    const mapNote=isHistorical?(m?`<p class="story-value"><strong>${escapeHtml(m.title)}</strong> (${escapeHtml(m.date)}). ${escapeHtml(m.description)}</p><a class="story-link" target="_blank" rel="noopener noreferrer" href="${escapeHtml(m.page)}">View original Wikimedia record ↗</a>`:(periodMapLinks||'<p class="story-value">No appropriate period map in our collection yet. This is an evidence gap, not proof that its people did not make maps.</p>')):state.view==='known'?`<p class="story-value">${escapeHtml(c.knownText||'Historical geographical understanding is not the same as a modern political boundary. Specific surviving maps or geographical accounts have not been curated for this society yet.')}</p>${worldKnowledgeNotes}`:'<p class="story-value">Map markers are approximate reference locations where documented, not historical borders. Some societies have no reliable location marker.</p>';
     $('storyPanel').innerHTML=`
       <div class="story-overline">${overview?'CULTURAL BACKGROUND':active?'CURRENTLY EXPLORING':'SELECTED HISTORICAL ENTITY'} · ${escapeHtml(groupLabel(c))}</div>
       <h2 class="story-title">${escapeHtml(c.name)}</h2>
-      <div class="story-years">${overview?'Broad cultural overview · not a single dated polity':life(c)+(!active?` · not active in ${compactYear(state.year)}`:'')}</div>
+      <div class="story-years">${overview?'Broad cultural overview · not a single dated polity':life(c)+(c.periodScope==='research-window'?' · research window, not complete lifespan':'')+(!active?` · not active in ${compactYear(state.year)}`:'')}</div>
       <p class="story-description">${escapeHtml(c.summary)}</p>
       <div class="story-section"><div class="story-label">⌖ GEOGRAPHICAL FOCUS</div><div class="story-value">${escapeHtml(c.location)}<br><span style="color:#a2a09a">${escapeHtml(c.region)}</span></div></div>
       <div class="story-section"><div class="story-label">▤ ${isHistorical?'HISTORICAL MAP':state.view==='known'?'THEIR GEOGRAPHICAL WORLD':'MAP INTERPRETATION'}</div>${mapNote}</div>

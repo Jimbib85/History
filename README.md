@@ -133,3 +133,11 @@ The additive research import preserves **93** supplied medieval events (500–99
 The 115-society structured catalogue and modern 60-event structured files mentioned by the reports were **not attached**. We have not claimed to import those absent datasets. Supplied reports and CSVs remain unchanged under [research](research/README.md) for future additions. Global events without one society association are visible in Compare → Events with their source and confidence. Neither a chronological overlap nor shared technology implies direct contact.
 
 Run `npm test` to include `research-merge-test.mjs` after existing regression tests. The web app remains an uncomplicated static Cloudflare Worker deployment with no subscriptions or database.
+
+## v0.7 — Verified 1000–1499 CE research import
+
+This corrects a previously missing research-pack import. The supplied 1000–1499 CE ZIP is integrated additively via `public/research-1000-1499.js`, `public/research-1000-1499-apply.js` and `public/research-1000-1499-tech.js`. Existing society IDs (including 10 legacy crosswalks) and existing source claims are not replaced. The full original 193-society / 108-event / 39-technology / 71-technology-observation structured collection, plus figures, historical maps, relationships, geographical-knowledge records, 723 source claims, 95 source records and research gaps are preserved under [research/1000-1499](research/1000-1499/README.md).
+
+The interactive map skips records without trustworthy reference-site coordinates rather than plotting fabricated markers. Broad Australian cultural research remains in the archive instead of generating an all-history dated Australian society. Dated observations show their sourced time intervals, and uncertainty notes should not be interpreted as precise invention dates. Multi-party or unlinked events remain available in Compare → Events. This research dataset is not a scholarly peer-reviewed historical GIS resource.
+
+Run `npm test` to validate the import alongside previous regression checks.

@@ -5,7 +5,7 @@
   const all = CIVILISATIONS.filter(c => c.kind !== 'overview' && Number.isFinite(c.start) && Number.isFinite(c.end));
   const entities = new Map(all.map(c => [c.id, c]));
   const events = EVENTS.filter(e => entities.has(e.civ) && Number.isFinite(e.year));
-  const researchEvents = typeof ATLAS_RESEARCH_EVENTS !== 'undefined' ? ATLAS_RESEARCH_EVENTS : [];
+  const researchEvents = [...(typeof ATLAS_RESEARCH_EVENTS !== 'undefined' ? ATLAS_RESEARCH_EVENTS : []),...(typeof ATLAS_MEDIEVAL_EVENTS !== 'undefined' ? ATLAS_MEDIEVAL_EVENTS : [])];
   const params = new URLSearchParams(location.search);
   const within = (x,min,max) => Math.min(max,Math.max(min,x));
   const parseDate = input => {
@@ -129,7 +129,7 @@
     $('insightYear').textContent=yearText(state.year);
     $('yearCaption').textContent=`${now.length} curated ${now.length===1?'entity':'entities'} active at this time${state.region==='all'?' worldwide':' in '+state.region}.`;
     $('selectedName').textContent=selected?.name || 'Select an entry';
-    $('selectedLife').textContent=selected?`${yearText(selected.start)} – ${yearText(selected.end)} · ${selected.kind==='empire'?'Empire':'Society'} · ${selected.region}`:'';
+    $('selectedLife').textContent=selected?`${yearText(selected.start)} – ${yearText(selected.end)} · ${selected.kind==='empire'?'Empire':'Society'} · ${selected.region}${selected.periodScope==='research-window'?' · researched period only':''}`:'';
     $('selectedSummary').textContent=selected?`${selected.summary}${active(selected,state.year)?'':' This entry is not dated as active in the selected year.'}`:'';
     $('selectedActions').innerHTML=selected?`<a href="${safe(selected.source)}" target="_blank" rel="noopener noreferrer">Read source ↗</a><button data-action="focus" type="button">Focus its period</button><button data-action="pin" type="button">${state.pinned.includes(selected.id)?'★ Unpin':'☆ Pin'}</button>`:'';
     $('pinCompare').textContent=state.pinned.includes(state.selected)?'★ Unpin selected':'☆ Pin selected';$('pinCompare').setAttribute('aria-pressed',String(state.pinned.includes(state.selected)));
