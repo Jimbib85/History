@@ -183,7 +183,7 @@
     return p.replace(/_/g,' ').replace(/^./, c => c.toUpperCase());
   };
   const entityDates = c => {
-    if (c.periodScope === 'research-window' || c.periodScope === 'source-range') return window.AtlasDateScope.label(c);
+    if (c.periodScope === 'research-window' || c.periodScope === 'source-range') return window.AtlasDateScope?.label(c) ?? `${yearText(c.start)} – ${yearText(c.end)}`;
     if (c.dateLabel) return c.dateLabel;
     if (typeof c.dating === 'string' && /\d/.test(c.dating)) return c.dating;
     return (/approx|circa/.test(c.datePrecision || c.dating || '') ? 'c. ' : '') + yearText(c.start) + ' – ' + yearText(c.end);
