@@ -37,6 +37,19 @@
   const regionColours = {'Europe':'#497ead','West Asia':'#9c668f','North Africa':'#b98a3c','Sub-Saharan Africa':'#8a9148','East Asia':'#b86f63','South Asia':'#a86b56','Southeast Asia':'#3b9293','Americas':'#5a9872','Oceania':'#6977a7'};
   const colour = c => regionColours[c?.region] || '#678595';
   const spans = [500, 1000, 2000, 4000, 12026];
+  const MAX_PINS=5, PIN_STORE='world-history-atlas-compare-pins-v1';
+  function savedPins() {
+    try {return typeof localStorage === 'undefined' ? [] : JSON.parse(localStorage.getItem(PIN_STORE) || '[]');}
+    catch (_) {return [];}
+  }
+  function validPins(value) {
+    const items=Array.isArray(value)?value:typeof value==='string'?value.split(','):[];
+    return [...new Set(items.filter(id=>typeof id==='string'&&entities.has(id)))].slice(0,MAX_PINS);
+  }
+  function savePins() {
+    try {if(typeof localStorage!=='undefined')localStorage.setItem(PIN_STORE,JSON.stringify(state.pinned));}catch(_){}
+  }
+  const initialPins=validPins(params.has('pins')?params.get('pins'):savedPins());
   const state = {
     year:within(parseDate(params.get('year')) ?? 1200, -9999, 2026),
     mode:['overlap','eras','regions','events'].includes(params.get('mode')) ? params.get('mode') : 'overlap',
@@ -45,7 +58,7 @@
     type:['all','empire','society'].includes(params.get('type')) ? params.get('type') : 'all',
     span:spans.includes(Number(params.get('span'))) ? Number(params.get('span')) : 1000,
     limit:[12,24,60,150,9999].includes(Number(params.get('limit'))) ? Number(params.get('limit')) : 24,
-    search:(params.get('search') || '').trim().toLowerCase(), pinned:[],
+    search:(params.get('search') || '').trim().toLowerCase(), pinned:initialPins, focusPinned:params.get('focus')==='1'&&initialPins.length>=2,
     event:eventByKey.has(params.get('event')) ? params.get('event') : null
   };
   // Reading state is intentionally separate from dates, filters, selection and saved row ordering.
@@ -62,11 +75,13 @@
   const pct = (v, r) => within((v - r.start) / (r.end - r.start) * 100, 0, 100);
   const overlaps = (c, r) => c.end >= r.start && c.start <= r.end;
   const pass = c => (state.region === 'all' || c.region === state.region) && (state.type === 'all' || c.kind === state.type) && (!state.search || (c.name + ' ' + c.region + ' ' + c.summary).toLowerCase().includes(state.search));
-  const candidates = r => all.filter(c => pass(c) && overlaps(c, r));
+  const candidates = r => all.filter(c => (state.focusPinned&&state.pinned.length>=2?state.pinned.includes(c.id):pass(c)) && overlaps(c, r));
   const eventPass = e => {
     const linked = [e.civ, ...(e.societyIds || e.allSocietyIds || [])].map(id => entities.get(id)).filter(Boolean);
-    if (state.region !== 'all' && e.region !== state.region && !linked.some(c => c.region === state.region)) return false;
-    if (state.type !== 'all' && !linked.some(c => c.kind === state.type)) return false;
+    if(state.focusPinned && state.pinned.length>=2) {
+      if(!linked.some(c=>state.pinned.includes(c.id))) return false;
+    } else if (state.region !== 'all' && e.region !== state.region && !linked.some(c => c.region === state.region)) return false;
+    if (!state.focusPinned && state.type !== 'all' && !linked.some(c => c.kind === state.type)) return false;
     return !state.search || [e.title,e.detail,e.kind,e.region,e.originalRegion,e.humanDate,e.dateLabel,...linked.map(c => c.name)].join(' ').toLowerCase().includes(state.search);
   };
   const filteredEvents = r => events.filter(e => Number.isFinite(e.year) && e.year <= r.end && (e.endExclusive || e.year + 1) > r.start && eventPass(e)).sort((a,b) => a.year - b.year || a.title.localeCompare(b.title));
@@ -89,7 +104,7 @@
         group.forEach((c,i) => {if (c.kind === kind) group[i] = ordered[next++];});
       }
     }
-    const take = Math.min(group.length, state.limit + ui.extraRows);
+    const take = state.focusPinned&&state.pinned.length>=2 ? group.length : Math.min(group.length, state.limit + ui.extraRows);
     const required = new Set([state.selected, ...state.pinned]);
     const ids = new Set(group.slice(0, take).map(c => c.id));
     for (const c of group) if (required.has(c.id) && !ids.has(c.id)) {
@@ -107,10 +122,11 @@
   }
   function updateLink() {
     const u = new URL(location.href);
-    for (const [k,v] of Object.entries({year:state.year,mode:state.mode,civ:state.selected,region:state.region,type:state.type,span:state.span,limit:state.limit,search:state.search,event:state.event})) {
+    for (const [k,v] of Object.entries({year:state.year,mode:state.mode,civ:state.selected,region:state.region,type:state.type,span:state.span,limit:state.limit,search:state.search,event:state.event,pins:state.pinned.join(','),focus:state.focusPinned?'1':null})) {
       if (v === null || v === '') u.searchParams.delete(k); else u.searchParams.set(k, v);
     }
     if (['http:','https:','file:'].includes(location.protocol)) history.replaceState(null, '', u.pathname + u.search + u.hash);
+    savePins();
     $('mapLink').href = qs(); $('topMapLink').href = qs();
     document.querySelectorAll('[data-atlas-nav="map"],[data-atlas-nav="technology"]').forEach(a => {a.href = qs() + (a.dataset.atlasNav === 'technology' ? '#technology' : '');});
   }
@@ -123,8 +139,16 @@
   }
   function bar(c,r) {
     const left = pct(Math.max(c.start,r.start),r), right = pct(Math.min(c.end,r.end),r);
-    const points = events.filter(e => e.civ === c.id && e.year >= r.start && e.year <= r.end).slice(0,5);
-    const ms = points.map(e => '<button type="button" class="milestone" data-event-key="' + safe(e.key) + '" style="left:' + pct(e.year,r).toFixed(3) + '%" title="' + safe(researchEventDate(e) + ' · ' + e.title) + '" aria-label="Read ' + safe(e.title + ', ' + researchEventDate(e)) + '"></button>').join('');
+    // Display a time-distributed sample of explicitly linked dated records; do not imply
+    // that concurrent records or nearby geographic points prove cultural transmission.
+    const linked = events.filter(e => Number.isFinite(e.year) && e.year >= r.start && e.year <= r.end && e.year >= c.start && e.year <= c.end &&
+      (e.civ === c.id || (e.societyIds || e.allSocietyIds || []).includes(c.id))).sort((a,b)=>a.year-b.year||a.key.localeCompare(b.key));
+    const selectedKeys=new Set();
+    const slots=Math.min(8,linked.length);
+    for(let i=0;i<slots;i++) selectedKeys.add(linked[Math.floor(i*(linked.length-1)/Math.max(1,slots-1))].key);
+    if(state.event && linked.some(e=>e.key===state.event)) selectedKeys.add(state.event);
+    const points=linked.filter(e=>selectedKeys.has(e.key));
+    const ms = points.map(e => '<button type="button" class="milestone' + (state.event === e.key ? ' selected' : '') + '" data-event-key="' + safe(e.key) + '" aria-pressed="' + (state.event === e.key) + '" style="left:' + pct(e.year,r).toFixed(3) + '%" title="' + safe(researchEventDate(e) + ' · ' + e.title) + '" aria-label="Read ' + safe(e.title + ', ' + researchEventDate(e)) + '"></button>').join('');
     return '<div class="lane ' + (c.id === state.selected ? 'selected ' : '') + (active(c,state.year) ? 'contemporary' : '') + '"><button type="button" class="lane-name" data-civ="' + safe(c.id) + '" aria-pressed="' + (c.id === state.selected) + '" title="' + safe(c.name) + '"><i style="background:' + colour(c) + '"></i><span><strong>' + safe(c.name) + (state.pinned.includes(c.id) ? ' ★' : '') + '</strong><small>' + safe(c.region) + ' · ' + (c.kind === 'empire' ? 'Empire' : 'Society') + '</small></span></button><div class="lane-track"><div class="lane-grid"></div><button type="button" data-civ="' + safe(c.id) + '" class="duration ' + c.kind + '" style="left:' + left.toFixed(3) + '%;width:' + Math.max(right-left,.35).toFixed(3) + '%;--bar:' + colour(c) + '" title="' + safe(c.name + ' · ' + entityDates(c)) + '"><span>' + safe(c.name) + '</span></button>' + ms + marker(r) + '</div><span class="lane-dates">' + safe(yearText(c.start)) + '<br>' + safe(yearText(c.end)) + '</span></div>';
   }
   function groupHeading(label,count,key,id) {
@@ -275,6 +299,51 @@
     const sourceAction = '<button type="button" data-open-reader="sourcesDetails">Sources (' + n + ')</button>';
     $('selectedActions').innerHTML = evidence ? '<button type="button" data-action="event-date">Go to this date</button>' + (entities.has(evidence.civ) ? '<button type="button" data-civ="' + safe(evidence.civ) + '">Read ' + safe(entities.get(evidence.civ).name) + '</button>' : '') + sourceAction : selected ? '<button data-action="focus" type="button">Focus its period</button><button data-action="pin" type="button">' + (pinned ? '★ Unpin' : '☆ Pin') + '</button>' + sourceAction + (ui.lastCell ? '<button type="button" data-action="back-cell">Back to era entries</button>' : '') : '';
   }
+  function renderPins() {
+    const shelf=$('pinnedComparison');
+    const pinned=state.pinned.map(id=>entities.get(id)).filter(Boolean);
+    const sharedStart=pinned.length?Math.max(...pinned.map(c=>c.start)):null;
+    const sharedEnd=pinned.length?Math.min(...pinned.map(c=>c.end)):null;
+    const dateNote=pinned.length<2
+      ? 'Pin at least two societies to compare them on their own shared ruler.'
+      : sharedStart<=sharedEnd
+        ? 'Recorded overlap: '+yearText(sharedStart)+' – '+yearText(sharedEnd)+'. Contemporaneity is not evidence of contact.'
+        : 'No shared dated overlap among all pinned entries. Their time bands may still be compared.';
+    $('pinnedCount').textContent=pinned.length+' / '+MAX_PINS+' pinned';
+    $('pinSummary').textContent=dateNote;
+    shelf.innerHTML=pinned.length
+      ?pinned.map(c=>'<span class="pinned-chip"><button type="button" data-civ="'+safe(c.id)+'" class="'+(c.id===state.selected?'active':'')+'" aria-label="Select '+safe(c.name)+'">'+safe(c.name)+'</button><button type="button" class="remove-pin" data-unpin="'+safe(c.id)+'" aria-label="Unpin '+safe(c.name)+'">×</button></span>').join('')
+      :'<span class="pinned-empty">Select a society and choose ☆ Pin selected to start comparing.</span>';
+    const canFocus=pinned.length>=2;
+    $('onlyPinned').disabled=!canFocus;
+    $('onlyPinned').setAttribute('aria-pressed',String(state.focusPinned));
+    $('onlyPinned').textContent=state.focusPinned?'★ Show all entries':'◎ Compare pinned only';
+    $('fitPinned').disabled=!canFocus;
+    $('clearPinned').disabled=pinned.length===0;
+    const available=all.filter(c=>!state.pinned.includes(c.id)&&active(c,state.year)).sort((a,b)=>a.name.localeCompare(b.name));
+    const pick=$('addCompareSociety');
+    pick.innerHTML='<option value="">+ Add a contemporary society…</option>'+
+      available.slice(0,120).map(c=>'<option value="'+safe(c.id)+'">'+safe(c.name)+' · '+safe(c.region)+'</option>').join('');
+    pick.disabled=pinned.length>=MAX_PINS||!available.length;
+    $('pinLimitNote').textContent=pinned.length>=MAX_PINS?'Five pinned entries maximum. Remove one to add another.':
+      state.focusPinned?'Focused views show pinned entities and their explicitly linked events. Region, type and text filters are suspended until focus is turned off.':
+      'Pin choices remain in this browser and the shareable URL. Pinned ranges are research-backed display intervals, not always complete lifespans.';
+  }
+  function fitPinned() {
+    const entries=state.pinned.map(id=>entities.get(id)).filter(Boolean);
+    if(entries.length<2)return;
+    const earliest=within(Math.min(...entries.map(c=>c.start)),-9999,2026);
+    const latest=within(Math.max(...entries.map(c=>c.end)),-9999,2026);
+    const middle=Math.round((earliest+latest)/2);
+    const span=spans.find(n=>n>=latest-earliest+2)||12026;
+    change({year:middle,span,mode:'overlap',event:null});
+  }
+  function removePin(id) {
+    if(!state.pinned.includes(id))return;
+    state.pinned=state.pinned.filter(x=>x!==id);
+    if(state.pinned.length<2)state.focusPinned=false;
+    render();
+  }
   function render() {
     const focused = document.activeElement;
     const focusAttr = ['data-group','data-more','data-event-key','data-civ','data-action','data-order-up','data-order-down'].find(a => focused?.hasAttribute?.(a));
@@ -296,7 +365,7 @@
     $('compareSearch').placeholder = state.mode === 'events' ? 'Search every event in this window…' : 'Search names, regions or summaries…';
     document.querySelectorAll('[data-mode]').forEach(b => { const is = b.dataset.mode === state.mode; b.classList.toggle('active',is); b.setAttribute('aria-selected',String(is)); b.tabIndex = is ? 0 : -1; });
     $('comparisonChart').innerHTML = state.mode === 'eras' ? eraView(r) : state.mode === 'regions' ? regionsView(r) : state.mode === 'events' ? eventsView(r) : overlapView(r);
-    insight(); updateLink();
+    insight(); renderPins(); updateLink();
     if (focusAttr && !focused.isConnected) {
       const replacement = [...document.querySelectorAll('[' + focusAttr + ']')].find(el => el.getAttribute(focusAttr) === focusValue);
       replacement?.focus({preventScroll:true});
@@ -311,6 +380,7 @@
     if (('mode' in patch || 'region' in patch || 'type' in patch || 'search' in patch) && !('event' in patch)) patch.event = null;
     if ('selected' in patch || 'event' in patch) {ui.sourceLimit=8; ui.cell=null;}
     Object.assign(state,patch);
+    if(!('focusPinned' in patch)&&['region','type','search'].some(k=>k in patch))state.focusPinned=false;
     if (('region' in patch || 'type' in patch || 'search' in patch) && state.mode !== 'events') {
       const eligible = candidates(range());
       if (!eligible.some(c => c.id === state.selected)) state.selected = (eligible.find(c => active(c,state.year)) || eligible[0])?.id || null;
@@ -323,7 +393,9 @@
   function choose(id) { if (!entities.has(id)) return; change({selected:id,event:null}); readOnMobile(); }
   function togglePin() {
     const id = state.selected; if (!entities.has(id)) return;
-    state.pinned = state.pinned.includes(id) ? state.pinned.filter(p => p !== id) : [...state.pinned.slice(-4),id];
+    if(state.pinned.includes(id)) return removePin(id);
+    if(state.pinned.length>=MAX_PINS) return;
+    state.pinned=[...state.pinned,id];
     revealEntity(id); render();
   }
   function selectEvent(key) {
@@ -351,6 +423,8 @@
     }
     const source = target.closest('[data-open-reader]');
     if (source) {const section=$(source.dataset.openReader); section.open=true; section.querySelector('summary').focus({preventScroll:true}); section.scrollIntoView({block:'nearest'}); return;}
+    const unpin=target.closest('[data-unpin]');
+    if(unpin){removePin(unpin.dataset.unpin);return;}
     const event = target.closest('[data-event-key]'); if (event) {selectEvent(event.dataset.eventKey); return;}
     const act = target.closest('[data-action]');
     if (act) {
@@ -368,7 +442,7 @@
     const c=target.closest('[data-civ]'); if (c) choose(c.dataset.civ);
   }
   function reset() {
-    Object.assign(state,{region:'all',type:'all',search:'',span:1000,limit:24,selected:'abbasid',year:1200,mode:'overlap',event:null,pinned:[]});
+    Object.assign(state,{region:'all',type:'all',search:'',span:1000,limit:24,selected:'abbasid',year:1200,mode:'overlap',event:null,pinned:[],focusPinned:false});
     Object.assign(ui,{eventLimit:8,concurrentLimit:8,nearLimit:8,sourceLimit:8,cellLimit:8,extraRows:0,cell:null,lastCell:null}); ui.collapsed.clear();
     $('compareSearch').value=''; render();
   }
@@ -400,6 +474,21 @@
     for (const id of ['compareForwardCentury','insightNext']) $(id).addEventListener('click',() => moveYear(state.year+100));
     $('zoomCompareIn').addEventListener('click',() => change({span:spans[Math.max(0,spans.indexOf(state.span)-1)]}));
     $('zoomCompareOut').addEventListener('click',() => change({span:spans[Math.min(spans.length-1,spans.indexOf(state.span)+1)]}));
+    $('onlyPinned').addEventListener('click',()=>{
+      if(state.pinned.length<2)return;
+      const next=!state.focusPinned;
+      change({focusPinned:next,...(next?{region:'all',type:'all',search:''}:{})});
+    });
+    $('fitPinned').addEventListener('click',fitPinned);
+    $('clearPinned').addEventListener('click',()=>{state.pinned=[];state.focusPinned=false;render();});
+    $('addCompareSociety').addEventListener('change',e=>{
+      const id=e.target.value;
+      if(entities.has(id) && !state.pinned.includes(id) && state.pinned.length<MAX_PINS){
+        state.pinned.push(id);revealEntity(id);render();
+      }
+      e.target.value='';
+    });
+    $('pinnedComparison').addEventListener('click',e=>navigateFromClick(e.target));
     $('pinCompare').addEventListener('click',togglePin); $('resetCompare').addEventListener('click',reset); $('randomComparison').addEventListener('click',randomise);
     $('comparisonChart').addEventListener('click',e => navigateFromClick(e.target));
     document.querySelector('.insight-body').addEventListener('click',e => navigateFromClick(e.target));
