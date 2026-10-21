@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
-const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');
-const data=fs.readFileSync(new URL('./data.js',import.meta.url),'utf8');
-const app=fs.readFileSync(new URL('./app.js',import.meta.url),'utf8');
+const html=fs.readFileSync(new URL('./public/index.html',import.meta.url),'utf8');
+const data=fs.readFileSync(new URL('./public/data.js',import.meta.url),'utf8');
+const app=fs.readFileSync(new URL('./public/app.js',import.meta.url),'utf8');
 const ids=[...html.matchAll(/id="([^"]+)"/g)].map(m=>m[1]);
 for(const [,id] of [...app.matchAll(/\$\(['"]([^'"]+)['"]\)/g)])assert(ids.includes(id)||id==='sameYearButton',`Missing element #${id}`);
 const names=['CIVILISATIONS','MOMENTS','EVENTS','MAPS','PLACES'];

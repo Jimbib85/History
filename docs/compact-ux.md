@@ -1,0 +1,27 @@
+# Compact exploration — v0.12
+
+World Map, Compare and Technology follow the Story view’s reading pattern: a short overview, a chosen record, then supporting evidence. Expansion is separate from the historical date, selected entity, chart scale and saved row order.
+
+## World Map
+
+The catalogue starts with eight matching entities at the selected date. Other periods, era shortcuts and refinement controls expand when needed. A selected entity stays reachable. The reader keeps identity, dates, location and overview visible; Events, People & daily life, Maps & geographical knowledge, Connections, contemporaries and Sources open individually. Each topic shows eight record headings initially and allows one record body at a time. Reader search covers the full loaded topic collection, including later batches. Record links reveal their containing topic.
+
+The two mini timeline groups expand independently and add rows without changing their common date scale. Map identity, date, source and representation caveats remain visible.
+
+## Compare
+
+Overlap and regional charts retain a linear shared time ruler. Groups can collapse; selection and pin navigation reveal the appropriate group. Saved Society/Empire ordering continues to use `world-history-atlas-compare-order-v1`. Reading evidence does not move the date or reorder lanes.
+
+Events start with eight dated headings, support search across all records in the selected window and continue beyond the former 200-record limit. Era cells open their complete matching list in the reader. Meanwhile, nearby events and sources expand independently. The chart may scroll horizontally inside its container on small screens; the page and reader fit the available width.
+
+## Technology
+
+Six counted families replace the fully open tree. Technology and evidence search covers all loaded records. Each plotted milestone has an individual record key, so separate milestones for the same society remain separately selectable. The chosen evidence body opens inline, with other records batched by eight. Compare-from society is independent of evidence selection. Time range stays fixed when more rows appear. Geographic points and curated connections retain their approximation notes.
+
+## Navigation and evidence
+
+Primary navigation uses Story, World Map, Compare, Technology and Conflicts. Supported transitions carry the current year and entity; Story uses `entity`, while Map and Compare use `civ`. Year zero remains 1 BCE. The clean homepage still enters Story, and existing Map/Technology links remain valid. No historical datasets, claim registries or conflict sensitivity defaults are changed.
+
+## Verification
+
+`npm test` runs the existing research, Story and conflict checks plus complete-data Map, Compare reader and Technology regressions. These cover batching, hidden-record search, record identity, dates, scale and non-mutation of research data. `tests/responsive.html` is copied into branch previews only, for checking the real app in 1440, 1024, 768, 390 and 320 pixel frames. It is not included in production assets.

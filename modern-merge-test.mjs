@@ -11,7 +11,7 @@ assert.equal(x.raw.events.length,173);
 assert.equal(x.raw.technologies.length,53);
 assert.equal(x.raw.technology_developments.length,87);
 assert.equal(x.raw.source_register.length,117);
-assert.equal(x.raw.source_claims.length,undefined,'Claim table archived separately, not loaded into the browser');
+assert.equal(x.raw.source_claims,undefined,'Claim table archived separately, not loaded into the browser');
 assert.equal(x.events.length,173);
 assert.equal(x.stats.added+x.stats.reused+x.stats.researchOnly,187);
 assert.equal(x.added+x.unmapped,87);

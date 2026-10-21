@@ -43,11 +43,12 @@ check(scripts.indexOf('story-model.js')>scripts.indexOf('research-classical-appl
 check(scripts[scripts.length-1],'story-app.js');
 // Routing bridge is tested separately from network-dependent hosting redirects.
 const navigation=read('./public/story-navigation.js');
-function navFixture(pathname,search='',hash='') {
+function navFixture(pathname,search='',hash='',staticViews=[]) {
  const redirects=[],items=[];let opened=0;
  const node=()=>({dataset:{},handlers:{},addEventListener(k,fn){this.handlers[k]=fn;}});
- const nav={querySelector:()=>items.find(x=>x.dataset.storyEntry),prepend:el=>items.push(el)};
- const document={readyState:'complete',querySelector:()=>nav,createElement:node,head:{append(){}},getElementById:()=>({open:false})};
+ for(const view of staticViews){const a=node();a.dataset.atlasNav=view;items.push(a);}
+ const nav={querySelector:()=>items.find(x=>x.dataset.storyEntry||x.dataset.atlasNav==='story'),prepend:el=>items.push(el)};
+ const document={readyState:'complete',querySelector:()=>nav,querySelectorAll:()=>items,createElement:node,head:{append(){}},getElementById:()=>({open:false})};
  const window={HistoryCompare:{state:{year:0}},WorldHistoryTechnology:{open(){opened++;}},addEventListener(){}};
  vm.runInNewContext(navigation,{location:{pathname,search,hash,replace:url=>redirects.push(url)},document,window});
  return {redirects,items,window,opened};
@@ -58,6 +59,10 @@ check(navFixture('/index.html').redirects,[],'Explicit map entry remains availab
 const nav=navFixture('/compare.html');check(nav.items[0].href,'story.html?year=0','Bridge preserves BCE/CE zero');
 nav.window.HistoryCompare.state.year=1453;nav.items[0].handlers.click();check(nav.items[0].href,'story.html?year=1453','Bridge picks up changed comparison date');
 check(navFixture('/index.html','?year=100','#technology').opened,1,'Technology links open the existing explorer');
+const shared=navFixture('/compare.html','','',['story','map','compare','technology']);
+check(shared.items.length,4,'Static primary navigation must not receive a duplicate Story link');
+shared.window.HistoryCompare.state.selected='abbasid';shared.window.HistoryCompare.state.year=0;shared.window.AtlasNavigation.refresh();
+check(shared.items.map(a=>a.href),['story.html?year=0&entity=abbasid','index.html?year=0&civ=abbasid','compare.html?year=0&civ=abbasid','index.html?year=0&civ=abbasid#technology'],'Every supported view carries year zero and the selected entity with its own parameter');
 const baselineFiles=scripts.filter(x=>!x.startsWith('story-'));
 const hashes=Object.fromEntries(baselineFiles.map(f=>{const b=fs.readFileSync(new URL('./public/'+f,import.meta.url));return [f,createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex')]}));
 const out={assertions,entities:input.entities.length,nativeEvents:input.events.length,researchEvents:input.research.flat().length,storyRecords:data.events.length,duplicateRecordsCollapsed:data.duplicates,invalidRecords:data.skipped,groupsAt1200:groups.length,eventsAt1200:events.length,baselineHashes:hashes};

@@ -6,6 +6,7 @@
   if (!chart) return;
   const byId = new Map(CIVILISATIONS.map(c => [c.id, c]));
   let order = {society: [], empire: []};
+  let pendingFocus = null;
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
     if (saved && typeof saved === 'object') {
@@ -49,9 +50,8 @@
     const known = order[c.kind].filter(x => !peers.includes(x));
     order[c.kind] = [...peers, ...known];
     save();
+    if (!targetId) pendingFocus = {id, direction:delta < 0 ? 'up' : 'down'};
     window.HistoryCompare?.render();
-    const focus = chart.querySelector('[data-order-up="' + id.replace(/[^a-zA-Z0-9_-]/g, "") + '"]');
-    if (focus && !targetId) focus.focus({preventScroll:true});
   }
   function decorate() {
     chart.querySelectorAll('.lane').forEach(lane => {
@@ -65,6 +65,13 @@
       controls.innerHTML = '<button type="button" draggable="true" class="lane-drag-handle" data-order-drag="'+id+'" aria-label="Drag to reorder '+byId.get(id).name.replace(/["<>]/g,'')+'" title="Drag to reorder">⠿</button><div class="lane-nudges"><button type="button" data-order-up="'+id+'" aria-label="Move '+byId.get(id).name.replace(/["<>]/g,'')+' up" title="Move up">↑</button><button type="button" data-order-down="'+id+'" aria-label="Move '+byId.get(id).name.replace(/["<>]/g,'')+' down" title="Move down">↓</button></div>';
       lane.prepend(controls);
     });
+    // Decoration runs after chart rendering; return keyboard focus to the moved row then.
+    if (pendingFocus) {
+      const key = pendingFocus.direction === 'up' ? 'orderUp' : 'orderDown';
+      const focus = [...chart.querySelectorAll('[data-order-up],[data-order-down]')].find(button => button.dataset[key] === pendingFocus.id);
+      focus?.focus({preventScroll:true});
+      pendingFocus = null;
+    }
   }
   chart.addEventListener('click', e => {
     const up = e.target.closest('[data-order-up]'), down = e.target.closest('[data-order-down]');

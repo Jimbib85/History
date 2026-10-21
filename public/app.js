@@ -16,6 +16,10 @@
   const rawYear = Number(params.get('year'));
   const initialYear = params.has('year') && Number.isFinite(rawYear) ? Math.min(2026,Math.max(-9999,Math.round(rawYear))) : 200;
   const state = {year:initialYear,civ:initialId,view:['actual','historical','known'].includes(params.get('view'))?params.get('view'):'actual',region:'All regions',search:'',zoom:1,tx:0,ty:0,catalogue:'all'};
+  // Reading and disclosure choices are separate from historical navigation.
+  const reading = {civ:null, search:'', topics:new Set(), records:{}, limits:{}};
+  const catalogueUI = {key:'', current:8, other:8, otherOpen:false};
+  const parallelUI = {key:'', limits:{society:8,empire:8}, open:{society:false,empire:false}};
   const snapshots = [];
   const eras = [
     {name:'Early human history',subtitle:'8000 BCE',year:-7999},
@@ -104,15 +108,31 @@
   }
   function renderList(){
     const q=state.search.toLowerCase().trim();
-    const visible=CIVILISATIONS.filter(c=>isCharted(c) && (state.catalogue==='all' || c.kind===state.catalogue) &&
-      regionMatch(c,state.region) && (!q||`${c.name} ${c.location} ${c.region} ${c.summary}`.toLowerCase().includes(q)))
-      .sort((a,b)=>Number(activeAt(b,state.year))-Number(activeAt(a,state.year)) || a.start-b.start);
-    $('civilisationCount').textContent=`${visible.filter(c=>activeAt(c,state.year)).length} contemporary`;
-    $('civilisationList').innerHTML=visible.length?visible.map(c=>`<button type="button" class="civ-entry ${state.civ===c.id?'active':''}" data-civ="${c.id}" title="${escapeHtml(c.name)} (${life(c)})"><span class="civ-dot" style="--dot:${c.color}"></span><span class="civ-text"><strong>${escapeHtml(c.name)}</strong><small>${activeAt(c,state.year)?'Contemporary':'Jump to '+compactYear(c.at)} · ${escapeHtml(c.region)} · ${c.kind==='empire'?'Empire':'Society'}</small></span><span class="civ-arrow">›</span></button>`).join(''):'<p class="civ-empty">No entries match these filters. Try another region or group.</p>';
+    const key=[state.year,state.region,state.catalogue,q].join('|');
+    if(catalogueUI.key!==key)Object.assign(catalogueUI,{key,current:8,other:8,otherOpen:!!q});
+    const visible=CIVILISATIONS.filter(c=>isCharted(c) && (state.catalogue==='all'||c.kind===state.catalogue) &&
+      regionMatch(c,state.region) && (!q||[c.name,c.location,c.region,c.summary].join(' ').toLowerCase().includes(q)))
+      .sort((a,b)=>a.start-b.start||a.name.localeCompare(b.name));
+    const current=visible.filter(c=>activeAt(c,state.year));
+    const other=visible.filter(c=>!activeAt(c,state.year));
+    // A visible selection takes one place in the compact batch, never an entire extra page.
+    for(const rows of [current,other])rows.sort((a,b)=>Number(b.id===state.civ)-Number(a.id===state.civ));
+    if(other.some(c=>c.id===state.civ))catalogueUI.otherOpen=true;
+    $('civilisationCount').textContent=current.length+' at this date';
+    $('filterSummary').textContent=(state.catalogue==='all'?'Societies & empires':state.catalogue==='society'?'Societies':'Empires')+' · '+state.region;
+    const entry=c=>'<button type="button" class="civ-entry '+(state.civ===c.id?'active':'')+'" data-civ="'+c.id+'" '+(state.civ===c.id?'aria-current="true"':'')+' title="'+escapeHtml(c.name+' · '+life(c))+'"><span class="civ-dot" style="--dot:'+c.color+'"></span><span class="civ-text"><strong>'+escapeHtml(c.name)+'</strong><small>'+escapeHtml(c.region)+' · '+(c.kind==='empire'?'Empire':'Society')+'</small><small>'+escapeHtml(life(c))+'</small></span><span class="civ-arrow" aria-hidden="true">›</span></button>';
+    const more=(group,rows)=>rows.length>catalogueUI[group]?'<button type="button" class="catalogue-more" data-catalogue-more="'+group+'">Show '+Math.min(8,rows.length-catalogueUI[group])+' more <span>'+catalogueUI[group]+' of '+rows.length+'</span></button>':'';
+    const hiddenSelected=!visible.some(c=>c.id===state.civ)&&civById[state.civ].kind!=='overview'?'<div class="catalogue-selected"><span>Selected · outside these filters</span>'+entry(civById[state.civ])+'</div>':'';
+    $('civilisationList').innerHTML=hiddenSelected+'<section class="catalogue-current"><h3>At this date <span>'+current.length+'</span></h3>'+(current.length?current.slice(0,catalogueUI.current).map(entry).join(''):'<p class="civ-empty">No matching entries at '+compactYear(state.year)+'. Try another date or the other periods below.</p>')+more('current',current)+'</section><details class="catalogue-other"'+(catalogueUI.otherOpen?' open':'')+'><summary>Other periods <span>'+other.length+'</span></summary>'+other.slice(0,catalogueUI.other).map(entry).join('')+more('other',other)+'</details>';
     $('civilisationList').querySelectorAll('[data-civ]').forEach(b=>b.addEventListener('click',()=>selectCiv(b.dataset.civ)));
+    $('civilisationList').querySelectorAll('[data-catalogue-more]').forEach(b=>b.addEventListener('click',()=>{const group=b.dataset.catalogueMore;const previous=catalogueUI[group];catalogueUI[group]+=8;renderList();const rows=$('civilisationList').querySelectorAll(group==='current'?'.catalogue-current [data-civ]':'.catalogue-other [data-civ]');rows[previous]?.focus();}));
+    const otherDetails=$('civilisationList').querySelector('.catalogue-other');
+    otherDetails?.addEventListener('toggle',()=>{catalogueUI.otherOpen=otherDetails.open;});
     document.querySelectorAll('[data-catalogue]').forEach(b=>{const selected=b.dataset.catalogue===state.catalogue;b.classList.toggle('active',selected);b.setAttribute('aria-pressed',String(selected));});
-    const overviews=CIVILISATIONS.filter(c=>c.kind==='overview');
-    $('culturalOverviewList').innerHTML=overviews.map(c=>`<button type="button" data-overview="${c.id}" class="overview-entry ${state.civ===c.id?'active':''}">${escapeHtml(c.name)} ↗</button>`).join('');
+    const overviews=CIVILISATIONS.filter(c=>c.kind==='overview'&&(!q||[c.name,c.summary,c.region].join(' ').toLowerCase().includes(q)));
+    $('culturalOverviewList').innerHTML=overviews.length?overviews.map(c=>'<button type="button" data-overview="'+c.id+'" class="overview-entry '+(state.civ===c.id?'active':'')+'">'+escapeHtml(c.name)+' ↗</button>').join(''):'<p class="civ-empty">No cultural background matches this search.</p>';
+    const disclosure=$('culturalOverviewList').closest?.('details');
+    if(disclosure&&(q||civById[state.civ].kind==='overview'))disclosure.open=true;
     $('culturalOverviewList').querySelectorAll('[data-overview]').forEach(b=>b.addEventListener('click',()=>go({civ:b.dataset.overview,view:'actual'})));
   }
   function project(lon,lat){return [((lon+180)/360*1200),((88-lat)/176*590)];}
@@ -153,13 +173,16 @@
     updateTransform();
     $('mapYear').textContent=compactYear(state.year);
     $('mapStatus').textContent=state.view==='known'?'◉ Illustrative contact points · not a complete known world':historical?'◉ Historical cartography · read dating carefully':`◉ ${CIVILISATIONS.filter(c=>activeAt(c,state.year)&&regionMatch(c,state.region)&&(state.catalogue==='all'||c.kind===state.catalogue)).length} charted entries in this selection`;
+    const selectedMap=MAPS[civ.mapId];
+    $('mapEvidence').innerHTML=historical&&selectedMap?'<strong>'+escapeHtml(selectedMap.title)+'</strong> · '+escapeHtml(selectedMap.date)+' · '+escapeHtml(selectedMap.type)+' · <a href="'+escapeHtml(selectedMap.page)+'" target="_blank" rel="noopener noreferrer">Source ↗</a>':state.view==='known'?'Illustrative contact points, not a complete known world.':'Approximate geographical reference points · not historical borders.';
+    $('mapAboutText').textContent=historical?(selectedMap?selectedMap.description:'No appropriate period map is curated for this selection yet. Missing evidence does not mean people lacked geographical knowledge.'):state.view==='known'?(civ.knownText||'The examples show documented places or networks where available. They do not represent the knowledge of every inhabitant.'):'Markers identify representative locations where documented. They do not depict territorial extent or historical borders. Select a marker to explore its records.';
     $('mapHelp').textContent=state.view==='actual'?'Select a marker to read its story ↗':state.view==='known'?'Example places and networks, not knowledge boundaries':'Maps are historical artefacts, not satellite views';
     $('mapLegend').style.display=historical?'none':'';
     $('zoomIn').disabled=historical;$('zoomOut').disabled=historical;$('resetMap').disabled=historical;
     document.querySelectorAll('[data-view]').forEach(b=>{const yes=b.dataset.view===state.view;b.classList.toggle('active',yes);b.setAttribute('aria-selected',String(yes));});
     if(historical){
       const m=MAPS[civ.mapId];
-      $('historicalMap').innerHTML=m?`<img src="${escapeHtml(m.image)}" alt="${escapeHtml(m.title)}" referrerpolicy="no-referrer"><div class="historic-overlay">${escapeHtml(m.title)} · ${escapeHtml(m.type)} · <a href="${escapeHtml(m.page)}" target="_blank" rel="noopener noreferrer">Source ↗</a></div>`:`<div class="map-note"><div class="section-kicker">NO RELIABLE PERIOD MAP CURATED YET</div><h3>Not every world has a surviving map.</h3><p>We haven't added a suitable historical map for <strong>${escapeHtml(civ.name)}</strong> yet. That does not mean its people lacked sophisticated geographical knowledge.</p><a href="${escapeHtml(civ.source)}" target="_blank" rel="noopener noreferrer">Explore background reading ↗</a></div>`;
+      $('historicalMap').innerHTML=m?`<img src="${escapeHtml(m.image)}" alt="${escapeHtml(m.title)}" referrerpolicy="no-referrer"><div class="historic-overlay">${escapeHtml(m.title)} · ${escapeHtml(m.date)} · ${escapeHtml(m.type)} · <a href="${escapeHtml(m.page)}" target="_blank" rel="noopener noreferrer">Source ↗</a></div>`:`<div class="map-note"><div class="section-kicker">NO RELIABLE PERIOD MAP CURATED YET</div><h3>Not every world has a surviving map.</h3><p>We haven't added a suitable historical map for <strong>${escapeHtml(civ.name)}</strong> yet. That does not mean its people lacked sophisticated geographical knowledge.</p><a href="${escapeHtml(civ.source)}" target="_blank" rel="noopener noreferrer">Explore background reading ↗</a></div>`;
       const img=$('historicalMap').querySelector('img');
       if(img){img.addEventListener('error',()=>{$('historicalMap').innerHTML=`<div class="map-note"><h3>The archived map could not load.</h3><p>It is hosted by Wikimedia Commons and needs an internet connection. The rest of the atlas works offline.</p><a href="${escapeHtml(m.page)}" target="_blank" rel="noopener noreferrer">Open the source map ↗</a></div>`;});}
     }
@@ -168,84 +191,135 @@
     const active=CIVILISATIONS.filter(c=>activeAt(c,state.year)&&regionMatch(c,state.region));
     const half=state.year>1600?190:state.year>0?460:800;
     const start=state.year-half,end=state.year+half;
+    const key=[state.year,state.region].join('|');
+    if(parallelUI.key!==key){parallelUI.key=key;parallelUI.limits={society:8,empire:8};}
     $('timelineFrom').textContent=compactYear(start);
     $('timelineTo').textContent=compactYear(end);
     $('parallelCount').textContent=active.length;
     function section(kind,label){
-      const all=active.filter(c=>c.kind===kind);
-      const display=all.filter(c=>c.id===state.civ).concat(all.filter(c=>c.id!==state.civ).sort((a,b)=>a.region.localeCompare(b.region)||a.start-b.start));
-      const chosen=display.slice(0,10);
+      const all=active.filter(c=>c.kind===kind).sort((a,b)=>Number(b.id===state.civ)-Number(a.id===state.civ)||a.region.localeCompare(b.region)||a.start-b.start);
+      const at=all.findIndex(c=>c.id===state.civ);
+      const chosen=all.slice(0,parallelUI.limits[kind]);
       const bars=chosen.map(c=>{
         const l=Math.max(0,(Math.max(start,c.start)-start)/(end-start)*100);
         const r=Math.min(100,(Math.min(end,c.end)-start)/(end-start)*100);
-        const width=Math.max(0,r-l);
-        return `<button class="timeline-row ${c.id===state.civ?'selected':''}" type="button" data-timeline="${c.id}" title="${escapeHtml(c.name)} · ${life(c)}"><span class="timeline-name">${escapeHtml(c.name)}</span><span class="timeline-track"><span class="timeline-band" style="left:${l.toFixed(2)}%;width:${width.toFixed(2)}%;--band:${c.color}"></span><span class="timeline-now"></span></span></button>`;
+        return '<button class="timeline-row '+(c.id===state.civ?'selected':'')+'" type="button" data-timeline="'+c.id+'" title="'+escapeHtml(c.name+' · '+life(c))+'"><span class="timeline-name">'+escapeHtml(c.name)+'</span><span class="timeline-track"><span class="timeline-band" style="left:'+l.toFixed(2)+'%;width:'+Math.max(0,r-l).toFixed(2)+'%;--band:'+c.color+'"></span><span class="timeline-now"></span></span></button>';
       }).join('');
-      return `<section class="timeline-group timeline-${kind}" aria-label="${label} timeline"><div class="timeline-group-title"><strong>${label}</strong><span>${all.length} contemporary ${kind==='empire'?'empires / imperial states':'societies'}</span></div>${chosen.length?bars:`<p class="timeline-empty">No ${label.toLowerCase()} recorded in this region for ${compactYear(state.year)}.</p>`}${all.length>chosen.length?`<span class="timeline-extra">Showing 10 of ${all.length} entries</span>`:''}</section>`;
+      return '<details class="timeline-group timeline-'+kind+'" data-parallel-group="'+kind+'"'+(parallelUI.open[kind]?' open':'')+'><summary class="timeline-group-title"><strong>'+label+'</strong><span>'+all.length+' contemporary'+(at>=0?' · includes selection':'')+'</span></summary>'+(chosen.length?bars:'<p class="timeline-empty">No '+label.toLowerCase()+' recorded in this region for '+compactYear(state.year)+'.</p>')+(all.length>chosen.length?'<button type="button" class="timeline-more" data-parallel-more="'+kind+'">Show '+Math.min(8,all.length-chosen.length)+' more · '+chosen.length+' of '+all.length+'</button>':'')+'</details>';
     }
     $('timelineRows').innerHTML=section('society','Societies')+section('empire','Empires');
     $('timelineRows').querySelectorAll('[data-timeline]').forEach(b=>b.addEventListener('click',()=>selectCiv(b.dataset.timeline)));
+    $('timelineRows').querySelectorAll('[data-parallel-group]').forEach(d=>d.addEventListener('toggle',()=>{parallelUI.open[d.dataset.parallelGroup]=d.open;}));
+    $('timelineRows').querySelectorAll('[data-parallel-more]').forEach(b=>b.addEventListener('click',()=>{const kind=b.dataset.parallelMore;const previous=parallelUI.limits[kind];parallelUI.limits[kind]+=8;parallelRows();$('timelineRows').querySelectorAll('.timeline-'+kind+' [data-timeline]')[previous]?.focus();}));
+  }
+  const readable = value => String(value||'').replaceAll('_',' ');
+  const safeURL = value => typeof value==='string'&&/^https?:\/\//.test(value)?value:'';
+  function recordDate(x){
+    if(x.humanDate||x.dateLabel||x.date_label)return x.humanDate||x.dateLabel||x.date_label;
+    if(x.physical_object_date_label)return x.physical_object_date_label;
+    if(x.surviving_object_date)return x.surviving_object_date;
+    const start=x.year??x.start_year??x.earliest_birth_year??x.birth_year??x.composition_earliest_year??x.year_composed_earliest??x.original_composition_year;
+    const end=x.endExclusive!==undefined?x.endExclusive-1:x.end_year_exclusive!==undefined?x.end_year_exclusive-1:x.latest_death_year??x.death_year??x.composition_latest_year??x.year_composed_latest;
+    if(!Number.isFinite(start))return '';
+    const precision=x.datePrecision||x.date_precision||x.dating||'';
+    if(/alternative/.test(precision)&&Number.isFinite(end)&&end!==start)return compactYear(start)+' or '+compactYear(end)+' · alternative dates';
+    return (/approximate|circa|century|decade/.test(precision)?'c. ':'')+compactYear(start)+(Number.isFinite(end)&&end!==start?' – '+compactYear(end):'');
+  }
+  function storyRecords(c){
+    const groups={events:[],people:[],maps:[],connections:[],meanwhile:[],sources:[]};
+    const seen=new Set();const sourceRows=new Map();
+    const addSource=(url,title,kind='Record source')=>{
+      url=safeURL(url);if(!url)return;
+      const existing=sourceRows.get(url);
+      if(existing){if(!existing.title.includes(kind)){existing.title+=' · '+kind;existing.search+=' '+kind;}return;}
+      sourceRows.set(url,{id:'source-'+sourceRows.size,title:kind,meta:title,html:'<a class="story-link" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">'+escapeHtml(title||url)+' ↗</a>',search:title+' '+url+' '+kind});
+    };
+    addSource(c.source,c.name+' · historical background','Background reading');
+    function add(group,row,sourceIndex={},prefix='',extra=''){
+      const title=row.title||row.name||row.region_or_place||readable(row.practice_type||row.theme||row.category||row.relationship_type||row.knowledge_type)||'Research record';
+      const id=prefix+(row.id||row.researchId||title+'|'+(row.year??row.start_year??''));
+      if(seen.has(group+'|'+id))return;seen.add(group+'|'+id);
+      const sourceURLs=[row.source,row.sourceUrl,...(row.source_urls||[]),...(row.source_ids||row.sourceIds||[]).map(id=>sourceIndex[id]?.url)].filter(safeURL);
+      const urls=[...new Set(sourceURLs)];
+      urls.forEach(url=>addSource(url,title));
+      const note=row.detail||row.summary||row.description||row.evidence_basis||row.content_scope||'';
+      const date=recordDate(row);
+      const qualifier=[row.kind||row.role||row.practice_type||row.theme||row.relationship_type||row.map_kind||row.representation_type||row.knowledge_level||row.evidence_layer,
+        row.datePrecision||row.date_precision||row.dating,row.confidence?row.confidence+' confidence':''].filter(Boolean).map(readable).join(' · ');
+      const caveats=[row.evidenceNote,row.evidence_note,row.evidence_status,row.evidenceStatus,row.scope_warning,row.comparison_caveat,row.worldview_caution,row.notes,row.direction_evidence,row.evidence_class,row.object_date_note].filter(Boolean);
+      const html=(note?'<p>'+escapeHtml(note)+'</p>':'')+caveats.map(x=>'<p class="evidence-note">'+escapeHtml(readable(x))+'</p>').join('')+extra+
+        (urls.length?urls.map(url=>'<a class="story-link" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">Read record source ↗</a>').join(''):'<p class="evidence-note">No claim-level source attached to this record. The Sources section includes entity background reading.</p>')+
+        (Number.isFinite(row.year)?'<button type="button" class="moment-chip" data-story-year="'+row.year+'">Explore '+compactYear(row.year)+' →</button>':'');
+      groups[group].push({id,title,meta:[date,qualifier].filter(Boolean).join(' · '),html,search:[title,date,qualifier,note,...caveats].join(' '),year:row.year??row.start_year??row.birth_year??row.earliest_birth_year});
+    }
+    const eventSets=[
+      [typeof ATLAS_RESEARCH_EVENTS!=='undefined'?ATLAS_RESEARCH_EVENTS:[],typeof ATLAS_RESEARCH_SOURCES!=='undefined'?ATLAS_RESEARCH_SOURCES:{}],
+      [typeof ATLAS_MEDIEVAL_EVENTS!=='undefined'?ATLAS_MEDIEVAL_EVENTS:[],typeof ATLAS_MEDIEVAL_SOURCES!=='undefined'?ATLAS_MEDIEVAL_SOURCES:{}],
+      [typeof ATLAS_CLASSICAL_EVENTS!=='undefined'?ATLAS_CLASSICAL_EVENTS:[],typeof ATLAS_CLASSICAL_SOURCES!=='undefined'?ATLAS_CLASSICAL_SOURCES:{}],
+      [typeof ATLAS_MODERN_EVENTS!=='undefined'?ATLAS_MODERN_EVENTS:[],typeof ATLAS_MODERN_SOURCES!=='undefined'?ATLAS_MODERN_SOURCES:{}],[EVENTS,{}]
+    ];
+    const eventKeys=new Set();
+    for(const [events,sources] of eventSets)for(const e of events){
+      if(e.civ!==c.id&&![...(e.societyIds||[]),...(e.allSocietyIds||[])].includes(c.id))continue;
+      const key=e.title.toLowerCase()+'|'+e.year;if(eventKeys.has(key))continue;eventKeys.add(key);add('events',e,sources);
+    }
+    const packs=[
+      [typeof ATLAS_MEDIEVAL_PACK!=='undefined'?ATLAS_MEDIEVAL_PACK:null,typeof ATLAS_MEDIEVAL_ALIAS!=='undefined'?ATLAS_MEDIEVAL_ALIAS:{},typeof ATLAS_MEDIEVAL_SOURCES!=='undefined'?ATLAS_MEDIEVAL_SOURCES:{},'med-'],
+      [typeof ATLAS_CLASSICAL_PACK!=='undefined'?ATLAS_CLASSICAL_PACK:null,typeof ATLAS_CLASSICAL_ALIAS!=='undefined'?ATLAS_CLASSICAL_ALIAS:{},typeof ATLAS_CLASSICAL_SOURCES!=='undefined'?ATLAS_CLASSICAL_SOURCES:{},'classical-'],
+      [typeof ATLAS_MODERN_PACK!=='undefined'?ATLAS_MODERN_PACK:null,typeof ATLAS_MODERN_ALIAS!=='undefined'?ATLAS_MODERN_ALIAS:{},typeof ATLAS_MODERN_SOURCES!=='undefined'?ATLAS_MODERN_SOURCES:{},'modern-']
+    ];
+    for(const [pack,aliases,sources,prefix] of packs){
+      if(!pack)continue;
+      const linked=x=>[...(x.society_ids||[]),...(x.associated_society_ids||[]),x.society_id,x.associated_society_id,x.society_a_id,x.society_b_id,x.source_society_id,x.target_society_id].filter(Boolean).some(id=>(aliases[id]||id)===c.id);
+      for(const row of [...(pack.figures||[]),...(pack.cultural_practices||[])].filter(linked))add('people',row,sources,prefix);
+      for(const row of (pack.historical_maps||[]).filter(linked))add('maps',row,sources,prefix,'<p class="evidence-note">Catalogue record; no reproduction image bundled. '+escapeHtml(row.reproduction_status||row.copyright_reuse||'Check the item record for reproduction rights.')+'</p>');
+      for(const row of (pack.geographical_knowledge||[]).filter(linked))add('maps',row,sources,prefix);
+      for(const row of (pack.relationships||[]).filter(linked))add('connections',row,sources,prefix);
+      const linkedEvents=new Set((pack.events||[]).filter(linked).map(x=>x.id));
+      for(const row of pack.connections||[]){
+        const related=linked(row)||(row.event_ids||[row.event_a_id,row.event_b_id]).some(id=>linkedEvents.has(id));
+        const start=row.display_year??row.start_year??row.date_a;
+        const end=row.end_year_exclusive??(Number.isFinite(start)?start+1:null);
+        if(related||(Number.isFinite(start)&&Number.isFinite(end)&&start<=state.year&&state.year<end))add('meanwhile',row,sources,prefix,'<p class="evidence-note">Contemporaneity is a comparison, not evidence of contact.</p>');
+      }
+    }
+    const m=MAPS[c.mapId];
+    if(m){add('maps',{id:'display-map',title:m.title,dateLabel:m.date,kind:m.type,detail:m.description,source:m.page}, {},'', '<p class="evidence-note">Displayed cartographic example: '+escapeHtml(m.type)+'.</p>');}
+    if(c.knownText)add('maps',{id:'known-world-overview',title:'Geographical knowledge overview',detail:c.knownText,kind:'Entity overview; illustrative contact points',source:c.source}, {},'', '<p class="evidence-note">Representative places and networks do not define a complete known world or political boundaries.</p>');
+    for(const group of ['events','people','maps','connections'])groups[group].sort((a,b)=>Math.abs((a.year??state.year)-state.year)-Math.abs((b.year??state.year)-state.year));
+    groups.sources=[...sourceRows.values()];
+    return groups;
   }
   function renderStory(){
     const c=civById[state.civ];
+    if(reading.civ!==c.id){reading.civ=c.id;reading.search='';reading.topics=new Set();reading.records={};reading.limits={};}
     if(state.region!=='All regions'&&!regionMatch(c,state.region)&&!CIVILISATIONS.some(e=>activeAt(e,state.year)&&regionMatch(e,state.region))){
-      $('storyPanel').innerHTML=`<div class="story-overline">NO ENTRIES FOR THIS DATE</div><h2 class="story-title">${escapeHtml(state.region)}</h2><p class="story-description">This sample currently has no dated societies or empires in ${escapeHtml(state.region)} for ${compactYear(state.year)}. That is a gap in the atlas data, not a claim that the region was uninhabited.</p><p>Try changing the date, selecting another region or using Surprise me.</p>`;
-      return;
-    }const nearby=EVENTS.filter(e=>e.civ===c.id).sort((a,b)=>Math.abs(a.year-state.year)-Math.abs(b.year-state.year))[0];
-    const overview=c.kind==='overview';
-    const active=activeAt(c,state.year);
-    const isHistorical=state.view==='historical';const m=MAPS[c.mapId];
-    const med=typeof ATLAS_MEDIEVAL_PACK!=='undefined'?ATLAS_MEDIEVAL_PACK:null;
-    const aliases=typeof ATLAS_MEDIEVAL_ALIAS!=='undefined'?ATLAS_MEDIEVAL_ALIAS:{};
-    const medievalMaps=med?.historical_maps.filter(x=>(aliases[x.associated_society_id]||x.associated_society_id)===c.id)||[];
-    const medievalKnowledge=med?.geographical_knowledge.filter(x=>(aliases[x.society_id]||x.society_id)===c.id && x.start_year<=state.year&&x.end_year_exclusive>state.year)||[];
-    const periodMapLinks=medievalMaps.map(x=>{const src=(x.source_ids||[]).map(id=>ATLAS_MEDIEVAL_SOURCES?.[id]?.url).find(Boolean);return '<p class="story-value">'+escapeHtml(x.title)+' ('+escapeHtml(String(x.composition_earliest_year))+') · '+escapeHtml(x.representation_type.replaceAll('_',' '))+(src?' <a class="story-link" href="'+escapeHtml(src)+'" target="_blank" rel="noopener noreferrer">View catalogue ↗</a>':'')+'</p>';}).join('');
-    const worldKnowledgeNotes=medievalKnowledge.map(x=>'<p class="story-value">'+escapeHtml(x.region_or_place)+' · '+escapeHtml(x.knowledge_level)+' · '+escapeHtml(x.evidence_basis)+'</p>').join('');
-    const ancient=typeof ATLAS_CLASSICAL_PACK!=='undefined'?ATLAS_CLASSICAL_PACK:null;
-    const classics=typeof ATLAS_CLASSICAL_ALIAS!=='undefined'?ATLAS_CLASSICAL_ALIAS:{};
-    const relevantClassical = row => (row.society_ids||row.associated_society_ids||[]).some(id=>(classics[id]||id)===c.id);
-    const classicalSource=row=>(row.source_urls||[]).find(url=>typeof url==='string'&&url.startsWith('https://'))||
-      (row.source_ids||[]).map(id=>ATLAS_CLASSICAL_SOURCES?.[id]?.url).find(Boolean)||'';
-    const classicalMapRows=ancient?.historical_maps.filter(relevantClassical)||[];
-    const classicalGeoRows=ancient?.geographical_knowledge.filter(x=>relevantClassical({society_ids:[x.society_id]})&&x.start_year<=state.year&&x.end_year_exclusive>state.year)||[];
-    const classicalFigures=(ancient?.figures||[]).filter(relevantClassical).sort((a,b)=>Math.abs(a.start_year-state.year)-Math.abs(b.start_year-state.year)).slice(0,3);
-    const classicalPractices=(ancient?.cultural_practices||[]).filter(relevantClassical).sort((a,b)=>Math.abs(a.start_year-state.year)-Math.abs(b.start_year-state.year)).slice(0,3);
-    const classicalLinks=(rows,kind)=>rows.map(x=>{
-      const source=classicalSource(x);
-      return '<p class="story-value"><strong>'+escapeHtml(x.title||x.name)+'</strong> · '+escapeHtml(x.date_label||x.physical_object_date_label||x.summary||'')+
-        (kind==='map'?' · '+escapeHtml(x.map_kind||'catalogue record')+' · no reproduction image bundled':'')+
-        (source?' <a class="story-link" target="_blank" rel="noopener noreferrer" href="'+escapeHtml(source)+'">Source ↗</a>':'')+'</p>';
-    }).join('');
-    const classicalMapDetails=classicalLinks(classicalMapRows,'map');
-    const classicalKnowledgeDetails=classicalGeoRows.map(x=>'<p class="story-value"><strong>'+escapeHtml(x.title)+'</strong> · '+escapeHtml(x.evidence_layer)+' · '+escapeHtml(x.summary)+'</p>').join('');
-    const classicalRelationships=(ancient?.relationships||[]).filter(x=>
-      (classics[x.society_a_id]||x.society_a_id)===c.id||(classics[x.society_b_id]||x.society_b_id)===c.id)
-      .filter(x=>x.start_year<=state.year&&x.end_year_exclusive>state.year).slice(0,3);
-    const classicalRelationshipDetails=classicalRelationships.length?'<div class="story-section"><div class="story-label">⌁ EVIDENCED CONNECTIONS</div>'+classicalRelationships.map(x=>
-      '<p class="story-value"><strong>'+escapeHtml(x.relationship_type.replaceAll('_',' '))+'</strong> · '+escapeHtml(x.summary)+
-      ' · '+escapeHtml(x.direction_evidence)+' · '+escapeHtml(x.confidence)+'</p>').join('')+'</div>':'';
-    const classicalSynchronic=(ancient?.connections||[]).filter(x=>Math.abs(x.display_year-state.year)<=1).slice(0,2);
-    const classicalSynchronicDetails=classicalSynchronic.length?'<div class="story-section"><div class="story-label">✧ MEANWHILE ELSEWHERE</div>'+classicalSynchronic.map(x=>
-      '<p class="story-value"><strong>'+escapeHtml(x.title)+'</strong> · '+escapeHtml(x.summary)+
-      ' <em>'+escapeHtml(x.comparison_caveat)+'</em></p>').join('')+'</div>':'';
-    const classicalResearchDetails=(classicalFigures.length||classicalPractices.length||classicalMapRows.length)?'<div class="story-section"><div class="story-label">◈ SOURCED LIFE, PEOPLE & MAPS</div>'+
-       classicalLinks(classicalFigures,'figure')+classicalLinks(classicalPractices,'culture')+classicalMapDetails+
-       '<p class="story-value" style="font-size:11px;color:#a2a09a">Research leads with provisional confidence; item licences and individual historical claims may require further verification.</p></div>':'';
-    const mapNote=isHistorical?(m?`<p class="story-value"><strong>${escapeHtml(m.title)}</strong> (${escapeHtml(m.date)}). ${escapeHtml(m.description)}</p><a class="story-link" target="_blank" rel="noopener noreferrer" href="${escapeHtml(m.page)}">View original Wikimedia record ↗</a>`:(periodMapLinks||'<p class="story-value">No appropriate period map in our collection yet. This is an evidence gap, not proof that its people did not make maps.</p>')):state.view==='known'?`<p class="story-value">${escapeHtml(c.knownText||'Historical geographical understanding is not the same as a modern political boundary. Specific surviving maps or geographical accounts have not been curated for this society yet.')}</p>${worldKnowledgeNotes}${classicalKnowledgeDetails}`:'<p class="story-value">Map markers are approximate reference locations where documented, not historical borders. Some societies have no reliable location marker.</p>';
-    $('storyPanel').innerHTML=`
-      <div class="story-overline">${overview?'CULTURAL BACKGROUND':active?'CURRENTLY EXPLORING':'SELECTED HISTORICAL ENTITY'} · ${escapeHtml(groupLabel(c))}</div>
-      <h2 class="story-title">${escapeHtml(c.name)}</h2>
-      <div class="story-years">${overview?'Broad cultural overview · not a single dated polity':life(c)+(c.periodScope==='research-window'?' · research window, not complete lifespan':'')+(!active?` · not active in ${compactYear(state.year)}`:'')}</div>
-      <p class="story-description">${escapeHtml(c.summary)}</p>
-      <div class="story-section"><div class="story-label">⌖ GEOGRAPHICAL FOCUS</div><div class="story-value">${escapeHtml(c.location)}<br><span style="color:#a2a09a">${escapeHtml(c.region)}</span></div></div>
-      <div class="story-section"><div class="story-label">▤ ${isHistorical?'HISTORICAL MAP':state.view==='known'?'THEIR GEOGRAPHICAL WORLD':'MAP INTERPRETATION'}</div>${mapNote}</div>
-      ${nearby?`<div class="story-section"><div class="story-label">✦ HISTORICAL MOMENT</div><div class="story-event"><div class="event-year">${escapeHtml(nearby.dateLabel||compactYear(nearby.year))} · ${escapeHtml(nearby.kind)}${nearby.confidence?` · ${escapeHtml(nearby.confidence)} confidence`:``}</div><strong>${escapeHtml(nearby.title)}</strong><p>${escapeHtml(nearby.detail)}</p><button type="button" class="moment-chip" data-story-year="${nearby.year}">Explore this year →</button></div></div>`:''}
-      ${classicalResearchDetails}
-      ${classicalRelationshipDetails}
-      ${classicalSynchronicDetails}
-      <div class="story-section"><div class="story-label">↗ FURTHER READING</div><a class="story-link" href="${escapeHtml(c.source)}" target="_blank" rel="noopener noreferrer">Read historical background and sources ↗</a></div>
-      <div class="story-callout"><strong>✧ Meanwhile, elsewhere...</strong><p>${escapeHtml(contemporaryNote(c))}</p><button type="button" id="sameYearButton" class="moment-chip" style="margin-top:12px">Random contemporary society ↗</button></div>`;
-    const storyYear=$('storyPanel').querySelector('[data-story-year]');if(storyYear)storyYear.addEventListener('click',()=>setYear(+storyYear.dataset.storyYear));
+      $('storyPanel').innerHTML='<div class="story-overline">NO ENTRIES FOR THIS DATE</div><h2 class="story-title">'+escapeHtml(state.region)+'</h2><p class="story-description">This atlas currently has no dated societies or empires in '+escapeHtml(state.region)+' for '+compactYear(state.year)+'. That is a gap in the atlas data, not a claim that the region was uninhabited.</p><p>Try changing the date or selecting another region.</p>';return;
+    }
+    const overview=c.kind==='overview',active=activeAt(c,state.year),records=storyRecords(c),q=reading.search.trim().toLowerCase();
+    const requested=params.get('record')||params.get('event');
+    if(requested&&!reading.requestHandled){
+      for(const [key,rows] of Object.entries(records)){const at=rows.findIndex(r=>r.id===requested);if(at>=0){reading.topics.add(key);reading.records[key]=rows[at].id;reading.limits[key]=Math.ceil((at+1)/8)*8;reading.requestHandled=true;break;}}
+    }
+    const labels={events:['✦','Events'],people:['◈','People & daily life'],maps:['▤','Maps & geographical knowledge'],connections:['⌁','Connections'],meanwhile:['✧','Meanwhile elsewhere'],sources:['↗','Sources']};
+    const matched=Object.values(records).flat().filter(r=>!q||r.search.toLowerCase().includes(q)).length;
+    function topic(key){
+      const [icon,label]=labels[key],all=records[key],rows=all.filter(r=>!q||r.search.toLowerCase().includes(q));
+      const selectedAt=rows.findIndex(r=>r.id===reading.records[key]);
+      const limit=Math.max(reading.limits[key]||8,selectedAt<0?0:Math.ceil((selectedAt+1)/8)*8),open=q?rows.length>0:reading.topics.has(key);
+      const chosen=rows.slice(0,limit);
+      return '<details class="reader-topic" data-reader-topic="'+key+'"'+(open?' open':'')+'><summary><span aria-hidden="true" class="topic-icon">'+icon+'</span><span>'+label+'</span><span class="topic-count">'+(q?rows.length+' / ':'')+all.length+'</span></summary><div class="reader-topic-body">'+
+        (key==='connections'?'<p class="reader-hint">Documented relationships, with the evidence and its limits. Dates may differ from the selected year.</p>':key==='sources'?'<p class="reader-hint">Background reading and sources attached to individual records. Source presence does not independently verify every claim.</p>':key==='meanwhile'?'<p class="reader-hint">Parallel histories; sharing a date does not itself establish contact.</p>':'')+
+        (chosen.length?chosen.map(r=>'<details class="reader-record" name="map-reader-'+key+'" data-reader-record="'+escapeHtml(r.id)+'"'+(reading.records[key]===r.id?' open':'')+'><summary><strong>'+escapeHtml(r.title)+'</strong>'+(r.meta?'<small>'+escapeHtml(r.meta)+'</small>':'')+'</summary><div class="reader-record-body">'+r.html+'</div></details>').join(''):'<p class="reader-empty">'+(q?'No records match this search.':'No linked records in this atlas yet.')+'</p>')+
+        (rows.length>chosen.length?'<button class="reader-more" type="button" data-reader-more="'+key+'">Show '+Math.min(8,rows.length-chosen.length)+' more <span>'+chosen.length+' of '+rows.length+'</span></button>':'')+'</div></details>';
+    }
+    $('storyPanel').innerHTML='<div class="story-overline">'+(overview?'CULTURAL BACKGROUND':active?'CURRENTLY EXPLORING':'SELECTED HISTORICAL ENTITY')+' · '+escapeHtml(groupLabel(c))+'</div><h2 class="story-title">'+escapeHtml(c.name)+'</h2><div class="story-years">'+(overview?'Broad cultural overview · not a single dated polity':life(c)+(c.periodScope==='research-window'?' · research window, not complete lifespan':'')+(!active?' · not active in '+compactYear(state.year):''))+'</div><p class="story-location">⌖ '+escapeHtml(c.location)+' · '+escapeHtml(c.region)+'</p><p class="story-description">'+escapeHtml(c.summary)+'</p><a class="reader-context-link" href="story.html?year='+state.year+'&entity='+encodeURIComponent(c.id)+'">Read in Story →</a><label class="reader-search-label" for="mapReaderSearch">Find in this story</label><input id="mapReaderSearch" class="reader-search" type="search" placeholder="Search events, people, sources…" value="'+escapeHtml(reading.search)+'"><p class="reader-search-status" aria-live="polite">'+(q?matched+' matching records':'Open a topic to explore its records.')+'</p>'+Object.keys(labels).map(topic).join('')+'<div class="story-callout"><strong>Discover a contemporary</strong><p>'+escapeHtml(contemporaryNote(c))+'</p><button type="button" id="sameYearButton" class="moment-chip">Random contemporary society ↗</button></div>';
+    $('storyPanel').querySelectorAll('[data-story-year]').forEach(b=>b.addEventListener('click',()=>setYear(+b.dataset.storyYear)));
+    $('storyPanel').querySelectorAll('[data-reader-topic]').forEach(d=>d.addEventListener('toggle',()=>{if(!reading.search.trim()){if(d.open)reading.topics.add(d.dataset.readerTopic);else reading.topics.delete(d.dataset.readerTopic);}}));
+    $('storyPanel').querySelectorAll('[data-reader-record]').forEach(d=>d.addEventListener('toggle',()=>{const group=d.closest('[data-reader-topic]').dataset.readerTopic;if(d.open){reading.records[group]=d.dataset.readerRecord;d.parentElement.querySelectorAll('[data-reader-record]').forEach(other=>{if(other!==d)other.open=false;});}else if(reading.records[group]===d.dataset.readerRecord)delete reading.records[group];}));
+    $('storyPanel').querySelectorAll('[data-reader-more]').forEach(b=>b.addEventListener('click',()=>{const key=b.dataset.readerMore,previous=reading.limits[key]||8;reading.limits[key]=previous+8;reading.topics.add(key);renderStory();$('storyPanel').querySelectorAll('[data-reader-topic="'+key+'"] [data-reader-record] > summary')[previous]?.focus();}));
+    const search=$('storyPanel').querySelector('.reader-search');
+    search?.addEventListener('input',e=>{const position=e.target.selectionStart;reading.search=e.target.value;reading.limits={};renderStory();const next=$('storyPanel').querySelector('.reader-search');next?.focus();try{next?.setSelectionRange(position,position);}catch(_e){}});
     $('sameYearButton').addEventListener('click',()=>randomise('year'));
   }
   function contemporaryNote(c){
@@ -272,10 +346,11 @@
     renderTitle();renderEras();renderList();renderMap();parallelRows();renderStory();renderMoments();
     $('searchInput').value=state.search;
     $('regionSelect').value=state.region;
+    window.AtlasNavigation?.refresh();
   }
   function wire(){
     $('regionSelect').innerHTML=REGIONS.map(x=>`<option>${escapeHtml(x)}</option>`).join('');
-    $('searchInput').addEventListener('input',e=>{state.search=e.target.value;renderList();});
+    $('searchInput').addEventListener('input',e=>{state.search=e.target.value;if(state.search.trim())$('mapBrowse').open=true;renderList();});
     $('regionSelect').addEventListener('change',e=>go({region:e.target.value,search:'',view:'actual'}));
     document.querySelectorAll('[data-catalogue]').forEach(b=>b.addEventListener('click',()=>go({catalogue:b.dataset.catalogue,search:'',view:'actual'})));
     $('randomButton').addEventListener('click',()=>randomise('all'));
@@ -317,6 +392,7 @@
     document.addEventListener('keydown',e=>{if(e.key==='/'&&!(e.target instanceof HTMLInputElement)){e.preventDefault();$('searchInput').focus();}if(e.key==='Escape')$('randomMenu').classList.add('hidden');});
     document.addEventListener('click',e=>{if(!e.target.closest('#moreRandom')&&!e.target.closest('#randomMenu'))$('randomMenu').classList.add('hidden');});
   }
+  if(window.matchMedia?.('(max-width:700px)').matches)$('mapBrowse').open=false;
   wire();render();
   window.WorldHistoryAtlas={state,civilisations:CIVILISATIONS,moments:MOMENTS,selectCiv,setYear,randomise,go};
 })();
