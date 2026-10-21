@@ -16,6 +16,7 @@
 .tech-toolbar label{font:700 12px/1.4 system-ui;color:#47595a;display:flex;align-items:center;gap:10px;min-width:0}
 .tech-toolbar select{border:1px solid #bdaa8f;background:#fffdf8;border-radius:5px;min-width:180px;max-width:340px;padding:10px;color:#263b42;font:14px system-ui}
 .tech-random{font:600 13px system-ui;border:1px solid #af8850;background:#d6b780;color:#142b38;border-radius:5px;padding:11px 14px;cursor:pointer}
+.tech-random:disabled{opacity:.55;cursor:default}
 .tech-layout{min-height:0;min-width:0;flex:1;display:grid;grid-template-columns:minmax(245px,27%) minmax(0,1fr)}
 .tech-tree{overflow:auto;padding:20px 16px;background:#f2ede2;border-right:1px solid #d8cebc;min-width:0}
 .tech-tree-intro{font:13px/1.55 system-ui;color:#52645f;margin:0 0 16px}
@@ -23,6 +24,9 @@
 .tech-search input{width:100%;min-width:0;padding:11px 10px;border:1px solid #b9b4a6;background:#fffdf8;color:#263d44;border-radius:5px;font:14px system-ui}
 .tech-search input::placeholder{color:#63716e}
 .tech-branches{display:flex;flex-direction:column;gap:10px;min-width:0}
+.tech-scope-summary{display:grid;gap:6px;padding:12px;border:1px solid #d8c9ad;border-left:3px solid #b18a50;border-radius:5px;background:#faf4e7;color:#36564c}
+.tech-scope-summary strong{font:600 14px/1.45 system-ui;overflow-wrap:anywhere}
+.tech-scope-summary span{font:12px/1.6 system-ui;color:#576e60}
 .tech-branch{border:1px solid #d7cbb8;border-radius:7px;background:#fffdf7;min-width:0;overflow:hidden}
 .tech-branch-head{display:flex;align-items:center;gap:8px;list-style:none;padding:15px 12px;cursor:pointer;color:#263e48;min-height:55px}
 .tech-branch-head::-webkit-details-marker,.tech-all-evidence>summary::-webkit-details-marker,.tviz-connections>summary::-webkit-details-marker{display:none}
@@ -53,8 +57,16 @@ details[open]>.tech-branch-head .tech-chevron,details[open]>.tech-chevron,detail
 .tech-more span{font:400 12px system-ui;color:#647269;white-space:nowrap}
 .tech-empty,.tech-selected-note{font:13px/1.6 system-ui;color:#52655e;margin:12px}
 .tech-search-result{display:flex;align-items:center;justify-content:space-between;gap:8px;font:13px/1.5 system-ui;color:#425e54;padding:0 2px 5px}
+.tech-search-result>span{min-width:0;overflow-wrap:anywhere}
+.tech-search-result>button{flex:none}
 .tech-search-result button,.tech-evidence-filter button{border:0;background:transparent;color:#725424;text-decoration:underline;font:600 12px system-ui;padding:6px 0;cursor:pointer}
 .tech-selected-note{margin:0 0 7px}
+.tech-empty-state{padding:24px;border:1px solid #d8c9ad;border-radius:8px;background:#f6f0e3;max-width:75ch}
+.tech-empty-state h2{font:normal 29px/1.25 Georgia,serif;color:#253f46;margin:10px 0 14px}
+.tech-empty-state p{font:14px/1.75 system-ui;color:#496156;margin:12px 0}
+.tech-empty-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:20px}
+.tech-empty-actions button{border:1px solid #b6a17d;border-radius:5px;padding:11px 13px;min-height:44px;background:#fffaf0;color:#5b472c;font:600 13px/1.4 system-ui;cursor:pointer}
+.tech-empty-actions button:hover{background:#eee1c9}
 .tech-evidence-list{margin-top:24px}
 .tech-evidence-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
 .tech-evidence-heading h3{font:normal 22px Georgia,serif;color:#233c47;margin:0}
@@ -105,6 +117,8 @@ details[open]>.tech-branch-head .tech-chevron,details[open]>.tech-chevron,detail
   .tech-branch-title{font-size:14px}
   .tech-branch-head{padding:12px;min-height:49px}
   .tech-details{overflow:visible;padding:22px 14px}
+  .tech-empty-state{padding:19px 15px}
+  .tech-empty-state h2{font-size:26px}
   .tech-intro h2{font-size:30px}
   .tech-intro p{font-size:14px}
   .tech-evidence-heading{flex-wrap:wrap;gap:5px}

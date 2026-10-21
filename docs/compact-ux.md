@@ -16,7 +16,11 @@ Events start with eight dated headings, support search across all records in the
 
 ## Technology
 
-Six counted families replace the fully open tree. Technology and evidence search covers all loaded records. Each plotted milestone has an individual record key, so separate milestones for the same society remain separately selectable. The chosen evidence body opens inline, with other records batched by eight. Compare-from society is independent of evidence selection. Time range stays fixed when more rows appear. Geographic points and curated connections retain their approximation notes.
+The selected society or empire filters both the technology tree and its evidence. Only families with matching topics appear, and all counts, search results, timeline rows, map locations and Random choices use the same selection. Matching uses existing civilisation IDs on evidence records. It does not infer technologies from a broad cultural relationship or similar name.
+
+**All societies & empires** restores the full comparison. A selection with no linked research clears the previous topic and record and explains the gap. Changing society clears the search and batch limits, retains an eligible topic where possible, and chooses evidence from the new selection. Reopening the tree preserves its selection until the society chosen on the main Map changes.
+
+Each plotted milestone retains its original record key, so separate milestones for the same society remain individually selectable. The chosen evidence body opens inline, with other records batched by eight. The full date range for the current selection stays fixed when more rows appear. A single milestone is shown as a dated point. Geographic points and curated connections retain their approximation notes; routes require evidence for both endpoints in the current view.
 
 ## Navigation and evidence
 
