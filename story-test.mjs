@@ -43,15 +43,16 @@ check(scripts.indexOf('story-model.js')>scripts.indexOf('research-classical-appl
 check(scripts[scripts.length-1],'story-app.js');
 // Routing bridge is tested separately from network-dependent hosting redirects.
 const navigation=read('./public/story-navigation.js');
-function navFixture(pathname,search='',hash='',staticViews=[]) {
- const redirects=[],items=[];let opened=0;
+function navFixture(pathname,search='',hash='',staticViews=[],separateContainers=false) {
+ const redirects=[],items=[],actionItems=[],primaryItems=[];let opened=0;
  const node=()=>({dataset:{},handlers:{},addEventListener(k,fn){this.handlers[k]=fn;}});
- for(const view of staticViews){const a=node();a.dataset.atlasNav=view;items.push(a);}
- const nav={querySelector:()=>items.find(x=>x.dataset.storyEntry||x.dataset.atlasNav==='story'),prepend:el=>items.push(el)};
- const document={readyState:'complete',querySelector:()=>nav,querySelectorAll:()=>items,createElement:node,head:{append(){}},getElementById:()=>({open:false})};
+ for(const view of staticViews){const a=node();a.dataset.atlasNav=view;items.push(a);(separateContainers?primaryItems:actionItems).push(a);}
+ const container=links=>({querySelector:()=>links.find(x=>x.dataset.storyEntry||x.dataset.atlasNav==='story'),prepend:el=>{links.unshift(el);items.unshift(el);}});
+ const actions=container(actionItems),primary=separateContainers?container(primaryItems):null;
+ const document={readyState:'complete',querySelector:selector=>selector==='.topbar nav'?primary:selector==='.top-actions'?actions:null,querySelectorAll:()=>items,createElement:node,head:{append(){}},getElementById:()=>({open:false})};
  const window={HistoryCompare:{state:{year:0}},WorldHistoryTechnology:{open(){opened++;}},addEventListener(){}};
  vm.runInNewContext(navigation,{location:{pathname,search,hash,replace:url=>redirects.push(url)},document,window});
- return {redirects,items,window,opened};
+ return {redirects,items,actionItems,primaryItems,window,opened};
 }
 check(navFixture('/').redirects,['story.html'],'Clean homepage enters the new Story view');
 check(navFixture('/','?year=0').redirects,[],'Historical map deep link is preserved');
@@ -63,6 +64,11 @@ const shared=navFixture('/compare.html','','',['story','map','compare','technolo
 check(shared.items.length,4,'Static primary navigation must not receive a duplicate Story link');
 shared.window.HistoryCompare.state.selected='abbasid';shared.window.HistoryCompare.state.year=0;shared.window.AtlasNavigation.refresh();
 check(shared.items.map(a=>a.href),['story.html?year=0&entity=abbasid','index.html?year=0&civ=abbasid','compare.html?year=0&civ=abbasid','index.html?year=0&civ=abbasid#technology'],'Every supported view carries year zero and the selected entity with its own parameter');
+const separate=navFixture('/index.html','','',['story','map','compare','technology'],true);
+check(separate.items.length,4,'Separate primary navigation and actions must not create a second Story link');
+check(separate.actionItems.length,0,'Utility actions must not receive a fallback when primary navigation already has Story');
+separate.window.HistoryCompare.state.selected='han';separate.window.HistoryCompare.state.year=0;separate.window.AtlasNavigation.refresh();
+check(separate.primaryItems.map(a=>a.href),['story.html?year=0&entity=han','index.html?year=0&civ=han','compare.html?year=0&civ=han','index.html?year=0&civ=han#technology'],'Separate navigation preserves global context refresh and year zero');
 const baselineFiles=scripts.filter(x=>!x.startsWith('story-'));
 const hashes=Object.fromEntries(baselineFiles.map(f=>{const b=fs.readFileSync(new URL('./public/'+f,import.meta.url));return [f,createHash('sha1').update('blob '+b.length+'\0').update(b).digest('hex')]}));
 const out={assertions,entities:input.entities.length,nativeEvents:input.events.length,researchEvents:input.research.flat().length,storyRecords:data.events.length,duplicateRecordsCollapsed:data.duplicates,invalidRecords:data.skipped,groupsAt1200:groups.length,eventsAt1200:events.length,baselineHashes:hashes};

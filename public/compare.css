@@ -148,6 +148,22 @@ details>summary:focus-visible,.timeline-scroll:focus-visible,.era-grid-scroll:fo
   .year-pair{max-width:280px}
   .concurrent-list,.near-events{max-height:none}
   .topbar nav{order:3;flex-basis:100%;justify-content:center;gap:6px}
+  /* Event headings remain readable without sideways scrolling. The ruler and
+     each dot track share the same inset and full available plotting width. */
+  .timeline-canvas.events-canvas{min-width:0}
+  .events-canvas .axis{grid-template-columns:minmax(0,1fr)}
+  .events-canvas .axis-label{border-right:0;padding:10px 12px 5px}
+  .events-canvas .axis-track{height:43px;margin:0 12px}
+  .events-canvas .axis-tick:nth-child(2),
+  .events-canvas .axis-tick:nth-child(4),
+  .events-canvas .axis-tick:nth-child(5){display:none}
+  .events-canvas .event-lane{grid-template-columns:minmax(0,1fr) 26px;grid-template-rows:auto auto 22px;padding:13px 12px;gap:7px 8px}
+  .events-canvas .event-year{grid-column:1;grid-row:1;padding:0;font-size:13px}
+  .events-canvas .event-copy{grid-column:1;grid-row:2;min-width:0;overflow-wrap:anywhere}
+  .events-canvas .event-copy strong{font-size:14px;line-height:1.5}
+  .events-canvas .event-copy small{font-size:12px;line-height:1.5}
+  .events-canvas .event-track{grid-column:1 / -1;grid-row:3}
+  .events-canvas .event-open{grid-column:2;grid-row:1 / span 2;font-size:25px}
 }
 @media(max-width:620px){
   .topbar{padding:12px;gap:8px}

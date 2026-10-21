@@ -22,8 +22,13 @@
   }
   window.AtlasNavigation={refresh};
   function boot() {
-    const nav=document.querySelector('.top-actions')||document.querySelector('.topbar nav');
-    if(nav&&!nav.querySelector('[data-atlas-nav="story"], [data-story-entry], a[href^="story.html"]')) {
+    const primary=document.querySelector('.topbar nav');
+    const actions=document.querySelector('.top-actions');
+    const nav=primary||actions;
+    const storySelector='[data-atlas-nav="story"], [data-story-entry], a[href^="story.html"]';
+    // Primary view links and utility actions can occupy separate header containers.
+    const existingStory=primary?.querySelector(storySelector)||actions?.querySelector(storySelector);
+    if(nav&&!existingStory) {
       fallback=document.createElement('a');fallback.dataset.storyEntry='true';fallback.dataset.atlasNav='story';
       fallback.textContent='Story';fallback.className='story-entry-link';
       fallback.addEventListener('click',refresh);nav.prepend(fallback);
