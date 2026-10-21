@@ -6,7 +6,10 @@
   }
   function context() {
     const s=window.HistoryCompare?.state||window.WorldHistoryAtlas?.state||{};
-    return {year:s.year??1200,civ:s.selected||s.civ||null};
+    const q=new URLSearchParams(location.search);
+    const parsed=Number(q.get('year'));
+    const year=Number.isSafeInteger(parsed)&&q.has('year')?parsed:1200;
+    return {year:s.year??year,civ:s.selected||s.civ||q.get('entity')||q.get('civ')||null};
   }
   function href(view) {
     const {year,civ}=context();
@@ -20,7 +23,7 @@
     }
     if(fallback)fallback.href=href('story');
   }
-  window.AtlasNavigation={refresh};
+  window.AtlasNavigation={refresh,href};
   function boot() {
     const primary=document.querySelector('.topbar nav');
     const actions=document.querySelector('.top-actions');
