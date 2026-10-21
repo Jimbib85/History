@@ -228,3 +228,6 @@ summary:focus-visible{outline:3px solid #c89951;outline-offset:3px;border-radius
 .cluster-marker:hover .cluster-core,.cluster-marker:focus-visible .cluster-core{fill:#aa7744;stroke:#152f3d;stroke-width:3}
 .geographic-caveat{display:block;color:#846b54;font-size:10px;margin-top:3px}
 @media(max-width:620px){.geo-controls{padding:10px;align-items:start}.geo-buttons button{min-height:40px;font-size:12px}#mapClusterCount{font-size:12px}.map-ornament.top-left{max-width:60%}}
+
+/* v0.17: evidence explorer entry point attached to all map views. */
+.worldview-entry{display:block;padding:12px 15px;border-top:1px solid #dfd7c7;background:#f4eee0;color:#305967;font-size:12px;font-weight:700;text-decoration:none;line-height:1.5}.worldview-entry:hover,.worldview-entry:focus-visible{background:#e9ddc8;text-decoration:underline;text-underline-offset:3px}
