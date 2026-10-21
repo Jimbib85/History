@@ -11,11 +11,13 @@
   const regionMatch = (c,r) => r === 'All regions' || (r === 'Africa' ? c.region.includes('Africa') : c.region === r);
   const escapeHtml = val => String(val).replace(/[&<>"']/g, x => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
   const civById = Object.fromEntries(CIVILISATIONS.map(c => [c.id,c]));
+  const geo = window.WorldAtlasGeo;
+  let markerGroups = [];
   const params = new URLSearchParams(window.location.search);
   const initialId = civById[params.get('civ')] ? params.get('civ') : 'rome';
   const rawYear = Number(params.get('year'));
   const initialYear = params.has('year') && Number.isFinite(rawYear) ? Math.min(2026,Math.max(-9999,Math.round(rawYear))) : 200;
-  const state = {year:initialYear,civ:initialId,view:['actual','historical','known'].includes(params.get('view'))?params.get('view'):'actual',region:'All regions',search:'',zoom:1,tx:0,ty:0,catalogue:'all'};
+  const state = {year:initialYear,civ:initialId,view:['actual','historical','known'].includes(params.get('view'))?params.get('view'):'actual',region:'All regions',search:'',zoom:1,tx:0,ty:0,catalogue:'all',geoMode:params.get('geo')==='points'?'points':'groups',geoGrid:params.get('grid')==='1'};
   // Reading and disclosure choices are separate from historical navigation.
   const reading = {civ:null, search:'', topics:new Set(), records:{}, limits:{}};
   const catalogueUI = {key:'', current:8, other:8, otherOpen:false};
@@ -135,8 +137,9 @@
     if(disclosure&&(q||civById[state.civ].kind==='overview'))disclosure.open=true;
     $('culturalOverviewList').querySelectorAll('[data-overview]').forEach(b=>b.addEventListener('click',()=>go({civ:b.dataset.overview,view:'actual'})));
   }
-  function project(lon,lat){return [((lon+180)/360*1200),((88-lat)/176*590)];}
+  function project(lon,lat){return geo.project(lon,lat);}
   function getMapMarkers(){
+    markerGroups=[];
     let visible=CIVILISATIONS.filter(c=>activeAt(c,state.year)&&regionMatch(c,state.region)&&(state.catalogue==='all'||c.kind===state.catalogue));
     const c=civById[state.civ];
     if(state.view==='known'){
@@ -149,12 +152,19 @@
       return visible.map(v=>marker(v,true)).join('')+points.join('');
     }
     if(!visible.some(c=>c.id===state.civ) && (activeAt(c,state.year) || c.kind==='overview'))visible.unshift(c);
-    return visible.map(v=>marker(v,v.id===state.civ)).join('');
+    if(state.geoMode==='points')return visible.map(v=>marker(v,v.id===state.civ)).join('');
+    const groups=geo.cluster(visible,{zoom:state.zoom,selectedId:state.civ,radius:42});
+    markerGroups=groups.filter(g=>g.count>1);
+    return groups.map(g=>g.count>1?clusterMarker(g):marker(g.items[0],g.selected)).join('');
+  }
+  function clusterMarker(group){
+    const label=group.count+' nearby reference points; zoom to inspect. Not a territory.';
+    return '<g class="map-marker cluster-marker" data-mapcluster="'+escapeHtml(group.id)+'" tabindex="0" role="button" aria-label="'+escapeHtml(label)+'"><title>'+escapeHtml(label)+'</title><circle class="cluster-halo" cx="'+group.x+'" cy="'+group.y+'" r="18"/><circle class="cluster-core" cx="'+group.x+'" cy="'+group.y+'" r="14"/><text class="cluster-count" x="'+group.x+'" y="'+(group.y+4)+'" text-anchor="middle">'+group.count+'</text></g>';
   }
   function marker(c,selected){
     if(!Number.isFinite(c.lon)||!Number.isFinite(c.lat))return '';
     const [x,y]=project(c.lon,c.lat);
-    return `<g class="map-marker ${selected?'selected':'not-selected'}" data-mapciv="${c.id}" tabindex="0" role="button" aria-label="Explore ${escapeHtml(c.name)}" style="--fill:${c.color}"><title>${escapeHtml(c.name)} · ${escapeHtml(c.location)}</title>${selected?`<circle class="ring" cx="${x}" cy="${y}" r="17"/>`:''}<circle class="core" cx="${x}" cy="${y}" r="${selected?9:6.5}"/>${selected?`<text x="${x+13}" y="${y-11}">${escapeHtml(c.name)}</text>`:''}</g>`;
+    return `<g class="map-marker ${selected?'selected':'not-selected'}" data-mapciv="${escapeHtml(c.id)}" tabindex="0" role="button" aria-label="Explore ${escapeHtml(c.name)}" style="--fill:${c.color}"><title>${escapeHtml(c.name)} · ${escapeHtml(c.location)}</title>${selected?`<circle class="ring" cx="${x}" cy="${y}" r="17"/>`:''}<circle class="core" cx="${x}" cy="${y}" r="${selected?9:6.5}"/>${selected?`<text x="${x+13}" y="${y-11}">${escapeHtml(c.name)}</text>`:''}</g>`;
   }
   function updateTransform(){
     $('mapTransform').setAttribute('transform',`translate(${state.tx.toFixed(2)} ${state.ty.toFixed(2)}) scale(${state.zoom.toFixed(3)})`);
@@ -164,17 +174,44 @@
     const f=next/old;
     state.tx=600-(600-state.tx)*f;state.ty=295-(295-state.ty)*f;state.zoom=next;
     updateTransform();
+    if(state.view==='actual'){$('mapMarkers').innerHTML=getMapMarkers();updateGeoCount();}
+  }
+  function zoomToCluster(id){
+    const group=markerGroups.find(g=>g.id===id);
+    if(!group)return;
+    if(state.zoom>=3.95){state.geoMode='points';renderMap();return;}
+    state.zoom=Math.min(4,state.zoom*1.8);
+    state.tx=600-group.x*state.zoom;
+    state.ty=295-group.y*state.zoom;
+    renderMap();
+  }
+  function updateGeoCount(){
+    const n=markerGroups.reduce((sum,g)=>sum+g.count,0);
+    $('mapClusterCount').textContent=state.view==='actual'
+      ?(state.geoMode==='groups'&&n ? n+' reference points grouped into '+markerGroups.length+' clusters' : 'Showing individual reference points')
+      :state.view==='known'?'Illustrative contact locations':'Historical map image';
   }
   function renderMap(){
     const civ=civById[state.civ];const historical=state.view==='historical';
     $('worldMap').classList.toggle('hidden',historical);
     $('historicalMap').classList.toggle('hidden',!historical);
     $('mapMarkers').innerHTML=getMapMarkers();
+    $('mapGrid').innerHTML=historical||!state.geoGrid?'':geo.grid();
+    $('geoControls').hidden=historical;
+    $('groupGeo').setAttribute('aria-pressed',String(state.geoMode==='groups'));
+    $('groupGeo').textContent=state.geoMode==='groups'?'● Group nearby':'○ Show nearby groups';
+    $('toggleGrid').setAttribute('aria-pressed',String(state.geoGrid));
+    updateGeoCount();
     updateTransform();
     $('mapYear').textContent=compactYear(state.year);
     $('mapStatus').textContent=state.view==='known'?'◉ Illustrative contact points · not a complete known world':historical?'◉ Historical cartography · read dating carefully':`◉ ${CIVILISATIONS.filter(c=>activeAt(c,state.year)&&regionMatch(c,state.region)&&(state.catalogue==='all'||c.kind===state.catalogue)).length} charted entries in this selection`;
     const selectedMap=MAPS[civ.mapId];
-    $('mapEvidence').innerHTML=historical&&selectedMap?'<strong>'+escapeHtml(selectedMap.title)+'</strong> · '+escapeHtml(selectedMap.date)+' · '+escapeHtml(selectedMap.type)+' · <a href="'+escapeHtml(selectedMap.page)+'" target="_blank" rel="noopener noreferrer">Source ↗</a>':state.view==='known'?'Illustrative contact points, not a complete known world.':'Approximate geographical reference points · not historical borders.';
+    const entityURL=safeURL(civ.source);
+    const evidenceSummary='<strong>'+escapeHtml(civ.name)+'</strong> · '+escapeHtml(civ.location||'Location not specified')+
+      ' · '+escapeHtml(life(civ))+'. This point is an illustrative location, not a measured historical boundary or a documented territorial centre.'+
+      (entityURL?' <a href="'+escapeHtml(entityURL)+'" target="_blank" rel="noopener noreferrer">Background ↗</a>':'')+
+      '<span class="geographic-caveat"> Background reading does not independently establish the precise marker coordinates.</span>';
+    $('mapEvidence').innerHTML=historical&&selectedMap?'<strong>'+escapeHtml(selectedMap.title)+'</strong> · '+escapeHtml(selectedMap.date)+' · '+escapeHtml(selectedMap.type)+' · <a href="'+escapeHtml(selectedMap.page)+'" target="_blank" rel="noopener noreferrer">Source ↗</a>':state.view==='known'?'Illustrative contact points, not a complete known world. '+evidenceSummary:evidenceSummary;
     $('mapAboutText').textContent=historical?(selectedMap?selectedMap.description:'No appropriate period map is curated for this selection yet. Missing evidence does not mean people lacked geographical knowledge.'):state.view==='known'?(civ.knownText||'The examples show documented places or networks where available. They do not represent the knowledge of every inhabitant.'):'Markers identify representative locations where documented. They do not depict territorial extent or historical borders. Select a marker to explore its records.';
     $('mapHelp').textContent=state.view==='actual'?'Select a marker to read its story ↗':state.view==='known'?'Example places and networks, not knowledge boundaries':'Maps are historical artefacts, not satellite views';
     $('mapLegend').style.display=historical?'none':'';
@@ -344,6 +381,8 @@
     $('yearSlider').value=state.year;
     $('backButton').disabled=snapshots.length===0;
     const url=new URL(location.href);url.searchParams.set('year',state.year);url.searchParams.set('civ',state.civ);url.searchParams.set('view',state.view);
+    if(state.geoMode==='points')url.searchParams.set('geo','points');else url.searchParams.delete('geo');
+    if(state.geoGrid)url.searchParams.set('grid','1');else url.searchParams.delete('grid');
     try {window.history.replaceState(null,'',url);}catch(_e){}
   }
   function render(){
@@ -382,14 +421,22 @@
     $('prevMoment').addEventListener('click',()=>{const earlier=MOMENTS.filter(m=>m.year<state.year);setYear((earlier[earlier.length-1]||MOMENTS[0]).year);});
     $('nextMoment').addEventListener('click',()=>{const later=MOMENTS.find(m=>m.year>state.year);setYear((later||MOMENTS[MOMENTS.length-1]).year);});
     document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>go({view:b.dataset.view})));
-    $('mapMarkers').addEventListener('click',e=>{const g=e.target.closest('[data-mapciv]');if(g)selectCiv(g.dataset.mapciv);});
-    $('mapMarkers').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){const g=e.target.closest('[data-mapciv]');if(g){e.preventDefault();selectCiv(g.dataset.mapciv);}}});
+    $('mapMarkers').addEventListener('click',e=>{
+      const cluster=e.target.closest('[data-mapcluster]');if(cluster){zoomToCluster(cluster.dataset.mapcluster);return;}
+      const g=e.target.closest('[data-mapciv]');if(g)selectCiv(g.dataset.mapciv);
+    });
+    $('mapMarkers').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){
+      const group=e.target.closest('[data-mapcluster]');if(group){e.preventDefault();zoomToCluster(group.dataset.mapcluster);return;}
+      const g=e.target.closest('[data-mapciv]');if(g){e.preventDefault();selectCiv(g.dataset.mapciv);}
+    }});
     $('zoomIn').addEventListener('click',()=>zoomBy(1.3));
     $('zoomOut').addEventListener('click',()=>zoomBy(1/1.3));
-    $('resetMap').addEventListener('click',()=>{Object.assign(state,{zoom:1,tx:0,ty:0});updateTransform();});
+    $('resetMap').addEventListener('click',()=>{Object.assign(state,{zoom:1,tx:0,ty:0});renderMap();});
+    $('groupGeo').addEventListener('click',()=>{state.geoMode=state.geoMode==='groups'?'points':'groups';renderMap();});
+    $('toggleGrid').addEventListener('click',()=>{state.geoGrid=!state.geoGrid;renderMap();});
     $('mapStage').addEventListener('wheel',e=>{if(state.view==='historical')return;e.preventDefault();zoomBy(e.deltaY<0?1.15:1/1.15);},{passive:false});
     const svg=$('worldMap');let drag=null;
-    svg.addEventListener('pointerdown',e=>{if(e.target.closest('[data-mapciv]'))return;drag={x:e.clientX,y:e.clientY,tx:state.tx,ty:state.ty};svg.setPointerCapture(e.pointerId);$('mapStage').classList.add('dragging');});
+    svg.addEventListener('pointerdown',e=>{if(e.target.closest('[data-mapciv],[data-mapcluster]'))return;drag={x:e.clientX,y:e.clientY,tx:state.tx,ty:state.ty};svg.setPointerCapture(e.pointerId);$('mapStage').classList.add('dragging');});
     svg.addEventListener('pointermove',e=>{if(!drag)return;const box=svg.getBoundingClientRect();state.tx=drag.tx+(e.clientX-drag.x)*1200/box.width;state.ty=drag.ty+(e.clientY-drag.y)*590/box.height;updateTransform();});
     const endDrag=()=>{drag=null;$('mapStage').classList.remove('dragging');};
     svg.addEventListener('pointerup',endDrag);svg.addEventListener('pointercancel',endDrag);
