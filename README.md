@@ -8,6 +8,14 @@ The Technology tree filters its families, topics and evidence to the selected so
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
 
+## Version 0.17 — The world through their eyes
+
+Open [Their World](public/worldview.html) directly or follow **Explore surviving maps, geographical knowledge and recorded connections** beneath the interactive World Map. It provides a compact reader for **19 historical map records, 42 geographical knowledge records and 127 historical relationships** across the classical, medieval and modern research imports.
+
+The reader explicitly separates original and later-copy map records; attested, inferred and unsupported claims; and direct contact, regional or indirect exchange and contemporaneity without contact. Only three previously curated, externally hosted image references appear inline. Bibliographic research records never imply automatic image rights or verified territorial geometry.
+
+Choose a society, search the research, optionally compare records within about 125 years of a selected year, and return to its World Map, Story or Compare context. Unsupported geographic knowledge assertions are excluded from normal results. No new routes, territories, user accounts or backend services are introduced. See [source and interpretation notes](docs/worldview-v017.md).
+
 ## Start using it
 
 1. Extract the zip somewhere on your computer.
