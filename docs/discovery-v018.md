@@ -25,7 +25,7 @@ This is editorial juxtaposition, **not** a chronology of transmission. Unrelated
 
 ## Same-year and Random
 
-Same-year cards require the raw record interval to include the chosen year (astronomical year numbering, 0 = 1 BCE). The initial example years are 200, 1600 and 1800 CE. The selection prefers diverse linked society IDs, without implying exchange or contact. Empty periods display a clear gap.
+Same-year cards require the raw record interval to include the chosen year (astronomical year numbering, 0 = 1 BCE). **These intervals are research coverage, not proof the described activity took place precisely in that selected year.** The initial example years are 200, 1600 and 1800 CE. The selection prefers diverse linked society IDs, without implying exchange or contact. Empty periods display a clear gap.
 
 Random only selects records with a valid HTTP(S) source link and avoids the recent selection; a link to the exact selected record is put into the URL. The “registered source” is a research lead, not independent claim review.
 
