@@ -87,3 +87,24 @@ The technology diagram deliberately avoids a false technology ladder: adoption, 
 Files: `public/tech-data.js`, `public/technology-tree.js`, `public/technology-tree.css`. Content expansions live in `public/data.js`. Run `npm test` for chronology and content-reference checks.
 
 The repository currently has `wrangler.jsonc` configured for Cloudflare Workers static asset hosting from `./public`, not the repository root. It is a personal passion project, with no login, advertising, database or subscriptions.
+
+
+## Version 0.3: When & where technologies spread
+
+The **Technology tree** now includes two modes: **Time** places curated milestones on a common chronological scale, while **World map** plots approximate geographical reference points. Societies are colour-coded by independent development, adoption or transmission, further development, and other evidence.
+
+A separate `public/tech-pathways.js` file stores **explicitly curated** connections. The diagram draws dashed conceptual links only when a connection is included in that file with an explanatory note and source URL. These are not reconstructed routes or claims of direct person-to-person transmission. Topics with no evidenced connection show separate dots.
+
+Two additional topics expand the catalogue to **14 technologies and 48 dated examples**: road and courier networks (Achaemenid Persia, Rome and Inca) and urban water engineering (Indus cities, Rome and Angkor). The examples use linked historical sources and are not exclusive claims of invention. The catalogue now includes four broad connections (papermaking diffusion, numeral scholarship and Chinese print continuity). Dates remain approximate.
+
+### Source files
+
+- `public/tech-extensions.js`: additional evidence-backed milestones and source metadata
+- `public/tech-pathways.js`: source-backed conceptual links, with their uncertainty explicitly described
+- `public/technology-tree.js`: interactive time and map views, comparison and atlas navigation
+- `public/technology-viz.css`: responsive diagram styling
+- `tech-v03-test.mjs`: checks records, links and UI state changes
+
+### Cloudflare hosting
+
+The current site runs on a Cloudflare Worker named `history` and serves the static files in `public/`, as configured by `wrangler.jsonc`. The hostname is `https://history.bibbybots.ai`. Build tools and databases are unnecessary for the atlas.
