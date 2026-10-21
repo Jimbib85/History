@@ -141,3 +141,9 @@ This corrects a previously missing research-pack import. The supplied 1000–149
 The interactive map skips records without trustworthy reference-site coordinates rather than plotting fabricated markers. Broad Australian cultural research remains in the archive instead of generating an all-history dated Australian society. Dated observations show their sourced time intervals, and uncertainty notes should not be interpreted as precise invention dates. Multi-party or unlinked events remain available in Compare → Events. This research dataset is not a scholarly peer-reviewed historical GIS resource.
 
 Run `npm test` to validate the import alongside previous regression checks.
+
+## v0.8 — 1500–2026 CE structured research
+
+An additive integration of the supplied research pack: 187 society records, 173 dated events, 53 technology definitions, 87 technology observations, and 117 bibliographic sources. The entire original structured dataset (including 861 claim-to-source links, 72 figures, 60 reference places, 8 historic-map candidates and contextual evidence) is preserved in [research/1500-2026/source-pack.json](research/1500-2026/source-pack.json). Existing atlas identities are reused where possible; original research periods are not assumed to establish entire cultural lifespans. Where an event or observation cannot be defensibly tied to one dated society, it stays in the research evidence rather than being given an artificial owner. The eight historical-map items are research references, not verified rights-cleared map images.
+
+The separate uploaded [500 BCE–500 CE report](research/500BCE-500CE-report.md) is archived for the next structured import. It is research prose, not a newly attached machine-readable seed dataset; no 48-society import is claimed from it.

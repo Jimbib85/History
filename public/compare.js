@@ -5,7 +5,7 @@
   const all = CIVILISATIONS.filter(c => c.kind !== 'overview' && Number.isFinite(c.start) && Number.isFinite(c.end));
   const entities = new Map(all.map(c => [c.id, c]));
   const events = EVENTS.filter(e => entities.has(e.civ) && Number.isFinite(e.year));
-  const researchEvents = [...(typeof ATLAS_RESEARCH_EVENTS !== 'undefined' ? ATLAS_RESEARCH_EVENTS : []),...(typeof ATLAS_MEDIEVAL_EVENTS !== 'undefined' ? ATLAS_MEDIEVAL_EVENTS : [])];
+  const researchEvents = [...(typeof ATLAS_RESEARCH_EVENTS !== 'undefined' ? ATLAS_RESEARCH_EVENTS : []),...(typeof ATLAS_MEDIEVAL_EVENTS !== 'undefined' ? ATLAS_MEDIEVAL_EVENTS : []),...(typeof ATLAS_MODERN_EVENTS !== 'undefined' ? ATLAS_MODERN_EVENTS : [])];
   const params = new URLSearchParams(location.search);
   const within = (x,min,max) => Math.min(max,Math.max(min,x));
   const parseDate = input => {
