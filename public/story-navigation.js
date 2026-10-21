@@ -6,10 +6,12 @@
   }
   function context() {
     const s=window.HistoryCompare?.state||window.WorldHistoryAtlas?.state||{};
-    const q=new URLSearchParams(location.search);
-    const parsed=Number(q.get('year'));
-    const year=Number.isSafeInteger(parsed)&&q.has('year')?parsed:1200;
-    return {year:s.year??year,civ:s.selected||s.civ||q.get('entity')||q.get('civ')||null};
+    const q=typeof URLSearchParams === 'function' ? new URLSearchParams(location.search) : null;
+    const get=k=>q?q.get(k):(location.search.match(new RegExp('(?:^|[?&])'+k+'=([^&]*)'))?.[1]||null);
+    const found=get('year');
+    const parsed=Number(found);
+    const year=found!==null&&Number.isSafeInteger(parsed)?parsed:1200;
+    return {year:s.year??year,civ:s.selected||s.civ||get('entity')||get('civ')||null};
   }
   function href(view) {
     const {year,civ}=context();
