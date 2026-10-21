@@ -18,7 +18,7 @@ const han=x.maps.find(m=>m.rawId==='map_mawangdui_topographic');
 assert.ok(han);
 assert.equal(han.year,-199,'The object composition window preserves BCE numbering');
 assert.equal(han.image,null,'Rights-unchecked originals are never embedded');
-assert.ok(han.objectDate.includes('168 BCE'),'Deposited object's date remains visibly separate from composition');
+assert.ok(han.objectDate.includes('168 BCE'),"Deposited object's date remains visibly separate from composition");
 assert.ok(han.sources.some(s=>s.url.startsWith('https://')),'Evidence links survive import');
 assert.ok(x.filter(x.maps,{society:'western_han',year:-170,period:'near'}).some(m=>m.rawId==='map_mawangdui_topographic'));
 assert.ok(!x.filter(x.maps,{society:'western_han',year:1602,period:'near'}).length,'Nearby-year scoping is deliberate, not fake simultaneity');
