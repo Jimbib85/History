@@ -67,7 +67,7 @@
    document.querySelectorAll('[data-snapshot]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.snapshot)===state.year)));
    const rows=M.peers(state.year);
    $('snapshotSummary').textContent=rows.length?
-      'Selected examples dated to '+M.year(state.year)+'. Showing '+rows.length+' research records from distinct societies where possible. Coexistence is not evidence of contact.':
+      'Research intervals include '+M.year(state.year)+'. Showing '+rows.length+' records from distinct societies where possible. Broad intervals do not prove each activity occurred in that exact year, and overlap is not evidence of contact.':
       'No individually dated cultural-practice entries in this research index for '+M.year(state.year)+'. Undated records are not silently assigned to this year.';
    $('snapshotCards').innerHTML=rows.length?rows.map(r=>entry(r,{compact:true})).join(''):
      '<div class="empty">No sourced comparison for this particular year. Try 200 CE, 1600 CE or 1800 CE, or follow one of the curated journeys instead.</div>';
