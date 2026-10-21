@@ -108,3 +108,12 @@ for(const kind of ['society','empire']){
   assert.deepEqual(names,[...names].sort((a,b)=>b.localeCompare(a)),'Saved '+kind+' order survives interleaved candidate rows');
 }
 console.log('PASS Compare date/order regressions: alternate chronologies, actual entity spans and independent saved type ordering.');
+
+const legacyModern=allResearch.find(e=>e.origin==='1500-2026'&&(e.sourceIds||[]).length>0);
+assert.ok(legacyModern,'Legacy modern source fixture exists');
+const legacySources=vm.runInContext('ATLAS_RESEARCH_SOURCES',context);
+compare.change({event:legacyModern.id});
+for(const id of legacyModern.sourceIds){
+  if(legacySources[id]?.url) assert.ok(nodes.get('selectedSources').innerHTML.includes(legacySources[id].url.replace(/&/g,'&amp;')),'Legacy modern source remains linked: '+id);
+}
+console.log('PASS Compare source registry: legacy modern bibliography entries stay attached.');

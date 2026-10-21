@@ -212,7 +212,8 @@
       seen.add(href); result.push({url:href,title:title || 'Read source',kind});
     }
     function ids(ids,batch) {
-      const registry = sourceRegistries[batch] || {};
+      // Legacy modern events share the older bibliography; modern entity records use the newer pack.
+      const registry = isEvent && batch === '1500-2026' ? sourceRegistries['500-999'] : sourceRegistries[batch] || {};
       for (const id of ids || []) {const s = registry[id]; if (s) add(s.url,s.title || s.name,isEvent ? 'Record source' : 'Entity background');}
     }
     ids(record.sourceIds,record.origin || record.researchBatch);
