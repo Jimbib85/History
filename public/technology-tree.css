@@ -1,0 +1,37 @@
+
+.technology-button{border:1px solid #c9aa78;background:transparent;color:#f6e9d0;padding:10px 13px;border-radius:4px;cursor:pointer;font:600 12px system-ui;white-space:nowrap}.technology-button:hover{background:#294453}
+.technology-dialog{position:fixed;inset:4vh 3vw;margin:auto;width:min(1300px,94vw);height:min(92vh,930px);max-width:none;max-height:none;border:1px solid #bba477;background:#f6efdf;color:#273e48;border-radius:10px;box-shadow:0 25px 90px #061a28a6;padding:0;overflow:hidden}
+.technology-dialog::backdrop{background:#101d27bf;backdrop-filter:blur(3px)}
+.tech-shell{display:flex;flex-direction:column;height:100%;min-height:0}
+.tech-header{background:#193646;color:#f6e8d0;padding:17px 23px;display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:3px solid #b79152}
+.tech-header h2{font:normal 29px Georgia,serif;margin:3px 0}.tech-header h2 em{color:#d3ac69}.tech-header p{font:12px system-ui;color:#d0d6d3;margin:5px 0 0}
+.tech-close{border:1px solid #b5a385;background:transparent;color:#f4e9d3;padding:7px 13px;border-radius:4px;font:21px system-ui;cursor:pointer}
+.tech-toolbar{padding:11px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#e8dfcd;border-bottom:1px solid #d2c3aa;flex-wrap:wrap}
+.tech-toolbar label{font:700 11px system-ui;color:#47595a;display:flex;align-items:center;gap:10px}
+.tech-toolbar select{border:1px solid #bea98b;background:#fffaf0;border-radius:4px;min-width:180px;max-width:285px;padding:9px;color:#263b42;font:12px system-ui}
+.tech-random{font:700 12px system-ui;border:1px solid #b58b51;background:#bd955e;color:#102e3d;border-radius:4px;padding:9px 12px;cursor:pointer}
+.tech-layout{min-height:0;flex:1;display:grid;grid-template-columns:minmax(310px,48%) minmax(300px,52%)}
+.tech-tree{overflow:auto;padding:19px;background:#f1e9d9;border-right:1px solid #d6c9b5}
+.tech-tree-intro{font:12px/1.5 system-ui;color:#68777a;margin:0 0 16px}
+.tech-branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tech-branch{border:1px solid #d5c9b7;border-radius:7px;padding:12px;background:#fffaf1;box-shadow:0 3px 12px #2338400a;min-width:0}
+.tech-branch-head{display:flex;gap:9px;align-items:center;padding-bottom:11px;border-bottom:1px solid #e6dbc7;background:none;color:#263e48}
+.tech-branch-head span{font:23px Georgia;color:#a5773e}
+.tech-branch h3{font:700 14px Georgia;margin:0 0 3px}.tech-branch p{font:10px/1.4 system-ui;color:#71807e;margin:0}
+.tech-nodes{display:flex;flex-direction:column;margin-top:8px}
+.tech-node{position:relative;display:flex;align-items:center;gap:8px;text-align:left;border:1px solid #e5dbc8;border-radius:5px;background:#fcf8ee;padding:10px 7px;margin-top:9px;cursor:pointer;color:#263d44;min-width:0}
+.tech-node::before{content:'↓';font:12px system-ui;color:#a58f73;position:absolute;top:-11px;left:15px;background:#fffaf1}
+.tech-node:first-child::before{display:none}.tech-node.selected{border:2px solid #a9763e;background:#fff2d5;padding:9px 6px}.tech-node:hover{border-color:#9c835f}
+.tech-num{display:grid;place-items:center;flex:none;width:20px;height:20px;background:#dbe2dd;border-radius:50%;font:700 10px system-ui}.tech-node.documented .tech-num{background:#d4b98d}
+.tech-node-copy{min-width:0;display:flex;flex-direction:column;gap:4px;flex:1}.tech-node-copy strong{font:600 12px system-ui}.tech-node-copy small{font:10px system-ui;color:#69807c}.tech-node-arrow{color:#8c704d}
+.tech-details{overflow:auto;padding:24px;background:#fffcf4}.tech-intro h2{font:normal 31px Georgia;margin:7px 0}.tech-kicker{font:700 10px system-ui;color:#9a7545;letter-spacing:1.3px}.tech-intro p{font:13px/1.65 system-ui;color:#5e6e6b;margin:9px 0 18px}
+.tech-current{border:1px solid #d7c1a2;background:#f6eddc;border-radius:7px;padding:15px;margin-bottom:22px}.tech-current span{font:700 11px system-ui;display:block;color:#725939;margin-bottom:5px}.tech-current strong{font:normal 21px Georgia}.tech-current p{font:12px/1.5 system-ui;color:#62716d;margin:9px 0 0}
+.tech-compare-head{display:flex;justify-content:space-between;gap:10px;align-items:end;font:11px system-ui;color:#86918a;margin-bottom:12px}.tech-compare-head strong{font:normal 22px Georgia;display:block;color:#203e4a;margin-bottom:3px}.tech-compare-head span{display:block}.tech-ends{display:flex;justify-content:space-between;margin-bottom:5px;font:11px system-ui;color:#887253}
+.tech-record{border-top:1px solid #e0d6c7;padding:13px 0}.tech-record.selected{background:#fff4da;margin:0 -10px;padding:13px 10px;border-left:3px solid #be9657}
+.tech-record-head{display:flex;justify-content:space-between;gap:10px;font:12px system-ui}.tech-record-head span{color:#9a6d41;font-weight:700;white-space:nowrap}
+.tech-track{height:6px;border-radius:4px;background:#d3c9b5;margin:13px 0 10px;position:relative}.tech-track i{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;background:#bb844d;border:2px solid white;border-radius:50%;box-shadow:0 0 0 1px #976c40}
+.tech-kind{font:700 10px system-ui;color:#8b673f}.tech-record p{font:12px/1.5 system-ui;color:#596c70;margin:5px 0}
+.tech-record-actions{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:9px}.tech-record-actions a,.tech-record-actions button{border:0;background:transparent;color:#866139;text-decoration:underline;font:700 11px system-ui;padding:0;cursor:pointer}
+.tech-disclaimer{font:11px/1.5 system-ui;color:#76786c;border-top:1px solid #ddd1be;padding-top:13px}
+@media(max-width:1100px){.tech-branches{grid-template-columns:1fr}.tech-layout{grid-template-columns:minmax(240px,42%) minmax(280px,58%)}}
+@media(max-width:700px){.technology-button{font-size:0;min-width:36px;padding:8px}.technology-button::after{content:'⚙';font-size:18px}.technology-dialog{inset:1vh 1vw;width:98vw;height:96vh}.tech-header{padding:12px}.tech-header h2{font-size:21px}.tech-header p{font-size:10px}.tech-toolbar{padding:8px 12px}.tech-toolbar select{min-width:160px;max-width:200px}.tech-layout{grid-template-columns:1fr;grid-template-rows:minmax(160px,40%) minmax(240px,60%)}.tech-tree{border-right:0;border-bottom:1px solid #d6c9b5;padding:10px}.tech-branches{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.tech-branch{padding:8px}.tech-node{padding:7px 4px}.tech-node.selected{padding:6px 3px}.tech-node-copy strong{font-size:11px}.tech-details{padding:14px}}
