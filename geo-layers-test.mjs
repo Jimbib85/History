@@ -50,7 +50,8 @@ class Element {
 const elements=Object.fromEntries([...html.matchAll(/id="([^"]+)"/g)].map(m=>[m[1],new Element()]));
 elements.sameYearButton=new Element();
 const location={href:'https://atlas.test/index.html?year=200&civ=rome',search:'?year=200&civ=rome'};
-const window={location,history:{replaceState(){}},matchMedia:()=>({matches:false})};
+const written=[];
+const window={location,history:{replaceState(_state,_title,url){written.push(String(url));}},matchMedia:()=>({matches:false})};
 const document={getElementById:id=>elements[id],querySelectorAll:()=>[],addEventListener(){}};
 const context=vm.createContext({window,document,location,URL,URLSearchParams,HTMLInputElement:Element,console});
 const excluded=new Set(['story-navigation.js','app.js','technology-tree.js']);
@@ -63,12 +64,15 @@ assert.ok(elements.mapEvidence.innerHTML.includes('Background reading does not i
 assert.match(elements.mapMarkers.innerHTML,/data-mapcluster=|data-mapciv=/);
 elements.toggleGrid.listeners.click();
 assert.equal(atlas.state.geoGrid,true);
+assert.match(written.at(-1),/grid=1/,'Grid state is shareable in the URL');
 assert.ok(elements.mapGrid.innerHTML.includes('<line '),'Grid renders only when asked');
 elements.groupGeo.listeners.click();
 assert.equal(atlas.state.geoMode,'points');
+assert.match(written.at(-1),/geo=points/,'Individual-marker mode is shareable');
 assert.ok(!elements.mapMarkers.innerHTML.includes('data-mapcluster='));
 elements.groupGeo.listeners.click();
 assert.equal(atlas.state.geoMode,'groups');
+assert.ok(!written.at(-1).includes('geo=points'),'Grouped default is removed from URL');
 elements.resetMap.listeners.click();
 assert.equal(atlas.state.zoom,1);
 assert.ok(elements.mapEvidence.innerHTML.includes('not a measured historical boundary'));
