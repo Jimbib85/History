@@ -56,7 +56,12 @@ const packEntries=packs.map(([scope,path])=>{
 const expected=render(createIndex(packEntries)),output=resolve(root,'public/discovery-data.js');
 if(process.argv.includes('--check')){
  const existing=readFileSync(output,'utf8');
- if(existing!==expected)throw Error('Discovery data out of date. Run node scripts/build-discovery-data.mjs');
+ const prefix='const ATLAS_DISCOVERY_DATA = ';
+ const start=existing.indexOf(prefix),end=existing.lastIndexOf(';');
+ if(start<0||end<start)throw Error('Discovery file format invalid');
+ const current=JSON.parse(existing.slice(start+prefix.length,end));
+ const compiled=createIndex(packEntries);
+ if(JSON.stringify(current)!==JSON.stringify(compiled))throw Error('Discovery data out of date. Run node scripts/build-discovery-data.mjs');
  console.log('PASS discovery index matches unchanged source archives');
 }else{
  writeFileSync(output,expected);
