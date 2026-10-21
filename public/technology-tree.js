@@ -5,7 +5,7 @@
   const $ = id => document.getElementById(id);
   const esc = value => String(value ?? '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
   const year = value => value <= 0 ? `${Math.abs(value - 1).toLocaleString('en-AU')} BCE` : `${value.toLocaleString('en-AU')} CE`;
-  const civs = new Map(CIVILISATIONS.map(c => [c.id,c]));
+  const civs = new Map(CIVILISATIONS.filter(c => c.kind !== 'overview').map(c => [c.id,c]));
   const technologies = new Map(TECHNOLOGIES.map(t => [t.id,t]));
   const dialog = $('technologyDialog');
   const tree = $('technologyBranches');
@@ -81,7 +81,7 @@
     select.value=state.civ;
     draw();dialog.showModal();
   }
-  select.innerHTML=[...CIVILISATIONS].sort((a,b)=>a.name.localeCompare(b.name)).map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
+  select.innerHTML=[...CIVILISATIONS].filter(c=>c.kind!=='overview').sort((a,b)=>a.name.localeCompare(b.name)).map(c=>`<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
   select.addEventListener('change',()=>{state.civ=select.value;draw();});
   tree.addEventListener('click',e=>{
     const target=e.target.closest('[data-tech]');if(!target)return;
@@ -92,7 +92,7 @@
     const compared=e.target.closest('[data-compare]');if(compared){state.civ=compared.dataset.compare;select.value=state.civ;draw();return;}
     const jumped=e.target.closest('[data-tech-jump]');if(jumped){
       const api=window.WorldHistoryAtlas;
-      if(api){api.selectCiv(jumped.dataset.techJump);api.setYear(Number(jumped.dataset.techYear));}
+      if(api){api.go({civ:jumped.dataset.techJump,year:Number(jumped.dataset.techYear),region:'All regions',catalogue:'all',search:'',view:'actual'},{zoomReset:true});}
       dialog.close();
     }
   });
