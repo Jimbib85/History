@@ -223,3 +223,35 @@ details>summary:focus-visible,.timeline-scroll:focus-visible,.era-grid-scroll:fo
   .page-footer{padding-top:19px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* v0.15: compact comparison shelf, with the historical ruler unchanged. */
+.pinned-workbench{margin:8px 18px 16px;padding:14px 16px;border:1px solid #daceb6;border-radius:9px;background:#faf5e8}
+.pinned-head{display:flex;align-items:start;justify-content:space-between;gap:14px}
+.pinned-head>div{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pinned-head strong{font-size:11px;letter-spacing:1.35px;color:#886e46}
+.pinned-head span{font-size:11px;color:#687780;font-weight:700}
+.pinned-head p{max-width:510px;font-size:11px;line-height:1.5;color:#69767c;margin:0}
+.pinned-shelf{display:flex;gap:7px;flex-wrap:wrap;align-items:center;min-height:40px;padding:10px 0}
+.pinned-empty{color:#747d7d;font-size:12px}
+.pinned-chip{display:flex;align-items:center;border:1px solid #b9c4c5;background:#fffdf6;border-radius:7px;max-width:100%}
+.pinned-chip button{border:0;background:transparent;color:#254858;padding:8px 10px;font-size:12px;font-weight:700;min-height:34px}
+.pinned-chip button.active{background:#e1edeb}
+.pinned-chip .remove-pin{border-left:1px solid #d5d1c9;font-size:16px;color:#785c45;padding:6px 10px}
+.pinned-tools{display:flex;align-items:end;gap:7px;flex-wrap:wrap}
+.pinned-tools>button,.pinned-add-label select{padding:9px 10px;min-height:40px;border:1px solid #cdbfa9;background:#fffdf6;color:#324f5b;font-size:12px;font-weight:700;border-radius:6px}
+.pinned-tools>button[aria-pressed="true"]{background:#234858;color:#fff8e8;border-color:#234858}
+.pinned-tools>button:disabled,.pinned-tools select:disabled{opacity:.55}
+.pinned-add-label{display:flex;flex-direction:column;gap:4px;flex:1 1 205px;min-width:0}
+.pinned-add-label span{font-size:10px;color:#746a5d;font-weight:700}
+.pinned-add-label select{width:100%;max-width:350px;font-weight:500}
+.pinned-caption{font-size:11px;line-height:1.5;color:#7b7167;margin:9px 0 0}
+.milestone.selected{background:#fff0ba;outline:3px solid #a76430;outline-offset:1px;z-index:7}
+@media(max-width:620px){
+ .pinned-workbench{margin:7px 9px 13px;padding:12px}
+ .pinned-head{display:block}
+ .pinned-head p{margin-top:7px;font-size:12px}
+ .pinned-tools>button{flex:1 1 125px}
+ .pinned-add-label{flex-basis:100%}
+ .pinned-add-label select{max-width:100%;font-size:16px}
+ .pinned-chip button{font-size:12px}
+}
