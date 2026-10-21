@@ -40,6 +40,9 @@ context.window={WorldHistoryAtlas:{state:{civ:'rome'},selectCiv(){},setYear(){}}
 vm.runInContext(source('technology-tree.js'),context,{filename:'technology-tree.js'});
 context.window.WorldHistoryTechnology.open();
 assert.ok(dom.technologyDialog.showing);
+dom.technologyCivilisation.value='all';
+dom.technologyCivilisation.listeners.change();
+assert.equal(context.window.WorldHistoryTechnology.state.civ,'all','Cross-society visualisation requires the explicit global scope');
 assert.ok(dom.technologyBranches.innerHTML.includes('Road and courier networks'));
 assert.ok(dom.technologyDetails.innerHTML.includes('Same scale across societies'));
 dom.technologyDetails.listeners.click({target:{closest:selector=>selector==='[data-viz]'?{dataset:{viz:'map'}}:null}});

@@ -1,8 +1,10 @@
 # World History Atlas
 
-**Version 0.12.0 — compact, expandable exploration**
+**Version 0.12.1 — technology evidence by society**
 
 World Map, Compare and Technology now use the Story timeline’s overview-first approach: scan a short heading, open a record, and read its evidence. See [the UX implementation notes](docs/compact-ux.md).
+
+The Technology tree filters its families, topics and evidence to the selected society or empire. Search and Random use the same selection. Choose **All societies & empires** to compare the full collection; a society without linked technology research gets an explicit empty state.
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
 
