@@ -165,3 +165,9 @@ Run `npm test` (including the new `classical-merge-test.mjs`) for chronology, du
 The optional [Conflicts & Human Experience explorer](public/conflicts.html) adds sourced conflict profiles, distinct battle/campaign/phase levels, civilian impacts, uncertainty and a source-access register. The 2026-10-21 [global conflicts research pack](research/conflicts/README.md) is preserved in canonical JSON without inventing unlocated battles, marching routes, ending dates or casualty totals. A short, dated, general-audience subset appears as collapsed `War & conflict` subject capsules in Story. Sensitive or unsupported research is not shown in default discovery and requires explicit opt-in within the conflict explorer.
 
 The Story Timeline's CE century/half-century bin offset is corrected (1-50 CE is a complete 50-year bucket) and browser Back/Forward navigation no longer overwrites destination URLs when a modal closes. Existing atlas data arrays and entity classifications remain unchanged. Run `npm test` for the combined suite and new `conflicts-test.mjs` checks.
+
+## v0.12.2 — Conflicts explorer finishing touches
+
+The conflict viewer now supports shareable record deep links, related-event navigation, source-access limits and jumps back to Story and Compare. Period filters include wars crossing a period boundary (for example, Aceh War across 1900), while UNKNOWN end dates never imply indefinite war. ONGOING records are bounded by their observed-through date for filtering, without pretending that observation is a peace date. Sensitive and provisional records stay opt-in, including via deep links. The underlying historical evidence is unchanged.
+
+Conflict milestones in Story now link to the original research dossier. Pure filter/navigation regression cases are included in conflicts-reader-test.mjs and npm test.
