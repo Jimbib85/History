@@ -12,7 +12,7 @@ const packs=[
   ['Medieval', 'public/research-1000-1499.js'],
   ['Modern', 'public/research-1500-2026-data.js']
 ];
-const validUrl=x=>{try{const u=new URL(x);return /^https?:$/.test(u.protocol)?u.href:null}catch{return null}};
+const validUrl=x=>typeof x==='string'&&/^https?:\/\/[^\s/]+(?:[/?#][^\s]*)?$/.test(x)?x:null;
 function createIndex(packEntries) {
  const practices=[];
  for(const [scope,pack] of packEntries){
