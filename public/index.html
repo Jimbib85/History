@@ -7,13 +7,14 @@
   <meta name="description" content="Explore human history in parallel. Choose any year, discover contemporary civilisations, and see the world as historical mapmakers imagined it." />
   <title>World History Atlas — a place to get lost in time</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="technology-tree.css" />
 </head>
 <body>
   <div id="app">
     <header class="topbar">
       <div class="brand"><div class="brand-seal" aria-hidden="true">✳</div><div><div class="brand-name">WORLD HISTORY <em>ATLAS</em></div><div class="brand-caption">A PLACE TO GET LOST IN TIME</div></div></div>
       <div class="topbar-center"><span class="top-dot"></span> AN INTERACTIVE CHRONICLE OF THE HUMAN STORY</div>
-      <div class="top-actions"><button class="ghost-light" id="backButton" type="button" title="Previous discovery" aria-label="Previous discovery">↶ <span>Back</span></button><button id="randomButton" class="surprise-button" type="button">✦ <span>Surprise me</span></button><button class="icon-button" id="moreRandom" type="button" title="Randomisation options" aria-label="Randomisation options">▾</button><div id="randomMenu" class="random-menu hidden"><button data-random="all" type="button">✦ Anywhere, anytime</button><button data-random="year" type="button">◎ New civilisation, same year</button><button data-random="civilisation" type="button">⌛ Same civilisation, another era</button></div><button id="helpButton" class="help-button" title="About this atlas" type="button">?</button></div>
+      <div class="top-actions"><button class="ghost-light" id="backButton" type="button" title="Previous discovery" aria-label="Previous discovery">↶ <span>Back</span></button><button id="technologyButton" class="technology-button" type="button" aria-label="Open technology tree" title="Compare developments across civilisations">⌘ Technology tree</button><button id="randomButton" class="surprise-button" type="button">✦ <span>Surprise me</span></button><button class="icon-button" id="moreRandom" type="button" title="Randomisation options" aria-label="Randomisation options">▾</button><div id="randomMenu" class="random-menu hidden"><button data-random="all" type="button">✦ Anywhere, anytime</button><button data-random="year" type="button">◎ New civilisation, same year</button><button data-random="civilisation" type="button">⌛ Same civilisation, another era</button></div><button id="helpButton" class="help-button" title="About this atlas" type="button">?</button></div>
     </header>
     <div class="workspace">
       <aside class="left-panel" aria-label="Explore history">
@@ -47,6 +48,13 @@
     </div>
   </div>
   <dialog id="aboutDialog"><div class="dialog-head"><div class="small-heading">ABOUT THIS LITTLE EXPERIMENT</div><button id="closeDialog" aria-label="Close" type="button">×</button></div><h2>A history atlas for <em>curious minds.</em></h2><p>This is a personal passion project. Jump between civilisations, see who shared the same centuries, and peek at how historical mapmakers imagined the world.</p><p><strong>Map honesty:</strong> markers represent approximate places associated with societies, not their territorial borders. Historical maps are authentic surviving examples or clearly labelled later copies and reconstructions. There is no pretence that a single map represents everybody's knowledge.</p><p><strong>Dates:</strong> ancient and medieval dates are often approximate. The atlas currently contains a small hand-curated starter collection intended to grow over time.</p><p>Tip: press <kbd>/</kbd> to search, click a civilisation, or hit <strong>Surprise me</strong> to go somewhere unexpected.</p><button id="closeDialogAction" class="surprise-button" type="button">Let's explore ↗</button></dialog>
-  <script src="data.js"></script><script src="app.js"></script>
+    <dialog id="technologyDialog" class="technology-dialog" aria-labelledby="technologyDialogTitle">
+    <div class="tech-shell">
+      <div class="tech-header"><div><div class="small-heading">A DIFFERENT WAY TO EXPLORE HISTORY</div><h2 id="technologyDialogTitle">The <em>technology tree</em></h2><p>See when societies developed, adopted or recorded important technologies.</p></div><button id="closeTechnology" class="tech-close" type="button" aria-label="Close technology explorer">×</button></div>
+      <div class="tech-toolbar"><label for="technologyCivilisation">COMPARE FROM <select id="technologyCivilisation" aria-label="Select civilisation for technology comparison"></select></label><button type="button" id="randomTechnology" class="tech-random">✦ Random technology</button></div>
+      <div class="tech-layout"><section class="tech-tree" aria-label="Technology branches"><p class="tech-tree-intro">Choose a branch and technique. These connections show themes, not a universal ladder of human progress.</p><div id="technologyBranches" class="tech-branches"></div></section><section id="technologyDetails" class="tech-details" aria-live="polite"></section></div>
+    </div>
+  </dialog>
+  <script src="data.js"></script><script src="tech-data.js"></script><script src="app.js"></script><script src="technology-tree.js"></script>
 </body>
 </html>
