@@ -3,10 +3,10 @@
   'use strict';
   const $=id=>document.getElementById(id),M=globalThis.HistoryStoryModel;
   const error=message=>{const el=$('storyError');el.hidden=false;el.textContent=message;$('resultStatus').textContent='Timeline unavailable';$('storyPagination').hidden=true;};
-  if(!M||typeof CIVILISATIONS==='undefined'||typeof EVENTS==='undefined'||typeof ATLAS_RESEARCH_EVENTS==='undefined'||typeof ATLAS_MEDIEVAL_EVENTS==='undefined'||typeof ATLAS_MODERN_EVENTS==='undefined'||typeof ATLAS_CLASSICAL_EVENTS==='undefined') {
+  if(!M||typeof CIVILISATIONS==='undefined'||typeof EVENTS==='undefined'||typeof ATLAS_RESEARCH_EVENTS==='undefined'||typeof ATLAS_MEDIEVAL_EVENTS==='undefined'||typeof ATLAS_MODERN_EVENTS==='undefined'||typeof ATLAS_CLASSICAL_EVENTS==='undefined'||typeof ATLAS_CONFLICT_STORY_EVENTS==='undefined') {
     error('A required history file did not load. Refresh to retry; no partial timeline has been substituted.');return;
   }
-  const data=M.build({entities:CIVILISATIONS,events:EVENTS,research:[ATLAS_RESEARCH_EVENTS,ATLAS_MEDIEVAL_EVENTS,ATLAS_MODERN_EVENTS,ATLAS_CLASSICAL_EVENTS]});
+  const data=M.build({entities:CIVILISATIONS,events:EVENTS,research:[ATLAS_RESEARCH_EVENTS,ATLAS_MEDIEVAL_EVENTS,ATLAS_MODERN_EVENTS,ATLAS_CLASSICAL_EVENTS,ATLAS_CONFLICT_STORY_EVENTS]});
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const paths={
     temple:'M3 9h18L12 3 3 9Zm2 2v8m5-8v8m4-8v8m5-8v8M3 21h18',
@@ -137,8 +137,9 @@
   $('moreDrawerRecords').addEventListener('click',()=>{drawerLimit+=8;renderDrawer();});
   $('closeStoryDrawer').addEventListener('click',()=>drawer.close());
   drawer.addEventListener('click',e=>{if(e.target===drawer){const r=drawer.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)drawer.close();}});
-  drawer.addEventListener('close',()=>{opener?.setAttribute('aria-expanded','false');opener?.focus({preventScroll:true});opener=null;expanded=null;syncURL(false);});
-  window.addEventListener('popstate',()=>{if(drawer.open)drawer.close();state=readState();render();});
+  let navigatingHistory=false;
+  drawer.addEventListener('close',()=>{opener?.setAttribute('aria-expanded','false');if(!navigatingHistory)opener?.focus({preventScroll:true});opener=null;expanded=null;if(!navigatingHistory)syncURL(false);navigatingHistory=false;});
+  window.addEventListener('popstate',()=>{if(drawer.open){navigatingHistory=true;drawer.close();}state=readState();render();});
   render();const initialEvent=new URLSearchParams(location.search).get('event');
   if(data.idMap.has(initialEvent)){const e=data.idMap.get(initialEvent);openSubject(e.subject,'all',null,e.id);}else syncURL(false);
   globalThis.HistoryStory={get state(){return {...state};},data,render,update,model:M};

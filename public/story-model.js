@@ -100,8 +100,8 @@
   function bucket(year,size) {
     if(size===1) return {start:year,end:year+1};
     if(year<=0){const start=1-Math.ceil((1-year)/size)*size;return {start,end:start+size};}
-    const floor=Math.floor(year/size)*size;
-    return {start:Math.max(1,floor),end:floor+size};
+    const start=1+Math.floor((year-1)/size)*size;
+    return {start,end:start+size};
   }
   function group(events,state) {
     const r=range(state.year,state.span),size=state.group|| (state.span<=100?10:state.span<=500?50:state.span<=2000?100:500);

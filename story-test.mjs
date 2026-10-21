@@ -14,7 +14,7 @@ check(model.parseYear('1 BCE'),0,'BCE/CE zero');check(model.parseYear('500 BCE')
 check(model.parseYear('0 CE'),null);check(model.parseYear('0'),0);check(model.parseYear('2,000 CE'),2000);check(model.parseYear('garbage'),null);
 check(model.parseYear('10001 BCE'),null);check(model.parseYear('2027'),null);check(model.yearLabel(0),'1 BCE');
 check(model.bucket(0,50),{start:-49,end:1});check(model.bucket(-499,50),{start:-499,end:-449});
-check(model.bucket(1,50),{start:1,end:50});check(model.bucket(1200,50),{start:1200,end:1250});
+check(model.bucket(1,50),{start:1,end:51});check(model.bucket(50,50),{start:1,end:51});check(model.bucket(51,50),{start:51,end:101});check(model.bucket(1200,50),{start:1151,end:1201});
 check(model.spanLabel(-49,1),'50\u20131 BCE');check(model.spanLabel(0,2),'1 BCE\u20131 CE');
 check(model.validURL('javascript:alert(1)'),null);check(model.validURL('data:text/html,test'),null);
 check(model.recordDate({dateLabel:'538 or 552 CE'}),'538 or 552 CE','Preserve disputed dates verbatim');
