@@ -28,7 +28,8 @@ gunpowder:'https://www.britannica.com/technology/gunpowder',
 artillery:'https://www.britannica.com/technology/artillery',
 angkor:'https://whc.unesco.org/en/list/668/',
 inca:'https://whc.unesco.org/en/list/274/',
-iron:'https://www.britannica.com/technology/iron-processing/History'
+iron:'https://www.britannica.com/technology/iron-processing/History',
+shangbronze:'https://www.metmuseum.org/fr/essays/shang-and-zhou-dynasties-the-bronze-age-of-china'
 };
 function tech(id,branch,name,era,description,related,records){
  return {id,branch,name,era,description,related,appearances:records.map(([civ,year,status,label,note,source])=>({civ,year:year<0?year+1:year,status,label,note,source:TECH_SOURCES[source]}))};
@@ -48,7 +49,7 @@ tech('bronze','materials','Bronze casting','Bronze Age','Copper alloy technology
 ['sumer',-3000,'attested','Mesopotamian metalwork','Bronze Age objects are documented in Mesopotamia.','meso'],
 ['old-egypt',-2500,'attested','Egyptian copper alloys','Metals formed part of Egyptian craft production.','meso'],
 ['minoans',-1900,'attested','Cretan Bronze Age craft','Metals featured in Bronze Age Cretan communities.','meso'],
-['shang',-1250,'developed','Shang bronze vessels','Complex bronze ritual vessels were cast in China.','printing']]),
+['shang',-1250,'developed','Shang bronze vessels','Distinctive ceramic piece-mould casting produced elaborate Shang ritual bronzes.','shangbronze']]),
 tech('iron','materials','Iron tools and production','Iron Age','The spread of iron production was uneven, and in some regions early smelting origins are contested. Bronze and iron often overlapped.',['bronze'],[
 ['neo-assyria',-850,'attested','Iron Age Assyria','Iron objects were in use during the Neo-Assyrian period.','iron'],
 ['maurya',-300,'attested','Ironworking in South Asia','Iron tools circulated widely before and during Mauryan rule.','iron'],
