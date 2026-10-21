@@ -381,6 +381,7 @@
     $('sceneSubtitle').textContent=Math.abs(state.year-moment.year)<110?moment.description:'Explore what different societies were doing at the same point in time.';
     $('yearInput').value=year;
     $('yearSlider').value=state.year;
+    $('discoverLink').href='discover.html?year='+encodeURIComponent(state.year);
     $('backButton').disabled=snapshots.length===0;
     const url=new URL(location.href);url.searchParams.set('year',state.year);url.searchParams.set('civ',state.civ);url.searchParams.set('view',state.view);
     if(state.geoMode==='points')url.searchParams.set('geo','points');else url.searchParams.delete('geo');

@@ -6,3 +6,6 @@
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 
 .capsule-label{color:#38515a}.filter-pill{color:#566970}.period-hint{color:#737d7e}.period-spacer{color:#827f72}@media(max-width:760px){.subject-capsule{min-height:44px}.drawer-header button{width:44px;height:44px}}
+
+/* v0.18: a lightweight entrance to curated discovery without adding a crowded nav tab. */
+.discovery-entry{display:inline-block;margin-top:9px;font-size:12px;font-weight:700;color:#956a32;text-underline-offset:3px}.discovery-entry:hover{color:#235363}

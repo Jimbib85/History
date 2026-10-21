@@ -1,12 +1,18 @@
 # World History Atlas
 
-**Version 0.12.1 — technology evidence by society**
+**Version 0.18.0 — Discovery & Refinement**
 
 World Map, Compare and Technology now use the Story timeline’s overview-first approach: scan a short heading, open a record, and read its evidence. See [the UX implementation notes](docs/compact-ux.md).
 
 The Technology tree filters its families, topics and evidence to the selected society or empire. Search and Random use the same selection. Choose **All societies & empires** to compare the full collection; a society without linked technology research gets an explicit empty state.
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
+
+## Version 0.18 — Discovery & Refinement
+
+[Discover](public/discover.html) offers four curated journeys through everyday lives, craftsmanship, learning and belief, plus a **same-year comparison** of source-dated cultural practices and a non-repeating **Surprise me** sourced excerpt. Each card opens the registered source and, where associated, its historical society. Undated medieval examples are labelled and excluded from exact-year comparisons rather than assigned invented dates.
+
+The new page loads a compact, reproducible excerpt of 88 existing cultural-practice records instead of all three research archives. The original historical data is untouched. The repository includes a generator freshness check, UI and data regression tests, and an uncompressed asset-size audit. See [v0.18 implementation notes](docs/discovery-v018.md).
 
 ## Version 0.17 — The world through their eyes
 

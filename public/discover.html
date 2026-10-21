@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142b38"><meta name="description" content="Follow sourced journeys through everyday life, crafts and culture across world history.">
+<title>Discover | World History Atlas</title>
+<link rel="stylesheet" href="discovery.css?v=0.18.0"></head>
+<body>
+<a href="#journeys" class="skip">Skip to discovery journeys</a>
+<header class="topbar"><a class="brand" href="story.html"><span aria-hidden="true">✳</span> WORLD HISTORY <em>ATLAS</em></a>
+<nav aria-label="Atlas views"><a href="story.html">Story</a><a href="index.html">World Map</a><a href="compare.html">Compare</a><a href="worldview.html">Their World</a><a href="discover.html" aria-current="page">Discover</a></nav></header>
+<main class="shell">
+<section class="hero">
+ <p class="eyebrow">HUMAN HISTORY, ONE CONNECTION AT A TIME</p>
+ <h1>Follow your <em>curiosity.</em></h1>
+ <p>Read a handful of real research records instead of searching through thousands. Follow a theme, see what people were doing around the same time, or take a random detour.</p>
+ <p class="honesty">These are editorial comparisons of selective evidence, not claims that societies influenced or knew each other.</p>
+</section>
+<section id="journeys" aria-labelledby="journeysTitle">
+ <div class="section-top"><div><p class="eyebrow">CHOOSE A THREAD</p><h2 id="journeysTitle">Four paths through history</h2></div><span class="quiet">Research-linked, expandable reading</span></div>
+ <div id="journeyChoices" class="journey-choices" role="group" aria-label="Choose a guided history journey"></div>
+ <div id="journeyReader" class="reader" aria-live="polite">
+  <div class="reader-head"><div><span class="eyebrow" id="guideProgress">GUIDED JOURNEY</span><h3 id="guideTitle">A day in different worlds</h3><p id="guideNote"></p></div><div class="step-nav"><button type="button" id="prevStep" aria-label="Previous discovery">← Back</button><button type="button" id="nextStep">Next →</button></div></div>
+  <div id="guideStep" class="step-details"></div>
+ </div>
+</section>
+<section class="same-time" aria-labelledby="sameTimeTitle">
+ <div class="section-top"><div><p class="eyebrow">SAME TIME, DIFFERENT LIVES</p><h2 id="sameTimeTitle">Look across one period</h2></div></div>
+ <p class="section-intro">Only records with source-provided date intervals appear here. A broad interval is not proof that an activity happened in this exact year; undated records are never assigned invented dates.</p>
+ <div class="snapshot-tools"><label for="snapshotYear">Historical year</label><input id="snapshotYear" type="text" value="1600 CE" inputmode="text" autocomplete="off">
+ <div class="year-presets" aria-label="Example historical years"><button type="button" data-snapshot="200">200 CE</button><button type="button" data-snapshot="1600">1600 CE</button><button type="button" data-snapshot="1800">1800 CE</button></div></div>
+ <p id="snapshotSummary" class="snapshot-summary" role="status"></p><div id="snapshotCards" class="snapshot-cards"></div>
+ <a id="snapshotCompare" class="comparison-link" href="compare.html?year=1600">Open overlapping society timelines ↗</a>
+</section>
+<section class="random-area" aria-labelledby="randomTitle">
+ <div class="section-top"><div><p class="eyebrow">A LITTLE SERENDIPITY</p><h2 id="randomTitle">Surprise me with a human story</h2></div>
+ <button type="button" id="randomDiscovery" class="random-button">✦ Find another discovery</button></div>
+ <p class="section-intro">Each suggestion comes from an existing cultural-practice record with a research source. Random means variety, not certainty.</p>
+ <div id="randomRecord" class="random-record" aria-live="polite">Choose a discovery to begin.</div>
+</section>
+<footer><span>✳ Built for curiosity, not productivity.</span><span>Dates, source quality and cultural accounts require care. Similarity is not proof of contact.</span></footer>
+</main>
+<script src="discovery-data.js?v=0.18.0"></script>
+<script src="discovery-model.js?v=0.18.0"></script>
+<script src="discovery.js?v=0.18.0"></script>
+</body></html>
