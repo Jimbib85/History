@@ -1,0 +1,64 @@
+/* World Through Their Eyes: sourced research packs, object dates, claims and relation classification. */
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import vm from 'node:vm';
+const read=path=>fs.readFileSync(new URL(path,import.meta.url),'utf8');
+const context=vm.createContext({console,URL,URLSearchParams});
+for(const script of ['data.js','research-1000-1499.js','research-1500-2026-data.js','research-classical-data.js','worldview-model.js']){
+  vm.runInContext(read('./public/'+script),context,{filename:script});
+}
+const x=vm.runInContext('WorldViewModel.build([{scope:"Classical",pack:ATLAS_CLASSICAL_PACK},{scope:"Medieval",pack:ATLAS_MEDIEVAL_PACK},{scope:"Modern",pack:ATLAS_MODERN_PACK}],CIVILISATIONS,MAPS)',context);
+assert.equal(x.maps.length,19,'All available map records are discoverable');
+assert.equal(x.knowledge.length,42,'Geographic knowledge records remain available');
+assert.equal(x.relationships.length,127,'Historical research relationships remain available');
+assert.ok(x.stats.unsupported>=1,'Some knowledge hypotheses are flagged as unsupported');
+assert.equal(x.filter(x.knowledge).length,x.knowledge.length-x.stats.unsupported,'Unsupported claims hidden in normal reading');
+assert.equal(x.filter(x.knowledge,{includeUnsupported:true}).length,x.knowledge.length,'Unsupported rows remain independently inspectable in the data model');
+const han=x.maps.find(m=>m.rawId==='map_mawangdui_topographic');
+assert.ok(han);
+assert.equal(han.year,-199,'The object composition window preserves BCE numbering');
+assert.equal(han.image,null,'Rights-unchecked originals are never embedded');
+assert.ok(han.objectDate.includes('168 BCE'),'Deposited object's date remains visibly separate from composition');
+assert.ok(han.sources.some(s=>s.url.startsWith('https://')),'Evidence links survive import');
+assert.ok(x.filter(x.maps,{society:'western_han',year:-170,period:'near'}).some(m=>m.rawId==='map_mawangdui_topographic'));
+assert.ok(!x.filter(x.maps,{society:'western_han',year:1602,period:'near'}).length,'Nearby-year scoping is deliberate, not fake simultaneity');
+const kang=x.maps.find(m=>m.rawId==='map_kangnido');
+assert.equal(kang.year,1402);
+assert.ok(/later_copy/.test(kang.type),'Later surviving copy explicitly distinguished');
+assert.ok(kang.image?.startsWith('https://'),'Existing curated map image can be shown');
+const ptolemy=x.maps.find(m=>m.rawId==='map_ptolemy_geography');
+assert.ok(ptolemy.imagePage?.startsWith('https://'));
+assert.ok(ptolemy.type.includes('reconstruction'),'Later reconstruction is not portrayed as a Roman original');
+const hanKnowledge=x.knowledge.find(k=>k.id.includes('knowledge_mawangdui'));
+assert.equal(hanKnowledge.certainty,'attested');
+assert.ok(/not that every Han subject knew/.test(hanKnowledge.description));
+const infer=x.knowledge.find(k=>k.certainty==='inferred');
+assert.ok(infer,'Inferred geographical awareness kept separately');
+const links=x.relationships.filter(r=>r.direct);
+assert.ok(links.length>0,'Direct-contact claims only when source flags record them');
+const chola=x.relationships.find(r=>r.id.includes('chola_srivijaya_war'));
+assert.equal(chola.direct,true);
+assert.ok(chola.assessment.includes('Direct contact'));
+const classical=x.relationships.find(r=>r.id.includes('rel_001'));
+assert.equal(classical.direct,true);
+const parallel=x.relationships.find(r=>r.comparisonOnly);
+assert.ok(parallel,'Simultaneity-only research exists');
+assert.ok(parallel.assessment.includes('no contact implied'));
+assert.ok(!parallel.direct,'Parallel chronology never masquerades as direct contact');
+assert.ok(x.maps.every(r=>r.sources.every(s=>!s.url||s.url.startsWith('https://')||s.url.startsWith('http://'))));
+assert.equal(vm.runInContext('WorldViewModel.yearText(0)',context),'1 BCE');
+assert.equal(vm.runInContext('WorldViewModel.yearText(-499)',context),'500 BCE');
+assert.equal(vm.runInContext('WorldViewModel.safeUrl("javascript:alert(1)")',context),null);
+assert.equal(x.filter(x.maps,{search:'kangnido'}).length,1);
+const html=read('./public/worldview.html'),app=read('./public/worldview.js'),index=read('./public/index.html');
+for(const name of ['mapsSection','knowledgeSection','connectionsSection','worldSociety','worldYear','worldSearch','worldPeriod','records','resetWorld']){
+  assert.ok(html.includes('id="'+name+'"'),'Missing accessible geography reader control '+name);
+}
+assert.ok(html.indexOf('research-classical-data.js')<html.indexOf('worldview-model.js'),'Research loads before model');
+assert.ok(html.indexOf('worldview-model.js')<html.indexOf('worldview.js'),'Model loads before reader');
+assert.match(app,/WorldViewModel\.build/);
+assert.match(app,/replaceState/);
+assert.ok(!app.includes('new google.maps'),'No external map backend');
+assert.ok(index.includes('id="worldviewLink"'),'Context link exists on World Map');
+assert.match(read('./public/app.js'),/worldviewParams\.toString\(\)/);
+console.log('PASS v0.17 World Through Their Eyes: 19 maps, 42 geographical claims, 127 relationships, provenance, attribution, unsupported filtering, rights and cross-view context.');
