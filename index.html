@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#142b38" />
+  <meta name="description" content="Explore human history in parallel. Choose any year, discover contemporary civilisations, and see the world as historical mapmakers imagined it." />
+  <title>World History Atlas — a place to get lost in time</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand"><div class="brand-seal" aria-hidden="true">✳</div><div><div class="brand-name">WORLD HISTORY <em>ATLAS</em></div><div class="brand-caption">A PLACE TO GET LOST IN TIME</div></div></div>
+      <div class="topbar-center"><span class="top-dot"></span> AN INTERACTIVE CHRONICLE OF THE HUMAN STORY</div>
+      <div class="top-actions"><button class="ghost-light" id="backButton" type="button" title="Previous discovery" aria-label="Previous discovery">↶ <span>Back</span></button><button id="randomButton" class="surprise-button" type="button">✦ <span>Surprise me</span></button><button class="icon-button" id="moreRandom" type="button" title="Randomisation options" aria-label="Randomisation options">▾</button><div id="randomMenu" class="random-menu hidden"><button data-random="all" type="button">✦ Anywhere, anytime</button><button data-random="year" type="button">◎ New civilisation, same year</button><button data-random="civilisation" type="button">⌛ Same civilisation, another era</button></div><button id="helpButton" class="help-button" title="About this atlas" type="button">?</button></div>
+    </header>
+    <div class="workspace">
+      <aside class="left-panel" aria-label="Explore history">
+        <div class="small-heading">YOUR HISTORICAL JOURNEY</div>
+        <div class="sidebar-heading">Where shall we begin<span>?</span></div>
+        <div class="search-wrap"><span class="search-icon">⌕</span><input id="searchInput" type="search" placeholder="Find a civilisation..." aria-label="Find a civilisation" autocomplete="off"><kbd>/</kbd></div>
+        <div class="left-section-title">JUMP TO AN ERA <span>↘</span></div>
+        <div class="eras" id="eraButtons"></div>
+        <div class="divider"></div>
+        <div class="left-section-title">EXPLORE BY REGION <span>⌄</span></div>
+        <div class="region-filter"><select id="regionSelect" aria-label="Filter civilisations by region"></select></div>
+        <div class="left-section-title civilisation-list-title">CIVILISATIONS <span id="civilisationCount">0</span></div>
+        <div id="civilisationList" class="civilisation-list" aria-live="polite"></div>
+        <div class="sidebar-foot"><span class="star-icon">✳</span><div>Every date is another doorway.<br><span>Follow the things that surprise you.</span></div></div>
+      </aside>
+      <main class="main-panel">
+        <section class="explore-header">
+          <div class="eyebrow">THE WORLD THROUGH TIME <span class="eyebrow-line"></span> EXPLORE • DISCOVER • WONDER</div>
+          <div class="scene-heading"><div><h1 id="sceneTitle">The world, <em>200 CE</em></h1><p id="sceneSubtitle">Many worlds, one moment in history.</p></div><div class="date-controls"><button id="prevMoment" type="button" title="Previous featured moment" aria-label="Previous featured moment">‹</button><div class="current-year"><span>SELECTED YEAR</span><input id="yearInput" type="text" aria-label="Selected historical year" title="Enter 500 BCE, 200 CE or an astronomical year like -499"><small>↵ TO JUMP</small></div><button id="nextMoment" type="button" title="Next featured moment" aria-label="Next featured moment">›</button></div></div>
+        </section>
+        <section class="map-card" aria-label="Interactive historical map">
+          <div class="map-tabs" role="tablist" aria-label="Historical map view"><button data-view="actual" role="tab" aria-selected="true" class="active">◎ <span>Actual world</span></button><button data-view="historical" role="tab" aria-selected="false">▤ <span>Their world map</span></button><button data-view="known" role="tab" aria-selected="false">◌ <span>World they knew</span></button></div>
+          <div class="map-stage" id="mapStage"><svg id="worldMap" viewBox="0 0 1200 590" role="img" aria-label="World basemap with historical civilisation markers"><g id="mapTransform"><image href="world.svg" x="0" y="0" width="1200" height="590"></image><g id="mapMarkers"></g></g></svg><div id="historicalMap" class="historical-map hidden"></div><div class="map-ornament top-left"><span class="map-ornament-label">HISTORICAL ATLAS · SELECTED DATE</span><strong id="mapYear">200 CE</strong></div><div class="map-ornament bottom-left" id="mapLegend"><span class="legend-dot"></span> Geographical reference points <span class="legend-note">• Not historical borders</span></div><div class="map-zoom"><button id="zoomIn" type="button" title="Zoom in" aria-label="Zoom in">+</button><button id="zoomOut" type="button" title="Zoom out" aria-label="Zoom out">−</button><button id="resetMap" type="button" title="Reset map" aria-label="Reset map">⌖</button></div><div class="compass" aria-hidden="true">N<br><span>✦</span></div></div>
+          <div class="map-footer"><span id="mapStatus">◉ The world circa 200 CE</span><span id="mapHelp">Click any marker to discover its story <b>↗</b></span></div>
+        </section>
+        <section class="time-card" aria-label="Historical time controls"><div class="time-top"><span class="section-kicker">MOVE THROUGH HISTORY</span><div class="time-tools"><button id="minusCentury" title="Go back 100 years" type="button">−100y</button><button id="plusCentury" title="Go forward 100 years" type="button">+100y</button></div></div><div class="time-ruler"><input id="yearSlider" type="range" min="-9999" max="2026" step="1" value="200" aria-label="Slide through historical years"><div class="range-ends"><span>10,000 BCE</span><span>5,000 BCE</span><span>1 CE</span><span>2026 CE</span></div></div><div id="moments" class="moment-chips" aria-label="Featured historical moments"></div></section>
+        <section class="timeline-card"><div class="timeline-header"><div><div class="section-kicker">SAME MOMENT, DIFFERENT WORLDS</div><h2>Meanwhile, <em>elsewhere...</em></h2></div><div class="timeline-count"><span id="parallelCount">0</span><small>contemporary societies</small></div></div><div class="timeline-scale"><span id="timelineFrom"></span><span>CONCURRENT HISTORY</span><span id="timelineTo"></span></div><div id="timelineRows" class="timeline-rows"></div><div class="timeline-explain">Highlighted societies are active at the selected date. The bands show approximate periods, not territorial extent.</div></section>
+        <footer class="main-footer"><span>✳ Built for curiosity, not productivity.</span><span>Historical dates and geographic knowledge are often approximate.</span></footer>
+      </main>
+      <aside class="right-panel" aria-label="Historical context"><div class="right-kicker">THE STORY BEHIND THE MAP <span>✧</span></div><div id="storyPanel"></div><div class="right-footer"><span>✧</span> Discover a new perspective on the past.</div></aside>
+    </div>
+  </div>
+  <dialog id="aboutDialog"><div class="dialog-head"><div class="small-heading">ABOUT THIS LITTLE EXPERIMENT</div><button id="closeDialog" aria-label="Close" type="button">×</button></div><h2>A history atlas for <em>curious minds.</em></h2><p>This is a personal passion project. Jump between civilisations, see who shared the same centuries, and peek at how historical mapmakers imagined the world.</p><p><strong>Map honesty:</strong> markers represent approximate places associated with societies, not their territorial borders. Historical maps are authentic surviving examples or clearly labelled later copies and reconstructions. There is no pretence that a single map represents everybody's knowledge.</p><p><strong>Dates:</strong> ancient and medieval dates are often approximate. The atlas currently contains a small hand-curated starter collection intended to grow over time.</p><p>Tip: press <kbd>/</kbd> to search, click a civilisation, or hit <strong>Surprise me</strong> to go somewhere unexpected.</p><button id="closeDialogAction" class="surprise-button" type="button">Let's explore ↗</button></dialog>
+  <script src="data.js"></script><script src="app.js"></script>
+</body>
+</html>
