@@ -183,6 +183,7 @@
     return p.replace(/_/g,' ').replace(/^./, c => c.toUpperCase());
   };
   const entityDates = c => {
+    if (c.periodScope === 'research-window' || c.periodScope === 'source-range') return window.AtlasDateScope.label(c);
     if (c.dateLabel) return c.dateLabel;
     if (typeof c.dating === 'string' && /\d/.test(c.dating)) return c.dating;
     return (/approx|circa/.test(c.datePrecision || c.dating || '') ? 'c. ' : '') + yearText(c.start) + ' – ' + yearText(c.end);
@@ -199,7 +200,7 @@
     return '<p class="events-intro">Select a dated heading to read its evidence. The dots use the same time scale; opening a record keeps this window in place.</p><div class="timeline-scroll" tabindex="0" aria-label="Scrollable event timeline"><div class="timeline-canvas events-canvas">' + axis(r) + '<div class="event-lanes">' + listed.slice(0,ui.eventLimit).map(e => '<button type="button" class="event-lane' + (e.key === state.event ? ' selected' : '') + '" data-event-key="' + safe(e.key) + '" aria-pressed="' + (e.key === state.event) + '"><span class="event-year">' + safe(researchEventDate(e)) + '</span><span class="event-copy"><strong>' + safe(e.title) + '</strong><small>' + safe(eventMeta(e)) + '</small></span><span class="event-track" aria-hidden="true"><i style="left:' + pct(e.year,r).toFixed(3) + '%;background:' + colour(entities.get(e.civ) || {region:e.region}) + '"></i>' + marker(r) + '</span><span class="event-open" aria-hidden="true">›</span></button>').join('') + '</div></div></div>' + moreButton('events',ui.eventLimit,listed.length,'milestones');
   }
   function entityButton(c) {
-    return '<button type="button" data-civ="' + safe(c.id) + '" class="concurrent"><i style="background:' + colour(c) + '"></i><span><b>' + safe(c.name) + '</b><small>' + safe(c.region + ' · ' + entityDates(c)) + (c.periodScope === 'research-window' ? ' · Researched period only' : '') + '</small></span><em aria-hidden="true">›</em></button>';
+    return '<button type="button" data-civ="' + safe(c.id) + '" class="concurrent"><i style="background:' + colour(c) + '"></i><span><b>' + safe(c.name) + '</b><small>' + safe(c.region + ' · ' + entityDates(c)) + '</small></span><em aria-hidden="true">›</em></button>';
   }
   function cardEvent(e) {
     return '<button type="button" class="insight-event" data-event-key="' + safe(e.key) + '"><b>' + safe(researchEventDate(e)) + '</b><span><strong>' + safe(e.title) + '</strong><small>' + safe(precisionLabel(e) || e.kind || 'Milestone') + '</small></span><em aria-hidden="true">›</em></button>';
@@ -263,7 +264,7 @@
     const n = renderSources(evidence || selected, Boolean(evidence));
     $('readerLabel').textContent = evidence ? 'SELECTED MILESTONE' : 'CURRENT SELECTION';
     $('selectedName').textContent = evidence?.title || selected?.name || 'Select an entry';
-    $('selectedLife').textContent = evidence ? researchEventDate(evidence) + ' · ' + eventMeta(evidence) : selected ? entityDates(selected) + ' · ' + (selected.kind === 'empire' ? 'Empire' : 'Society') + ' · ' + selected.region + (selected.periodScope === 'research-window' ? ' · Researched period only' : '') : '';
+    $('selectedLife').textContent = evidence ? researchEventDate(evidence) + ' · ' + eventMeta(evidence) : selected ? entityDates(selected) + ' · ' + (selected.kind === 'empire' ? 'Empire' : 'Society') + ' · ' + selected.region : '';
     $('selectedSummary').textContent = evidence ? evidence.detail || '' : selected?.summary || '';
     const notes = [];
     if (evidence?.evidenceNote) notes.push(evidence.evidenceNote);
