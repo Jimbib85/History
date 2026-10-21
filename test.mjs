@@ -39,6 +39,7 @@ const window={location,history:{replaceState(){}}};
 const globals={document,window,location,URL,URLSearchParams,HTMLInputElement:FakeEl,console};
 const runtime=vm.createContext(globals);
 vm.runInContext(data,runtime);
+vm.runInContext(fs.readFileSync(new URL('./public/geo-layers.js',import.meta.url),'utf8'),runtime);
 vm.runInContext(app,runtime);
 assert(elements.sceneTitle.innerHTML.includes('200 CE'),'Initial date not rendered');
 assert(elements.storyPanel.innerHTML.includes('Roman Empire'),'Initial civilisation not rendered');
