@@ -4,7 +4,7 @@
   const $ = (id) => document.getElementById(id);
   const yearLabel = y => y <= 0 ? `${Math.abs(y - 1).toLocaleString('en-AU')} BCE` : `${y.toLocaleString('en-AU')} CE`;
   const compactYear = y => y <= 0 ? `${Math.abs(y - 1)} BCE` : `${y} CE`;
-  const life = c => window.AtlasDateScope.label(c);
+  const life = c => window.AtlasDateScope?.label(c) ?? `${compactYear(c.start)} – ${compactYear(c.end)}`;
   const activeAt = (c,y) => c.kind !== 'overview' && c.start <= y && c.end >= y;
   const isCharted = c => c.kind !== 'overview';
   const groupLabel = c => c.kind === 'empire' ? 'Empire / imperial state' : c.kind === 'overview' ? 'Cultural overview' : 'Society / non-imperial polity';
