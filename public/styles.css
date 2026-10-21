@@ -206,3 +206,8 @@ summary:focus-visible{outline:3px solid #c89951;outline-offset:3px;border-radius
 @media(max-width:700px){.map-primary-nav{order:3;width:100%;justify-content:space-between;border-top:1px solid #3a5259;padding-top:5px}.map-primary-nav a{font-size:13px;min-height:44px;padding:9px}.top-actions{justify-content:flex-start}}
 .map-reader-link{display:none;color:#355d53;font-weight:600;text-underline-offset:3px;min-height:36px;align-items:center}
 @media(max-width:1160px){.map-reader-link{display:inline-flex}}
+
+/* Connected exploration: compact cross-view actions within the selected society. */
+.atlas-journey{display:grid;grid-template-columns:1fr;gap:7px;margin:16px 0;padding-top:12px;border-top:1px solid rgba(135,151,157,.3)}
+.atlas-journey a{display:block;padding:9px 11px;border:1px solid rgba(135,151,157,.32);border-radius:6px;color:inherit;text-decoration:none;font-size:.84rem;font-weight:600}
+.atlas-journey a:hover,.atlas-journey a:focus-visible{border-color:#b58e53;background:rgba(181,142,83,.1)}
