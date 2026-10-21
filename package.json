@@ -1,9 +1,9 @@
 {
   "name": "world-history-atlas",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node test.mjs && node tech-test.mjs && node tech-v03-test.mjs && node classification-test.mjs && node compare-test.mjs && node research-merge-test.mjs && node medieval-merge-test.mjs && node modern-merge-test.mjs && node classical-merge-test.mjs && node story-test.mjs && node conflicts-test.mjs && node map-ux-test.mjs && node compare-reader-test.mjs && node tech-ux-test.mjs && node conflicts-reader-test.mjs && node date-scope-test.mjs"
+    "test": "node test.mjs && node tech-test.mjs && node tech-v03-test.mjs && node classification-test.mjs && node compare-test.mjs && node research-merge-test.mjs && node medieval-merge-test.mjs && node modern-merge-test.mjs && node classical-merge-test.mjs && node story-test.mjs && node conflicts-test.mjs && node map-ux-test.mjs && node compare-reader-test.mjs && node tech-ux-test.mjs && node conflicts-reader-test.mjs && node date-scope-test.mjs && node connected-navigation-test.mjs"
   }
 }
