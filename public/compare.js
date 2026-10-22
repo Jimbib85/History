@@ -338,6 +338,29 @@
     if(state.pinned.length<2)state.focusPinned=false;
     render();
   }
+
+  // Cinematic comparison deck is a second reading surface for the same state
+  // and historic intervals. Never creates inferred cross-civilisation links.
+  function renderCinematicDeck(){
+    const host=$('cinematicCompareDeck');if(!host)return;
+    const selected=entities.get(state.selected);
+    const rangeNow=range();
+    const ordered=[...new Set([state.selected,...state.pinned,...all.filter(c=>c.id!==state.selected&&active(c,state.year)).sort((a,b)=>a.name.localeCompare(b.name)).map(c=>c.id)])]
+      .map(id=>entities.get(id)).filter(c=>c&&overlaps(c,rangeNow)).slice(0,3);
+    const selectedSet=new Set(ordered.map(c=>c.id));
+    const yearTextCompact=y=>yearText(y);
+    host.innerHTML='<div class="cinematic-deck-heading"><span>PEOPLES · PLACES · CONNECTIONS</span><strong>'+safe(yearText(state.year))+'</strong></div>'+
+      '<div class="cinematic-societies">'+ordered.map((c,i)=>{
+       const hue=['gold','green','violet'][i],isSelected=c.id===state.selected;
+       return '<article class="cinematic-society '+hue+(isSelected?' current':'')+'"><div class="cinematic-society-top"><span class="cinematic-glyph" aria-hidden="true">'+(c.kind==='empire'?'♜':'✥')+'</span><span class="cinematic-region">'+safe(c.region)+'</span></div><h2>'+safe(c.name)+'</h2><div class="cinematic-society-life">'+safe(entityDates(c))+'</div><p>'+safe((c.summary||c.description||'Explore this society’s history and surviving records.').slice(0,230))+'</p><div class="cinematic-card-actions"><button data-deck-civ="'+safe(c.id)+'" '+(isSelected?'aria-current="true"':'')+'>Explore history →</button><button data-deck-pin="'+safe(c.id)+'" aria-pressed="'+state.pinned.includes(c.id)+'">'+(state.pinned.includes(c.id)?'★ Pinned':'☆ Pin')+'</button></div></article>';
+      }).join('')+'</div>'+
+      '<div class="cinematic-flow-heading"><div><strong>Histories in parallel</strong><span>Actual recorded periods on one shared scale</span></div><span>'+safe(yearText(rangeNow.start))+' — '+safe(yearText(rangeNow.end))+'</span></div>'+
+      '<div class="cinematic-flow-tracks">'+ordered.map((c,i)=>{
+        const x=pct(Math.max(c.start,rangeNow.start),rangeNow),end=pct(Math.min(c.end,rangeNow.end),rangeNow);
+        return '<div class="cinematic-flow-track"><span>'+safe(c.name)+'</span><div class="cinematic-flow-line"><button type="button" data-deck-civ="'+safe(c.id)+'" aria-label="Explore '+safe(c.name)+'" style="--flow-x:'+x.toFixed(3)+'%;--flow-width:'+Math.max(.6,end-x).toFixed(3)+'%;--flow-colour:var(--flow-'+i+')" title="'+safe(entityDates(c))+'"></button><i style="left:'+pct(state.year,rangeNow)+'%" aria-hidden="true"></i></div></div>';
+      }).join('')+'</div>'+
+      '<p class="cinematic-evidence-note">Shared dates are not evidence of contact. Bands reflect the atlas’s recorded intervals and may be incomplete. Select a society or use the sourced event markers in the main timeline below.</p>';
+  }
   function render() {
     const focused = document.activeElement;
     const focusAttr = ['data-group','data-more','data-event-key','data-civ','data-action','data-order-up','data-order-down'].find(a => focused?.hasAttribute?.(a));
@@ -361,7 +384,7 @@
     $('compareSearch').placeholder = state.mode === 'events' ? 'Search every event in this window…' : 'Search names, regions or summaries…';
     document.querySelectorAll('[data-mode]').forEach(b => { const is = b.dataset.mode === state.mode; b.classList.toggle('active',is); b.setAttribute('aria-selected',String(is)); b.tabIndex = is ? 0 : -1; });
     $('comparisonChart').innerHTML = state.mode === 'eras' ? eraView(r) : state.mode === 'regions' ? regionsView(r) : state.mode === 'events' ? eventsView(r) : overlapView(r);
-    insight(); renderPins(); renderAtlasSummary(r); updateLink();
+    insight(); renderPins(); renderAtlasSummary(r); renderCinematicDeck(); updateLink();
     if (focusAttr && !focused.isConnected) {
       const replacement = [...document.querySelectorAll('[' + focusAttr + ']')].find(el => el.getAttribute(focusAttr) === focusValue);
       replacement?.focus({preventScroll:true});
@@ -486,6 +509,7 @@
       }
       e.target.value='';
     });
+    $('cinematicCompareDeck')?.addEventListener('click',e=>{const b=e.target.closest('[data-deck-civ],[data-deck-pin]');if(!b)return;if(b.dataset.deckCiv)choose(b.dataset.deckCiv);else if(b.dataset.deckPin){change({selected:b.dataset.deckPin,event:null});togglePin();}});
     $('pinnedComparison').addEventListener('click',e=>navigateFromClick(e.target));
     $('pinCompare').addEventListener('click',togglePin); $('resetCompare').addEventListener('click',reset); $('randomComparison').addEventListener('click',randomise);
     $('comparisonChart').addEventListener('click',e => navigateFromClick(e.target));
