@@ -8,6 +8,10 @@ The Technology tree filters its families, topics and evidence to the selected so
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
 
+## Version 0.26 — Cinematic World Map visual foundation
+
+The World Map now uses a **dark navy, aged-gold and ivory** look inspired by the uploaded visual concepts. This is a scoped, reusable CSS design system with a responsive map-first layout, high-contrast map markers, clearer time controls, and accessible touch/focus states. Historical research, chronological logic, geography, and controls remain unchanged; no decorative historical routes or territorial claims have been invented. See [v0.26 visual design notes](docs/cinematic-atlas-v026.md).
+
 ## Version 0.25 — Shared source identities and institutional technology evidence
 
 The **39 unresolved modern historical IDs** were traced to shared IDs and start-years across two earlier research packs. Their v2 source claims now enrich both existing catalogue entries, retaining distinct date scopes and original wording rather than duplicating historical events. The modern event audit now accounts for 72 enriched existing records, 10 genuinely new precise events, and 15 broad/context records.
