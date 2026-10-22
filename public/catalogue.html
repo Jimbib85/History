@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#142b38"><meta name="description" content="Search the World History Atlas master research catalogue: 3,125 source-linked entries, historical relationships and claim-level evidence.">
+<title>Connected Research | World History Atlas</title>
+<link rel="stylesheet" href="atlas-nav.css?v=0.19.0"><link rel="stylesheet" href="catalogue.css?v=0.28.0">
+</head><body>
+<a class="skip" href="#researchWorkspace">Skip to research</a>
+<header class="topbar"><a class="brand" href="story.html"><span aria-hidden="true">✳</span> WORLD HISTORY <em>ATLAS</em></a>
+<nav class="atlas-crossnav" aria-label="Atlas views"><a href="story.html" data-atlas-view="story">Story</a><a href="index.html" data-atlas-view="map">World Map</a><a href="compare.html" data-atlas-view="compare">Compare</a><a href="index.html#technology" data-atlas-view="technology">Technology</a><a href="worldview.html" data-atlas-view="worldview">Their World</a><a href="discover.html" data-atlas-view="discover">Discover</a><a href="conflicts.html" data-atlas-view="conflicts">Conflicts</a><a href="catalogue.html" data-atlas-view="catalogue" aria-current="page">Research</a></nav></header>
+<main id="researchWorkspace" class="shell">
+<section class="hero"><div class="eyebrow">A SOURCE-LINKED WINDOW INTO THE HUMAN STORY</div><h1>History is a <em>web of connections.</em></h1><p>Follow societies, turning points, technologies, people and the evidence between them. This research catalogue preserves uncertainty instead of turning every historical possibility into a definite fact.</p>
+<div class="stats" aria-label="Research archive summary"><div><strong id="countRecords">3,125</strong><span>catalogue entries</span></div><div><strong>621</strong><span>source references</span></div><div><strong>3,001</strong><span>historical claims</span></div><div><strong>8000 BCE–2026</strong><span>approximate research scope</span></div></div>
+<div class="view-pills" role="group" aria-label="Explore research views"><button type="button" id="browseMode" aria-pressed="true">⌕ Browse the archive</button><button type="button" id="networkMode" aria-pressed="false">◇ Explore connections</button></div></section>
+<section class="disclaimer"><strong>Research status matters.</strong> Most records were inherited from earlier packs and were not rechecked during this release. “Source checked” is a limited check, not independent corroboration. Missing entries do not mean a society, event or technology did not exist. The network uses explicit relationship records—not imagined trade routes.</section>
+<div id="loadStatus" class="loading" role="status">Opening the source-linked catalogue…</div>
+<section id="browseSection" hidden>
+  <div class="filters" aria-label="Filter research records">
+    <label>Find a name, event, technology or place<input type="search" id="search" placeholder="Try: Abbasid, papermaking, ocean trade…" autocomplete="off"></label>
+    <label>Record category<select id="category"><option value="all">All record categories</option></select></label>
+    <label>Region<select id="region"><option value="all">Every region</option></select></label>
+    <label>Time range<select id="period"><option value="all">Any period or undated</option><option value="near">Near the selected year</option><option value="bce">BCE</option><option value="early">1–999 CE</option><option value="medieval">1000–1499 CE</option><option value="earlymodern">1500–1899 CE</option><option value="modern">1900–2026 CE</option><option value="undated">Undated / no structured year</option></select></label>
+    <label>Historical year<input id="year" type="text" inputmode="text" value="1200 CE" aria-label="Historical year for near-date filtering"></label>
+  </div>
+  <div class="category-shortcuts" id="shortcuts" role="group" aria-label="Popular research subjects"></div>
+  <div class="toggles"><label><input type="checkbox" id="showLeads"> Include 59 source-unresolved research leads</label><label><input type="checkbox" id="showSensitive"> Include sensitive and propaganda-related material</label><button type="button" id="reset">Reset filters</button></div>
+  <div class="collection-head"><div><div class="eyebrow">EXPLORE AT YOUR OWN PACE</div><h2 id="resultTitle">Explore historical evidence</h2><p id="resultHelp">Open a record to see its dating, original context, linked claims and sources.</p></div><span id="resultCount" role="status"></span></div>
+  <div id="cards" class="cards" aria-live="polite"></div><button id="more" class="more" type="button" hidden>Show more records</button>
+</section>
+<section id="networkSection" hidden>
+ <div class="network-head"><div><div class="eyebrow">EVIDENCED RELATIONSHIPS, NOT CONJECTURAL ROUTES</div><h2>How societies <em>interacted.</em></h2><p>Pick a society and follow its documented relationship records. Lines show a catalogue association—not historical geography, relationship intensity or direct travel.</p></div><label>Choose society <select id="networkSociety"></select></label></div>
+ <div class="network-grid"><div class="network-stage"><div id="networkDiagram" class="network-diagram" role="group" aria-label="Catalogue relationship network"></div><p class="network-caution">Network positions are schematic, not real-world coordinates. Links represent only explicitly supplied relationship records. A separate “Meanwhile” comparison is not evidence of contact.</p></div><div class="network-reader"><div class="eyebrow">HISTORICAL RELATIONSHIP EVIDENCE</div><h3 id="networkTitle">Select a linked society</h3><p id="networkIntro"></p><div id="networkEvidence" class="network-evidence"></div></div></div>
+ <details class="contemporary"><summary>Meanwhile, elsewhere — separate comparisons (not contact claims) <span id="meanwhileCount"></span></summary><div id="meanwhileRecords"></div></details>
+</section>
+<section class="footer-notes"><p><strong>What has been imported?</strong> The complete primary catalogue, linked claim statements, source references, source-claim assertions, research gaps and media-review queue. Duplicate category *views* were deliberately not imported twice. Original observations and review statuses are retained in the source payload.</p><p>Want a date in context? Open a record and use <strong>Explore this period</strong> to return to the Story timeline. Where the source provides only an uncertain range, the archive shows that wording rather than inventing a precise event date.</p></section>
+</main>
+<dialog id="reader" aria-labelledby="readerTitle"><div class="reader-shell"><div class="reader-top"><span id="readerType" class="eyebrow">RESEARCH RECORD</span><button type="button" id="closeReader" aria-label="Close record">×</button></div><div id="readerBody"></div></div></dialog>
+<script src="atlas-links.js?v=0.28.0" defer></script>
+<!-- The 21 chunks represent one compressed canonical research corpus. They load only on this page, and work offline. -->
+<script src="master-payload-01.js?v=0.28.0" defer></script>
+<script src="master-payload-02.js?v=0.28.0" defer></script>
+<script src="master-payload-03.js?v=0.28.0" defer></script>
+<script src="master-payload-04.js?v=0.28.0" defer></script>
+<script src="master-payload-05.js?v=0.28.0" defer></script>
+<script src="master-payload-06.js?v=0.28.0" defer></script>
+<script src="master-payload-07.js?v=0.28.0" defer></script>
+<script src="master-payload-08.js?v=0.28.0" defer></script>
+<script src="master-payload-09.js?v=0.28.0" defer></script>
+<script src="master-payload-10.js?v=0.28.0" defer></script>
+<script src="master-payload-11.js?v=0.28.0" defer></script>
+<script src="master-payload-12.js?v=0.28.0" defer></script>
+<script src="master-payload-13.js?v=0.28.0" defer></script>
+<script src="master-payload-14.js?v=0.28.0" defer></script>
+<script src="master-payload-15.js?v=0.28.0" defer></script>
+<script src="master-payload-16.js?v=0.28.0" defer></script>
+<script src="master-payload-17.js?v=0.28.0" defer></script>
+<script src="master-payload-18.js?v=0.28.0" defer></script>
+<script src="master-payload-19.js?v=0.28.0" defer></script>
+<script src="master-payload-20.js?v=0.28.0" defer></script>
+<script src="master-payload-21.js?v=0.28.0" defer></script>
+<script src="catalogue.js?v=0.28.0" defer></script>
+</body></html>
