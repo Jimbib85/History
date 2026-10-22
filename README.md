@@ -8,6 +8,10 @@ The Technology tree filters its families, topics and evidence to the selected so
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
 
+## Version 0.21 — Lightweight historical worldview
+
+Their World now loads a reproducible 132 KB research-only index instead of the full 1.2+ MB research scripts and app adapters. It still exposes all **19 historical maps, 42 geographic-knowledge records and 127 relationship records** with the same source links and scope caveats. GitHub Chrome measured a reduction from roughly 1,473 KiB to 159 KiB of first-party local resource transfers for that screen. See [data-loading notes](docs/worldview-loading-v021.md).
+
 ## Version 0.20 — Classical research provenance and lightweight evidence
 
 The two user-supplied 500-year classical research packs are preserved as compressed canonical, source-linked staging archives under `research/classical-split/`. A deduplicated set of **72 reviewed claim excerpts** is available on demand inside Discover, with precise dates, uncertainty, original source IDs and review scopes explicitly labelled. The existing combined classical dataset has **not** been overwritten with unreviewed seed material.
