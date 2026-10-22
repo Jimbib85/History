@@ -8,6 +8,12 @@ The Technology tree filters its families, topics and evidence to the selected so
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
 
+## Version 0.25 — Shared source identities and institutional technology evidence
+
+The **39 unresolved modern historical IDs** were traced to shared IDs and start-years across two earlier research packs. Their v2 source claims now enrich both existing catalogue entries, retaining distinct date scopes and original wording rather than duplicating historical events. The modern event audit now accounts for 72 enriched existing records, 10 genuinely new precise events, and 15 broad/context records.
+
+The **19 technology observations** associated with hospitals, companies, laboratories and other non-polity actors are now browsable in the Technology Tree's new **Research institutions and historical technology** section, with claim IDs, original sources and source dates. They appear only under *All societies & empires*: no unsupported society-wide adoption or invention is asserted. See [v0.25 research review](docs/modern-evidence-review-v025.md).
+
 ## Version 0.24 — Reconcile modern priority v2 into main Atlas
 
 An explicit, repeatable ID crosswalk links the v2 modern research to original Atlas events without duplicate chronology. **33 modern events gain new citations, 10 sourced single-year event records become explorable in Story and Compare, and 15 broad / 39 ambiguous records remain in Discover.** The technology tree gains evidence on four existing appearances while 24 others remain contextual or require identity mapping. Conflicts gains 18 distinct sourced records and updates eight existing ones, preserving war/phase/battle/treaty hierarchy. No new fabricated society lifespans or territorial boundaries.
