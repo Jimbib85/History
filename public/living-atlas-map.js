@@ -3,6 +3,8 @@
  */
 (function(root){
  'use strict';
+// Skip browser-only map composition in minimal DOM research fixtures.
+ if(typeof document==='undefined'||typeof document.createElement!=='function'||typeof document.querySelector!=='function')return;
  const api=root.WorldHistoryAtlas,stage=document.getElementById('mapStage'),yearNode=document.getElementById('mapYear');
  const browse=document.querySelector('.left-panel'),mapCard=document.querySelector('.map-card');
  if(!api||!stage||!browse||!mapCard)return;
