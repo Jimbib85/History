@@ -5,7 +5,7 @@ const read=p=>readFileSync(new URL('./public/'+p,import.meta.url),'utf8');
 const html=read('index.html');
 assert.match(html,/id="modernV2InstitutionEvidence"/);
 assert.match(html,/modern-v2-institution-tech\.js\?v=0\.25\.0/);
-assert.match(read('technology-viz.css'),/tech-institutional\[hidden\]/);
+assert.match(read('technology-viz.css'),/modernV2InstitutionEvidence\[hidden\]/);
 const listeners={};
 const controls={
  modernV2InstitutionEvidence:{hidden:true,open:false,addEventListener(n,f){listeners.panel=f}},
