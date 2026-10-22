@@ -3,6 +3,8 @@
  */
 (function(root){
  'use strict';
+  // Browser-only visual layer; research test sandboxes may have no DOM.
+  if(typeof document==='undefined'||typeof document.getElementById!=='function')return;
  const $=id=>document.getElementById(id);
  const societies=new Map(CIVILISATIONS.filter(c=>c.kind!=='overview').map(c=>[c.id,c]));
  const allSources=[
