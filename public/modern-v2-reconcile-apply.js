@@ -32,7 +32,7 @@ const ATLAS_MODERN_V2_NEW_EVENTS=[];
  };
  for(const e of pack.events){
    if(e.type==='existing'){
-     if(attach(byId.get(e.canonical),e)){ATLAS_MODERN_V2_REPORT.sourceEnriched.push(e.id);}
+     if(attach(byId.get(e.canonical)||old.find(prior=>prior.additionalResearch?.some(r=>r.id===e.canonical)),e)){ATLAS_MODERN_V2_REPORT.sourceEnriched.push(e.id);}
      else ATLAS_MODERN_V2_REPORT.ambiguous.push({id:e.id,reason:'canonical_target_missing'});
      continue;
    }
