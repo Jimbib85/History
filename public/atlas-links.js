@@ -44,7 +44,7 @@
    if(document.readyState==='loading')document.addEventListener?.('DOMContentLoaded',refresh,{once:true});
    else refresh();
    for(const action of ['pointerdown','focusin','click','auxclick','contextmenu'])
-     document.addEventListener(action,refresh,true);
+     document.addEventListener?.(action,refresh,true);
  }
  root.addEventListener?.('pageshow',refresh);
 })(typeof window!=='undefined'?window:globalThis);
