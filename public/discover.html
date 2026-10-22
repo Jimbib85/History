@@ -38,10 +38,25 @@
  <p class="section-intro">Each suggestion comes from an existing cultural-practice record with a research source. Random means variety, not certainty.</p>
  <div id="randomRecord" class="random-record" aria-live="polite">Choose a discovery to begin.</div>
 </section>
+<section class="classical-section" aria-label="Reviewed ancient and classical evidence">
+ <details id="classicalEvidence">
+  <summary><span><small>NEW RESEARCH · 500 BCE–500 CE</small><strong>Explore reviewed classical evidence</strong><em>Source-linked events, technology, culture and maps from two research packs</em></span><span class="classical-chevron" aria-hidden="true">⌄</span></summary>
+  <div class="classical-content">
+   <p class="classical-intro">Reviewed claim excerpts from the 500 BCE–1 BCE and 1–500 CE research packs. A partially checked entry does not mean every historical claim has been independently verified. These records complement the existing classical data; unreviewed and uncertain records are not promoted into precise timeline points.</p>
+   <div class="classical-tools">
+    <label for="classicalKind">Evidence type<select id="classicalKind"><option value="all">All evidence</option><option value="event">Historical events</option><option value="technology">Technology evidence</option><option value="culture">Cultural practices</option><option value="map">Historical maps</option><option value="geography">Geographical knowledge</option></select></label>
+    <label for="classicalBatch">Research period<select id="classicalBatch"><option value="all">Both periods</option><option value="500 BCE–1 BCE">500 BCE–1 BCE</option><option value="1–500 CE">1–500 CE</option></select></label>
+    <label for="classicalSearch">Search evidence<input type="search" id="classicalSearch" placeholder="Mawangdui, Aksum, glass…" maxlength="160"></label>
+   </div>
+   <p id="classicalStatus" role="status">Open this section to load reviewed research.</p>
+   <div id="classicalCards" class="classical-cards"></div><button type="button" id="classicalMore" hidden>Show more records</button>
+  </div>
+ </details>
+</section>
 <footer><span>✳ Built for curiosity, not productivity.</span><span>Dates, source quality and cultural accounts require care. Similarity is not proof of contact.</span></footer>
 </main>
 <script src="discovery-data.js?v=0.18.0"></script>
 <script src="discovery-model.js?v=0.18.0"></script>
-<script src="discovery.js?v=0.18.0"></script>
+<script src="discovery.js?v=0.18.0"></script><script src="classical-reviewed-model.js?v=0.20.0"></script><script src="classical-reviewed-view.js?v=0.20.0"></script>
 <script src="atlas-links.js?v=0.19.0"></script>
 </body></html>
