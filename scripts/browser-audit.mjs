@@ -9,7 +9,7 @@ import {readFile,stat,mkdir,writeFile} from 'node:fs/promises';
 import {resolve,extname,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {chromium} from 'playwright-core';
-const root=fileURLToPath(new URL('../public/',import.meta.url));
+const root=resolve(fileURLToPath(new URL('../public/',import.meta.url)));
 const output=fileURLToPath(new URL('../artifacts/browser-audit/',import.meta.url));
 const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8',
  '.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg',
