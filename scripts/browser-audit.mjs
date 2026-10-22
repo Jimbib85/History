@@ -109,6 +109,30 @@ else{
     fatal.push({device:device.name,page:'reviewed classical evidence',errors:[String(err),JSON.stringify(diag),...reviewedErrors]});
   }
   finally{await classical.close();}
+  const modern=await context.newPage();
+  const modernErrors=[];modern.on('pageerror',e=>modernErrors.push(e.message));
+  try{
+    await modern.goto(base+'discover.html?modernV2=1#modernV2Evidence',{waitUntil:'load',timeout:30000});
+    await modern.waitForFunction(()=>/events matching|Could not open/.test(document.querySelector('#modernV2Status')?.textContent||''),null,{timeout:15000});
+    const state=await modern.evaluate(()=>({
+      status:document.querySelector('#modernV2Status')?.textContent,
+      expanded:document.querySelector('#modernV2Evidence')?.open,
+      cards:document.querySelectorAll('#modernV2Cards .expansion-card').length,
+      hasSources:document.querySelectorAll('#modernV2Cards a[href^="https://"]').length,
+      fetched:performance.getEntriesByType('resource').some(r=>r.name.includes('modern-v2-data.js'))
+    }));
+    if(!state.expanded||state.cards!==15||!state.fetched||state.hasSources<5)
+      fatal.push({device:device.name,page:'modern v2 evidence',errors:['Modern v2 lazy loading/card data: '+JSON.stringify(state)]});
+    await modern.locator('#modernV2Type').selectOption('conflicts');
+    const conflicts=await modern.locator('#modernV2Status').textContent();
+    if(!conflicts.includes('16 conflicts matching'))fatal.push({device:device.name,page:'modern v2 conflicts',errors:[conflicts]});
+    await modern.locator('#modernV2Sensitive').check();
+    const fullConflicts=await modern.locator('#modernV2Status').textContent();
+    if(!fullConflicts.includes('18 conflicts matching'))fatal.push({device:device.name,page:'modern v2 sensitive opt-in',errors:[fullConflicts]});
+    if(modernErrors.length)fatal.push({device:device.name,page:'modern v2 evidence JS',errors:modernErrors});
+    else console.log('PASS',device.name,'modern v2 archive opened lazily and conflict category switches');
+  }catch(e){fatal.push({device:device.name,page:'modern v2 evidence',errors:[String(e),...modernErrors]});}
+  finally{await modern.close();}
   const extra=await context.newPage();
   const errors=[];extra.on('pageerror',e=>errors.push(e.message));
   try{

@@ -11,6 +11,7 @@
    year:params.has('year')&&Number.isSafeInteger(initialYear)&&initialYear>=-9999&&initialYear<=2026?initialYear:1600,
    random:null,recent:[]};
  const classicalRequested=params.has('classical')||location.hash==='#classicalEvidence';
+ const modernV2Requested=params.has('modernV2')||location.hash==='#modernV2Evidence';
  const ids=new Set(M.all.map(r=>r.id));
  function parseYear(text){
    const match=String(text).trim().replace(/,/g,'').match(/^(-?\d+)\s*(BCE|BC|CE|AD)?$/i);
@@ -47,6 +48,7 @@
    const q=new URLSearchParams({journey:state.journey,step:String(state.step),year:String(state.year)});
    if(state.random)q.set('record',state.random.id);
    if(classicalRequested)q.set('classical','1');
+   if(modernV2Requested)q.set('modernV2','1');
    if(params.has('research'))q.set('research',params.get('research'));
    try{history.replaceState(null,'','discover.html?'+q.toString());}catch(_){}
    $('snapshotCompare').href='compare.html?year='+encodeURIComponent(state.year);
