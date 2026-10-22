@@ -39,6 +39,13 @@
  stage.append(hero);
  const strip=document.createElement('div');strip.className='atlas-map-contemporaries';strip.id='atlasMapContemporaries';strip.setAttribute('aria-label','Other atlas societies active at this date');
  stage.insertAdjacentElement('afterend',strip);
+ const toolbar=document.getElementById('livingMapControls'),geo=document.getElementById('geoControls');
+ const layerTools=document.createElement('details');layerTools.className='atlas-map-layer-tools';
+ if(toolbar&&geo){
+   const summary=document.createElement('summary');summary.textContent='⚙ Map layers';layerTools.append(summary);
+   toolbar.append(layerTools);layerTools.append(geo);
+   document.addEventListener('click',event=>{if(layerTools.open&&!layerTools.contains(event.target))layerTools.open=false;});
+ }
  const caution=document.getElementById('livingMapExplanation');
  if(caution)caution.classList.add('atlas-geography-disclaimer');
  const evidence=document.getElementById('mapEvidence');
@@ -66,6 +73,7 @@
    const item=media?.forSociety(selected.id);
    const description=selected.kind==='overview'?'Cultural context rather than a single dated polity':
      active(selected,y)?'Part of the world at this date':'Selected from another historical period';
+   if(layerTools.parentNode)layerTools.hidden=api.state.view==='historical';
    hero.hidden=api.state.view!=='actual';
    hero.innerHTML='<div class="atlas-map-spotlight-visual">'+image(selected)+'</div><div class="atlas-map-spotlight-copy"><span>SELECTED SOCIETY · '+esc(description)+'</span><h3>'+esc(selected.name)+'</h3><p>'+esc(selected.region)+' · '+esc(selected.location||'')+'</p><div><a href="'+link(selected,y)+'">Compare ↗</a><a href="story.html?year='+encodeURIComponent(y)+'&entity='+encodeURIComponent(selected.id)+'">Read story ↗</a></div>'+(item?'<small>'+esc(item.title)+' · '+esc(item.date)+' · Object context, not a territorial map</small>':'<small>Decorative artwork, not archaeological evidence</small>')+'</div>';
    const activeSocieties=api.civilisations.filter(c=>active(c,y));
