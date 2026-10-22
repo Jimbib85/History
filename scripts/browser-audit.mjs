@@ -56,7 +56,7 @@ else{
        navLinks:menu?.querySelectorAll('[data-atlas-view]').length||0,
        navScrollable:menu?menu.scrollWidth>menu.clientWidth:false};
     });
-    if(info.navLinks!==7)errors.push('Not all seven view destinations are accessible');
+    if(info.navLinks!==8)errors.push('Expected all eight atlas view destinations, including Research');
     if(device.name==='mobile'&&info.bodyWidth>info.viewport+24)errors.push('Page overflows mobile viewport by '+(info.bodyWidth-info.viewport)+' px');
     // v0.24: the integrated evidence must be present on main screens,
     // not only in the research viewer. All assertions are source-identity based.
