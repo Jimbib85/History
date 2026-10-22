@@ -33,7 +33,7 @@ else{
  await mkdir(output,{recursive:true});
  const routes=[
   ['story.html','#storyTimeline'],['index.html','#worldMap'],['compare.html','#comparisonChart'],
-  ['worldview.html','#mapsRecords'],['discover.html','#journeyReader'],['conflicts.html','#results']
+  ['worldview.html','#mapsRecords'],['discover.html','#journeyReader'],['conflicts.html','#results'],['catalogue.html','.record-card']
  ];
  const devices=[{name:'desktop',width:1280,height:800},{name:'mobile',width:390,height:844}];
  const results=[],fatal=[];
