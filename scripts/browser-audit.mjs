@@ -125,7 +125,10 @@ else{
       fatal.push({device:device.name,page:'modern v2 evidence',errors:['Modern v2 lazy loading/card data: '+JSON.stringify(state)]});
     await modern.locator('#modernV2Type').selectOption('conflicts');
     const conflicts=await modern.locator('#modernV2Status').textContent();
-    if(!conflicts.includes('18 conflicts matching'))fatal.push({device:device.name,page:'modern v2 conflicts',errors:[conflicts]});
+    if(!conflicts.includes('16 conflicts matching'))fatal.push({device:device.name,page:'modern v2 conflicts',errors:[conflicts]});
+    await modern.locator('#modernV2Sensitive').check();
+    const fullConflicts=await modern.locator('#modernV2Status').textContent();
+    if(!fullConflicts.includes('18 conflicts matching'))fatal.push({device:device.name,page:'modern v2 sensitive opt-in',errors:[fullConflicts]});
     if(modernErrors.length)fatal.push({device:device.name,page:'modern v2 evidence JS',errors:modernErrors});
     else console.log('PASS',device.name,'modern v2 archive opened lazily and conflict category switches');
   }catch(e){fatal.push({device:device.name,page:'modern v2 evidence',errors:[String(e),...modernErrors]});}
