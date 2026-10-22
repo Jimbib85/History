@@ -97,7 +97,17 @@ else{
       fatal.push({device:device.name,page:'reviewed classical evidence',errors:['Source-checked lazy import did not render as expected: '+JSON.stringify(result)]});
     if(reviewedErrors.length)fatal.push({device:device.name,page:'reviewed classical evidence',errors:reviewedErrors});
     else console.log('PASS',device.name,'72 deduplicated classical review excerpts loaded lazily');
-  }catch(err){fatal.push({device:device.name,page:'reviewed classical evidence',errors:[String(err)]});}
+  }catch(err){
+    const diag=await classical.evaluate(()=>({
+      status:document.querySelector('#classicalStatus')?.textContent,
+      sectionOpen:document.querySelector('#classicalEvidence')?.open,
+      hasModel:!!window.AtlasClassicalReviewed,
+      hasUI:!!window.AtlasClassicalReviewUI,
+      hasPayload:typeof window.ATLAS_CLASSICAL_REVIEW_DEFLATE_BASE64==='string',
+      resources:performance.getEntriesByType('resource').filter(r=>r.name.includes('classical-reviewed')).map(r=>r.name+' '+r.responseStatus)
+    })).catch(()=>null);
+    fatal.push({device:device.name,page:'reviewed classical evidence',errors:[String(err),JSON.stringify(diag),...reviewedErrors]});
+  }
   finally{await classical.close();}
   await context.close();
  }
