@@ -60,6 +60,7 @@
       const urls=unique(explicit.map(validURL).filter(Boolean));
       const originalCategory=text(raw.kind)||text(raw.category)||'Unclassified';
       const entry={id,start,end,title:raw.title,summary:text(raw.detail)||text(raw.summary),
+        catalogueIds:unique([raw.catalogueId,...list(raw.masterCatalogueIds)].filter(Boolean)),
         originalCategory,subject:category(originalCategory),
         region:text(raw.region)||primary?.region||'Unspecified',originalRegion:text(raw.originalRegion)||text(raw.region)||'Unspecified',
         entityIds:ids,primaryId:primary?.id||null,sourceURLs:urls,
@@ -69,7 +70,7 @@
         notes:text(raw.evidenceNote),batch:text(raw.origin)||'Original atlas',aliases:[id],variants:[]};
       if(byKey.has(key)) {
         const prior=byKey.get(key);prior.entityIds=unique([...prior.entityIds,...ids]);
-        prior.sourceURLs=unique([...prior.sourceURLs,...urls]);prior.aliases=unique([...prior.aliases,id]);
+        prior.sourceURLs=unique([...prior.sourceURLs,...urls]);prior.aliases=unique([...prior.aliases,id]);prior.catalogueIds=unique([...prior.catalogueIds,...entry.catalogueIds]);
         // Exact-title/date duplicates share a card, but alternate text/provenance remains inspectable.
         prior.variants.push(entry);idMap.set(id,prior);continue;
       }
