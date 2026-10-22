@@ -8,6 +8,12 @@ The Technology tree filters its families, topics and evidence to the selected so
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
 
+## Version 0.24 — Reconcile modern priority v2 into main Atlas
+
+An explicit, repeatable ID crosswalk links the v2 modern research to original Atlas events without duplicate chronology. **33 modern events gain new citations, 10 sourced single-year event records become explorable in Story and Compare, and 15 broad / 39 ambiguous records remain in Discover.** The technology tree gains evidence on four existing appearances while 24 others remain contextual or require identity mapping. Conflicts gains 18 distinct sourced records and updates eight existing ones, preserving war/phase/battle/treaty hierarchy. No new fabricated society lifespans or territorial boundaries.
+
+See [modern priority reconciliation notes](docs/modern-priority-reconciliation-v024.md).
+
 ## Version 0.23 — Modern priority research revision
 
 The complete 1501–2026 CE priority research v2 ZIP has been preserved in a compact, on-demand source archive. In **Discover → Modern history — priority research v2**, explore 97 event/process records, 18 conflict records, 28 technology observations and the associated claims, citations, actors, impacts and research gaps. The new revision supplements rather than duplicates or overwrites the existing modern historical timeline. Missing source verification, uncertain dates and content notices remain explicit. See [v0.23 evidence integration notes](docs/modern-priority-v023.md).
