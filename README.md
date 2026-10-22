@@ -8,6 +8,10 @@ The Technology tree filters its families, topics and evidence to the selected so
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
 
+## Version 0.23 — Modern priority research revision
+
+The complete 1501–2026 CE priority research v2 ZIP has been preserved in a compact, on-demand source archive. In **Discover → Modern history — priority research v2**, explore 97 event/process records, 18 conflict records, 28 technology observations and the associated claims, citations, actors, impacts and research gaps. The new revision supplements rather than duplicates or overwrites the existing modern historical timeline. Missing source verification, uncertain dates and content notices remain explicit. See [v0.23 evidence integration notes](docs/modern-priority-v023.md).
+
 ## Version 0.22 - Research, maps and atlas-style Compare
 
 The uploaded early/modern research packs are preserved with canonical checksums and source claims. The adapter accounts for 123 event records (59 new, 48 evidence enrichments, 16 contextual) and 61 technology observations (12 new linked appearances, 3 enrichments, 46 contextual). Existing society lifespans are unchanged; unknown dates never become invented polity spans. Full research remains searchable in the lazy Discover source catalogue.
