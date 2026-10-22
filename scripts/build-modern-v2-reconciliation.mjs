@@ -29,7 +29,12 @@ const claimIds=r=>(r.claim_ids||[]).filter(id=>pack.tables.claims.some(c=>c.id==
 const matchEvent=r=>{
  const ids=eventIndexes.filter(e=>e.id===r.id);
  if(ids.length===1)return {type:'existing',canonical:ids[0].canonical,match:'exact_id'};
- if(ids.length>1)return {type:'review',match:'ambiguous_id'};
+ if(ids.length>1){
+   const sameYear=ids.every(e=>e.year===r.start_year);
+   const uniqueCanon=[...new Set(ids.map(e=>e.canonical))];
+   if(sameYear&&uniqueCanon.length===ids.length)return {type:'existing',canonical:ids[0].canonical,canonicalTargets:uniqueCanon,match:'shared_id_same_year'};
+   return {type:'review',match:'ambiguous_id_different_year'};
+ }
  const cand=eventIndexes.filter(e=>e.year===r.start_year&&normalize(e.title)===normalize(r.title));
  if(cand.length===1)return {type:'existing',canonical:cand[0].canonical,match:'exact_title_year'};
  if(cand.length>1)return {type:'review',match:'ambiguous_title_year'};
