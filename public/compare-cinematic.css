@@ -21,3 +21,8 @@
 @media(prefers-reduced-motion:reduce){.cinematic-compare-deck *, .cinematic-compare-deck *:before,.cinematic-compare-deck *:after{animation:none!important;transition:none!important}}
 
 .cinematic-compare-deck{background-image:radial-gradient(ellipse at 50% 0%,#244f5b88,transparent 68%),url('assets/atlas-texture.svg'),linear-gradient(#102936,#071721);background-size:auto,256px 256px,auto;background-blend-mode:normal,soft-light,normal}
+
+/* Original SVG mood scenes; explicitly decorative, never historic survey evidence. */
+.cinematic-society[data-entity="abbasid"]{background-image:linear-gradient(92deg,#071a28d9 2%,#08212acb 45%,#071520ae 100%),url('assets/scene-abbasid.svg');background-size:cover;background-position:center}
+.cinematic-society[data-entity="song"]{background-image:linear-gradient(92deg,#071a28e8 2%,#09242ad3 45%,#071520b1 100%),url('assets/scene-song.svg');background-size:cover;background-position:center}
+.cinematic-society[data-entity="byzantium"]{background-image:linear-gradient(92deg,#101729eb 2%,#211d38cc 45%,#0d1227b4 100%),url('assets/scene-byzantium.svg');background-size:cover;background-position:center}
