@@ -78,6 +78,28 @@ else{
       if(!x||x.added.length!==18||x.enriched.length!==8)
         errors.push('Modern conflict hierarchy reconciliation incomplete: '+JSON.stringify(x));
     }
+    if(name==='index.html'){
+      const institutional=await page.evaluate(()=>{
+        const dialog=document.getElementById('technologyDialog');
+        dialog.showModal();
+        return {
+          present:!!document.getElementById('modernV2InstitutionEvidence'),
+          visible:!document.getElementById('modernV2InstitutionEvidence').hidden,
+          count:document.querySelectorAll('#modernV2InstitutionRecords .tech-institution-item').length
+        };
+      });
+      if(!institutional.present||!institutional.visible||institutional.count!==19)
+        errors.push('Institutional research panel must expose 19 source records for all societies: '+JSON.stringify(institutional));
+      const select=page.locator('#technologyCivilisation');
+      const restricted=await select.evaluate(el=>[...el.options].find(x=>x.value!=='all')?.value);
+      if(restricted){
+        await select.selectOption(restricted);
+        const blocked=await page.locator('#modernV2InstitutionEvidence').evaluate(el=>el.hidden);
+        if(!blocked)errors.push('Unattributed institutional research leaked into a society-specific technology view');
+        await select.selectOption('all');
+      }
+      await page.evaluate(()=>document.getElementById('technologyDialog').close());
+    }
     await page.screenshot({path:output+name.replace('.html','')+'-'+device.name+'.png',fullPage:false});
     results.push({page:name,device:device.name,...info,errors});
     if(errors.length)fatal.push({page:name,device:device.name,errors});
