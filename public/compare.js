@@ -344,7 +344,14 @@
   function renderCinematicDeck(){
     const host=$('cinematicCompareDeck');if(!host)return;
     const r=range();
-    const suggestions=all.filter(c=>c.id!==state.selected&&active(c,state.year)).sort((a,b)=>a.name.localeCompare(b.name));
+    const spotlight=state.selected==='abbasid' && state.pinned.length===0 ? ['song','byzantium'] : [];
+    const suggestions=all.filter(c=>c.id!==state.selected&&active(c,state.year)).sort((a,b)=>{
+      const ai=spotlight.indexOf(a.id),bi=spotlight.indexOf(b.id);
+      if(ai!==bi)return (ai<0?999:ai)-(bi<0?999:bi);
+      const selected=entities.get(state.selected);
+      const ar=selected&&a.region!==selected.region?0:1,br=selected&&b.region!==selected.region?0:1;
+      return ar-br||a.name.localeCompare(b.name);
+    });
     const ordered=[...new Set([state.selected,...state.pinned,...suggestions.map(c=>c.id)])]
       .map(id=>entities.get(id)).filter(c=>c&&(c.id===state.selected||overlaps(c,r))).slice(0,3);
     const media=window.AtlasVisualAssets;
