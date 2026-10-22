@@ -5,6 +5,7 @@ on:
       - feat/v024-modern-v2-reconciliation
     paths:
       - scripts/build-modern-v2-reconciliation.mjs
+      - .github/workflows/reconcile-generate.yml
   workflow_dispatch:
 
 permissions:
