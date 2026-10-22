@@ -5,6 +5,8 @@
   'use strict';
   const details=document.getElementById('technologyDetails'),tech=root.WorldHistoryTechnology;
   if(!details||!tech)return;
+  // Only activate in a full browser DOM; VM unit tests use minimal fixtures.
+  if(typeof MutationObserver!=='function'||typeof document.createElement!=='function')return;
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"\'":'&#39;'}[c]));
   const byId=new Map(tech.technologies.map(t=>[t.id,t]));
   const civs=new Map(CIVILISATIONS.map(c=>[c.id,c]));
