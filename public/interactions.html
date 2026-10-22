@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#071722"><meta name="description" content="Discover historically documented interactions across world societies, with evidence, dates, uncertainty and an interactive schematic network.">
+<title>Interactions · World History Atlas</title>
+<link rel="stylesheet" href="atlas-nav.css?v=0.19.0">
+<link rel="stylesheet" href="atlas-cinematic.css?v=0.26.0">
+<link rel="stylesheet" href="atlas-artwork.css?v=0.30.0">
+<link rel="stylesheet" href="interactions.css?v=0.33.0">
+</head>
+<body class="atlas-interactions">
+<a class="interaction-skip" href="#interactionNetwork">Skip to interaction evidence</a>
+<header class="topbar">
+ <a class="brand" href="index.html"><span class="brand-seal" aria-hidden="true">✳</span><span><strong>WORLD HISTORY <em>ATLAS</em></strong><small>PEOPLES · PLACES · CONNECTIONS</small></span></a>
+ <nav class="atlas-crossnav" aria-label="Atlas views">
+  <a href="story.html" data-atlas-view="story">Story</a>
+  <a href="index.html" data-atlas-view="map">World Map</a>
+  <a href="compare.html" data-atlas-view="compare">Compare</a>
+  <a href="index.html#technology" data-atlas-view="technology">Technology</a>
+  <a href="interactions.html" data-atlas-view="interactions" aria-current="page">Interactions</a>
+  <a href="worldview.html" data-atlas-view="worldview">Their World</a>
+  <a href="discover.html" data-atlas-view="discover">Discover</a>
+  <a href="conflicts.html" data-atlas-view="conflicts">Conflicts</a>
+ </nav>
+</header>
+<main class="interaction-shell">
+ <section class="interaction-hero">
+  <div class="interaction-hero-copy"><span class="interaction-eyebrow">THE LIVING ATLAS · CONNECTED HISTORIES</span><h1>How worlds <em>met</em></h1><p>Discover historical relationships through trade, diplomacy, conflict, knowledge and movement. Every connection shown here is anchored to a record naming the societies involved.</p></div>
+  <div class="interaction-hero-art" aria-hidden="true"><img src="assets/atlas-compass.svg" alt=""></div>
+ </section>
+ <section class="interaction-filters" aria-label="Explore interaction records">
+  <div class="interaction-filter-top">
+   <label>Period <select id="interactionEra" aria-label="Historical period"><option value="medieval">850–1500 CE</option><option value="classical">500 BCE–500 CE</option><option value="earlymodern">1450–1800 CE</option><option value="modern">1800–2026 CE</option><option value="all">All recorded history</option><option value="window">Custom year ±250</option></select></label>
+   <label>Connection type <select id="interactionType" aria-label="Interaction type"><option value="All">All evidenced types</option><option>Trade</option><option>Conflict</option><option>Diplomacy</option><option>Knowledge</option><option>Migration</option><option>Political change</option><option>Other</option></select></label>
+   <label class="interaction-search-label">Find a society or event <input id="interactionSearch" type="search" placeholder="Search historical evidence…" autocomplete="off"></label>
+   <button type="button" id="interactionFocus">Explore all societies</button>
+  </div>
+  <div class="interaction-era-ruler"><span id="interactionRangeLabel" role="status">850–1500 CE</span><input id="interactionYear" type="range" min="-9999" max="2026" step="1" value="1200" aria-label="Choose a year and a 500-year exploration window"><span class="interaction-ruler-hint">Drag to explore a ±250-year window</span></div>
+ </section>
+ <section class="interaction-explainer"><span class="interaction-key" aria-hidden="true">✧</span><p><strong>Evidence network, not a route map.</strong> Each arc reflects a research record that explicitly names multiple societies. It does not imply direct travel, a border or a verified bilateral relationship. Records and source limitations open on selection.</p></section>
+ <div class="interaction-workspace">
+  <div class="interaction-main">
+   <div class="interaction-controls"><div><span id="interactionCount" role="status">Historical interactions</span><h2>Connections across time</h2></div><div class="interaction-switch" role="group" aria-label="Interaction display"><button type="button" class="active" data-interaction-mode="network" aria-pressed="true">◉ Network</button><button type="button" data-interaction-mode="stories" aria-pressed="false">▤ Stories</button></div></div>
+   <div id="interactionNetwork" class="interaction-network" tabindex="-1" aria-label="Interactive, non-geographic historical interaction network"></div>
+   <div id="interactionStories" class="interaction-stories" hidden aria-label="Linked historical interaction stories"></div>
+   <div class="interaction-legend"><span><i style="--swatch:#edc16c"></i>Trade</span><span><i style="--swatch:#f17a75"></i>Conflict</span><span><i style="--swatch:#67c9e7"></i>Diplomacy</span><span><i style="--swatch:#ba98f0"></i>Knowledge</span><span><i style="--swatch:#76d4ad"></i>Migration</span><span><i style="--swatch:#e6a279"></i>Political change</span></div>
+  </div>
+  <aside class="interaction-detail-panel" aria-label="Selected record and evidence"><div id="interactionDetail" aria-live="polite"></div></aside>
+ </div>
+ <footer class="interaction-footer"><p>This is a deliberately selective research network, not a complete history of human connections. Missing records do not mean a society was isolated. Images are authentic objects or clearly marked decorative illustrations; dates and source access have varying uncertainty.</p><a href="compare.html">Explore shared timelines ↗</a></footer>
+</main>
+<script src="data.js?v=0.4.0"></script>
+<script src="entity-types.js?v=0.4.0"></script>
+<script src="research-sources.js?v=0.6.0"></script>
+<script src="research-events-500a.js?v=0.6.0"></script>
+<script src="research-events-500b.js?v=0.6.0"></script>
+<script src="research-events-modern.js?v=0.6.0"></script>
+<script src="research-tech-records.js?v=0.6.0"></script>
+<script src="research-civilisations.js?v=0.6.0"></script>
+<script src="research-apply.js?v=0.6.0"></script>
+<script src="research-1000-1499.js?v=0.7.0"></script>
+<script src="research-1000-1499-apply.js?v=0.7.0"></script>
+<script src="research-1500-2026-data.js?v=0.8.0"></script>
+<script src="research-1500-2026-apply.js?v=0.8.0"></script>
+<script src="research-classical-data.js?v=0.9.0"></script>
+<script src="research-classical-apply.js?v=0.9.0"></script>
+<script src="research-expansion-data.js?v=0.22.0"></script>
+<script src="research-expansion-apply.js?v=0.22.0"></script>
+<script src="modern-v2-reconciled-data.js?v=0.24.0"></script>
+<script src="modern-v2-reconcile-apply.js?v=0.24.0"></script>
+<script src="date-scope.js?v=0.13.0"></script>
+<script src="atlas-master-core-01.js?v=0.29.0"></script>
+<script src="atlas-master-core-02.js?v=0.29.0"></script>
+<script src="atlas-master-core-03.js?v=0.29.0"></script>
+<script src="atlas-master-core-04.js?v=0.29.0"></script>
+<script src="atlas-master-core-05.js?v=0.29.0"></script>
+<script src="atlas-master-core-06.js?v=0.29.0"></script>
+<script src="atlas-master-core-07.js?v=0.29.0"></script>
+<script src="atlas-master-core-08.js?v=0.29.0"></script>
+<script src="atlas-master-core-09.js?v=0.29.0"></script>
+<script src="atlas-master-core-10.js?v=0.29.0"></script>
+<script src="atlas-master-core-11.js?v=0.29.0"></script>
+<script src="atlas-master-core-12.js?v=0.29.0"></script>
+<script src="atlas-master-core-13.js?v=0.29.0"></script>
+<script src="atlas-master-core-14.js?v=0.29.0"></script>
+<script src="atlas-master-core-15.js?v=0.29.0"></script>
+<script src="atlas-master-core-16.js?v=0.29.0"></script>
+<script src="atlas-master-core-17.js?v=0.29.0"></script>
+<script src="atlas-master-core-18.js?v=0.29.0"></script>
+<script src="atlas-master-core-19.js?v=0.29.0"></script>
+<script src="atlas-master-core-20.js?v=0.29.0"></script>
+<script src="atlas-master-core-21.js?v=0.29.0"></script>
+<script src="atlas-master-core-22.js?v=0.29.0"></script>
+<script src="atlas-master-core-23.js?v=0.29.0"></script>
+<script src="atlas-master-core-24.js?v=0.29.0"></script>
+<script src="atlas-master-core-25.js?v=0.29.0"></script>
+<script src="atlas-master-core-26.js?v=0.29.0"></script>
+<script src="atlas-master-core-27.js?v=0.29.0"></script>
+<script src="atlas-master-core-28.js?v=0.29.0"></script>
+<script src="atlas-master-core-29.js?v=0.29.0"></script>
+<script src="atlas-master-core-apply.js?v=0.29.0"></script>
+<script src="atlas-visual-assets.js?v=0.33.0"></script>
+<script src="interactions.js?v=0.33.0"></script>
+<script src="atlas-links.js?v=0.33.0"></script>
+</body></html>

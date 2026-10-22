@@ -6,7 +6,7 @@
  'use strict';
  const VIEWS=Object.freeze({
    story:'story.html',map:'index.html',compare:'compare.html',
-   technology:'index.html',worldview:'worldview.html',
+   technology:'index.html',interactions:'interactions.html',worldview:'worldview.html',
    discover:'discover.html',conflicts:'conflicts.html',catalogue:'catalogue.html'
  });
  function context(){
