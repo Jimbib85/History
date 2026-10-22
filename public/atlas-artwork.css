@@ -35,3 +35,7 @@
 @media(max-width:960px){.cinematic-society-main{grid-template-columns:minmax(0,1fr) minmax(120px,30%);gap:15px}.atlas-artwork--card .atlas-artwork-picture,.atlas-artwork--card img{min-height:158px;height:158px}}
 @media(max-width:520px){.cinematic-society-main{grid-template-columns:minmax(0,1fr) 39%;gap:10px}.atlas-artwork--card .atlas-artwork-picture,.atlas-artwork--card img{min-height:112px;height:112px}.cinematic-society-copy h2{font-size:21px!important}.atlas-artwork--reader{grid-template-columns:minmax(105px,35%) minmax(0,1fr);gap:9px}.atlas-artwork--reader .atlas-artwork-picture,.atlas-artwork--reader img{height:105px;min-height:105px}}
 @media(prefers-reduced-motion:reduce){.atlas-artwork *{animation:none!important;transition:none!important}}
+
+/* Original decorative assets: these are UI ornaments, never evidence. */
+.atlas-artwork-placeholder{background-image:radial-gradient(circle,#e6b56125,transparent 61%),url('assets/atlas-compass.svg'),url('assets/atlas-texture.svg');background-repeat:no-repeat,no-repeat,repeat;background-position:center,center,center;background-size:100% 100%,95px 95px,256px 256px}
+.atlas-artwork-fallback .atlas-artwork-placeholder{opacity:1}
