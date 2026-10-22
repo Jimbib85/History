@@ -57,6 +57,20 @@ else{
        navScrollable:menu?menu.scrollWidth>menu.clientWidth:false};
     });
     if(info.navLinks!==8)errors.push('Expected all eight atlas view destinations, including Research');
+    // The master ZIP must be usable in the main experiences, not merely archived.
+    if(['story.html','index.html','compare.html'].includes(name)){
+      const imported=await page.evaluate(()=>({
+        societies:typeof CIVILISATIONS==='undefined'?0:CIVILISATIONS.length,
+        events:globalThis.ATLAS_MASTER_EVENTS?.length||0,
+        report:globalThis.ATLAS_MASTER_REPORT||null,
+        tech:globalThis.ATLAS_MASTER_TECH_REPORT||null,
+        technologies:typeof TECHNOLOGIES==='undefined'?0:TECHNOLOGIES.length
+      }));
+      if(!imported.report||imported.societies<550||imported.events<500)
+        errors.push('Master research did not populate societies and timeline events');
+      if(name==='index.html'&&(!imported.tech||imported.tech.milestonesAdded<100||imported.technologies<120))
+        errors.push('Master research did not populate the Technology tree');
+    }
     if(device.name==='mobile'&&info.bodyWidth>info.viewport+24)errors.push('Page overflows mobile viewport by '+(info.bodyWidth-info.viewport)+' px');
     // v0.24: the integrated evidence must be present on main screens,
     // not only in the research viewer. All assertions are source-identity based.
