@@ -33,7 +33,10 @@ for(const t of stats.allTech)for(const a of t.appearances){
 }
 assert.equal(stats.tech.added.length+stats.tech.enriched.length+stats.tech.context.length+stats.tech.unmapped.length>=28,true);
 assert.ok(stats.tech.context.includes('td_edo_urban_print'),'Edo observation window is not an invented precise invention year');
-assert.ok(stats.pack.events.filter(e=>e.type==='review').length>0,'Unresolved identity cases retained');
+assert.equal(stats.pack.events.filter(e=>e.type==='review').length,0,'Shared historical IDs reconciled with same-year source variants');
+assert.equal(stats.pack.events.filter(e=>e.match==='shared_id_same_year').length,39);
+assert.equal(stats.ev.sourceEnriched.length,72);
+assert.equal(stats.ev.ambiguous.length,0);
 const c=vm.createContext({URL,URLSearchParams,console});
 for(const file of ['conflicts-data.js','modern-v2-reconciled-data.js','modern-v2-reconcile-conflicts.js'])
  vm.runInContext(read('./public/'+file),c,{filename:file});
