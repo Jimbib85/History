@@ -8,6 +8,12 @@ The Technology tree filters its families, topics and evidence to the selected so
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
 
+## Version 0.20 — Classical research provenance and lightweight evidence
+
+The two user-supplied 500-year classical research packs are preserved as compressed canonical, source-linked staging archives under `research/classical-split/`. A deduplicated set of **72 reviewed claim excerpts** is available on demand inside Discover, with precise dates, uncertainty, original source IDs and review scopes explicitly labelled. The existing combined classical dataset has **not** been overwritten with unreviewed seed material.
+
+See [v0.20 classical staging and import notes](docs/classical-split-v020.md).
+
 ## Version 0.19 — Navigation continuity and browser usability
 
 The seven main views now share a readable, swipeable navigation row on narrow screens. Story, Map, Compare, Technology and Their World retain a selected year and society when both views understand those fields; Discover keeps the year only, while Conflicts remains unfiltered rather than implying support for a year parameter.
