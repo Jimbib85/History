@@ -3,7 +3,7 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#142b38"><meta name="description" content="Follow sourced journeys through everyday life, crafts and culture across world history.">
 <title>Discover | World History Atlas</title>
-<link rel="stylesheet" href="discovery.css?v=0.22.0">
+<link rel="stylesheet" href="discovery.css?v=0.23.0">
 <link rel="stylesheet" href="atlas-nav.css?v=0.19.0"></head>
 <body>
 <a href="#journeys" class="skip">Skip to discovery journeys</a>
@@ -54,11 +54,25 @@
  </details>
 </section>
 <section class="expansion-section"><details id="researchExpansion"><summary><span><small>NEW SOURCE COLLECTIONS</small><strong>From early communities to the modern world</strong><em>8000 BCE-500 BCE / 1501-2026 CE</em></span><span aria-hidden="true">+</span></summary><div class="expansion-body"><p class="expansion-caution">Two source-linked research packs, not an independently verified encyclopaedia. Unknown lifespans remain unknown. Approximate occurrence windows are not fabricated event durations. Overlapping periods are reconciled by identity.</p><div class="expansion-controls"><label>Collection<select id="expansionBatch"><option value="all">Both research packs</option><option value="early">8000 BCE-500 BCE</option><option value="modern">1501-2026 CE</option></select></label><label>Record type<select id="expansionType"></select></label><label>Find evidence<input id="expansionSearch" type="search" placeholder="Person, society, place or event" maxlength="200"></label></div><p id="expansionCount" role="status">Open to load research evidence.</p><div id="expansionCards"></div><button type="button" id="expansionMore" hidden>Show more evidence</button></div></details></section>
+<section class="expansion-section" aria-label="Modern research revision 2">
+<details id="modernV2Evidence">
+<summary><span><small>RESEARCH UPDATE · 1501–2026 CE</small><strong>Modern history — priority research v2</strong><em>Events, conflicts, technology, social impact and original evidence records</em></span><span aria-hidden="true">+</span></summary>
+<div class="expansion-body">
+<p class="expansion-caution">This is an updated source-linked research collection, not a second independent set of events. Some records refine earlier entries. A source-checked claim has not necessarily been independently corroborated, broad evidence windows are not exact event dates, and actor references without lifespans are not empires.</p>
+<div class="expansion-controls">
+<label>Evidence category<select id="modernV2Type"><option value="events">Events and processes</option><option value="conflicts">Conflicts</option><option value="conflict_participations">Conflict participants</option><option value="battles_and_sieges">Battles and sieges</option><option value="treaties_and_settlements">Treaties and settlements</option><option value="technology_developments">Technology observations</option><option value="technologies">Technology topics</option><option value="technology_dependencies">Technology dependencies</option><option value="technology_transmission">Technology transmission</option><option value="cultural_practices">Cultural practices</option><option value="historical_figures">Historical figures</option><option value="social_impacts">Social impacts</option><option value="relationships">Relationships</option><option value="connections">Connections</option><option value="statistical_observations">Statistical observations</option><option value="discovery_cards">Discovery cards</option><option value="societies">Society and actor references</option><option value="research_gaps">Research gaps</option></select></label>
+<label>Find research<input id="modernV2Search" type="search" placeholder="War, independence, invention..." maxlength="160"></label>
+<label class="expansion-sensitive"><input id="modernV2Sensitive" type="checkbox"> Include sensitive non-graphic historical topics</label>
+</div>
+<p id="modernV2Status" role="status">Expand to load the complete source-linked revision.</p><div id="modernV2Cards"></div><button type="button" id="modernV2More" hidden>Show more records</button>
+</div></details></section>
 <footer><span>✳ Built for curiosity, not productivity.</span><span>Dates, source quality and cultural accounts require care. Similarity is not proof of contact.</span></footer>
 </main>
 <script src="discovery-data.js?v=0.18.0"></script>
 <script src="discovery-model.js?v=0.18.0"></script>
 <script src="discovery.js?v=0.22.0"></script><script src="classical-reviewed-model.js?v=0.20.0"></script><script src="classical-reviewed-view.js?v=0.20.0"></script>
 <script src="research-expansion-view.js?v=0.22.0"></script>
+<script src="modern-v2-model.js?v=0.23.0"></script>
+<script src="modern-v2-view.js?v=0.23.0"></script>
 <script src="atlas-links.js?v=0.19.0"></script>
 </body></html>
