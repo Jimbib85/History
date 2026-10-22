@@ -63,3 +63,24 @@
   .tviz-world{padding:8px}
 }
 @media(prefers-reduced-motion:reduce){.tviz-track i,.tviz-pin{transition:none}}
+
+/* v0.25: historical technology research attached to institutions rather than societies. */
+#modernV2InstitutionEvidence[hidden]{display:none!important}
+.tech-institutional{margin:12px 20px 20px;padding:12px 16px;border:1px solid #bfa889;
+  border-radius:10px;background:rgba(245,236,214,.96);color:#203c49}
+.tech-institutional>summary{cursor:pointer;font-weight:800;font-size:14px;min-height:42px;
+  display:flex;align-items:center;padding:5px 3px}
+.tech-institutional>p{font-size:12px;line-height:1.6;margin:5px 0 12px}
+#modernV2InstitutionRecords{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,285px),1fr));gap:10px}
+.tech-institution-group{min-width:0;padding:10px;border-radius:7px;background:#fffaf0;border:1px solid #dfd0b7}
+.tech-institution-group h3{margin:0 0 8px;font-size:13px}
+.tech-institution-item{border-top:1px solid #e5d8c6;padding:8px 0}
+.tech-institution-item>summary{cursor:pointer;min-height:44px;display:flex;flex-direction:column;
+  justify-content:center;gap:4px}
+.tech-institution-item strong{font-size:12px;line-height:1.4}
+.tech-institution-item small{font-size:11px;color:#596974}
+.tech-institution-item p{font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.tech-institution-sources{display:flex;flex-wrap:wrap;gap:6px}
+.tech-institution-sources a{font-size:12px;display:inline-block;padding:6px;background:#e9eef0;
+  border-radius:4px;color:#204762;overflow-wrap:anywhere}
+@media(max-width:620px){.tech-institutional{margin:8px;padding:10px}#modernV2InstitutionRecords{grid-template-columns:1fr}}
