@@ -79,6 +79,24 @@ else{
     else console.log('PASS',device.name,'selected Story 500 BCE/Athens → Map context navigation');
   }catch(err){fatal.push({device:device.name,page:'cross-view navigation',errors:[String(err)]});}
   finally{await journey.close();}
+  const classical=await context.newPage();
+  const reviewedErrors=[];
+  classical.on('pageerror',err=>reviewedErrors.push(err.message));
+  try{
+    await classical.goto(base+'discover.html?classical=1#classicalEvidence',{waitUntil:'load',timeout:30000});
+    await classical.waitForFunction(()=>document.querySelector('#classicalStatus')?.textContent.includes('72 distinct reviewed records'),{timeout:15000});
+    const result=await classical.evaluate(()=>({
+      open:document.querySelector('#classicalEvidence')?.open,
+      count:document.querySelectorAll('#classicalCards .classical-card').length,
+      hasSources:document.querySelectorAll('#classicalCards .classical-source-links a').length,
+      loaded:performance.getEntriesByType('resource').some(r=>r.name.includes('classical-reviewed-data.js'))
+    }));
+    if(!result.open||result.count!==18||result.hasSources<18||!result.loaded)
+      fatal.push({device:device.name,page:'reviewed classical evidence',errors:['Source-checked lazy import did not render as expected: '+JSON.stringify(result)]});
+    if(reviewedErrors.length)fatal.push({device:device.name,page:'reviewed classical evidence',errors:reviewedErrors});
+    else console.log('PASS',device.name,'72 deduplicated classical review excerpts loaded lazily');
+  }catch(err){fatal.push({device:device.name,page:'reviewed classical evidence',errors:[String(err)]});}
+  finally{await classical.close();}
   await context.close();
  }
  await browser.close();
