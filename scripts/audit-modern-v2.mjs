@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import {gunzipSync} from 'node:zlib';
 import vm from 'node:vm';
-const read=p=>fs.readFileSync(new URL(p,import.meta.url),'utf8');
+const read=p=>fs.readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const b64=read('./public/modern-v2-data.js').match(/ATLAS_MODERN_V2_GZIP = '([^']+)'/)[1];
 const pack=JSON.parse(gunzipSync(Buffer.from(b64,'base64')));
 const earlier=JSON.parse(read('./public/research-1500-2026-data.js').split('ATLAS_MODERN_PACK=')[1].replace(/;\s*$/,''));
