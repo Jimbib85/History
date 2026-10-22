@@ -30,7 +30,7 @@
    const rows=pack.tables[type]||[];
    const terms=String(search).toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);
    const safe=rows.filter(row=>{
-     const sensitive=/DISTURBING_NON_GRAPHIC/.test(String(row.content_sensitivity||row.sensitivity||row.content_warning||''));
+     const sensitive=row.default_discovery===false||/DISTURBING_NON_GRAPHIC/.test([row.content_level,...(row.content_warnings||[])].join(' '));
      if(sensitive&&!includeSensitive)return false;
      return terms.every(t=>[row.title,row.preferred_name,row.name,row.summary,row.description,row.region,row.original_date_text,row.id].filter(Boolean).join(' ').toLocaleLowerCase().includes(t));
    });
