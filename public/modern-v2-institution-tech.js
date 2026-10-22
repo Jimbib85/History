@@ -2,6 +2,7 @@
    v0.25 deliberately keeps these out of society-filtered technology appearances. */
 (function(){
  'use strict';
+ if(typeof document==='undefined')return;
  const data=globalThis.AtlasModernV2Reconciled;
  const panel=document.getElementById('modernV2InstitutionEvidence');
  const records=document.getElementById('modernV2InstitutionRecords');
