@@ -32,8 +32,14 @@ const ATLAS_MODERN_V2_NEW_EVENTS=[];
  };
  for(const e of pack.events){
    if(e.type==='existing'){
-     if(attach(byId.get(e.canonical)||old.find(prior=>prior.additionalResearch?.some(r=>r.id===e.canonical)),e)){ATLAS_MODERN_V2_REPORT.sourceEnriched.push(e.id);}
-     else ATLAS_MODERN_V2_REPORT.ambiguous.push({id:e.id,reason:'canonical_target_missing'});
+     const targets=e.canonicalTargets||[e.canonical];
+     let matched=0;
+     for(const target of targets){
+       const entry=byId.get(target)||old.find(prior=>prior.additionalResearch?.some(r=>r.id===target));
+       if(attach(entry,e))matched++;
+     }
+     if(matched===targets.length)ATLAS_MODERN_V2_REPORT.sourceEnriched.push(e.id);
+     else ATLAS_MODERN_V2_REPORT.ambiguous.push({id:e.id,reason:'some_canonical_targets_missing',expected:targets.length,matched});
      continue;
    }
    if(e.type!=='point'){
