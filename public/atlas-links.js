@@ -38,11 +38,18 @@
      if(next)a.setAttribute('href',next);
    }
  }
- root.AtlasCrossLinks=Object.freeze({context,href,refresh});
+ function revealCurrentView(){
+   const nav=typeof document!=='undefined'?document.querySelector?.('.atlas-crossnav'):null;
+   const active=nav?.querySelector?.('[aria-current="page"]');
+   if(!active||nav.scrollWidth<=nav.clientWidth||!active.getBoundingClientRect)return;
+   const offset=active.getBoundingClientRect().left-nav.getBoundingClientRect().left+nav.scrollLeft;
+   nav.scrollLeft=Math.max(0,offset-(nav.clientWidth-active.clientWidth)/2);
+ }
+ root.AtlasCrossLinks=Object.freeze({context,href,refresh,revealCurrentView});
  // Update before click, keyboard activation, link copy and context menu; no polling.
  if(typeof document!=='undefined'){
-   if(document.readyState==='loading')document.addEventListener?.('DOMContentLoaded',refresh,{once:true});
-   else refresh();
+   if(document.readyState==='loading')document.addEventListener?.('DOMContentLoaded',()=>{refresh();revealCurrentView();},{once:true});
+   else {refresh();revealCurrentView();}
    for(const action of ['pointerdown','focusin','click','auxclick','contextmenu'])
      document.addEventListener?.(action,refresh,true);
  }
