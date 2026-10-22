@@ -24,11 +24,16 @@ assert.equal(a.forEvent({title:'A completely unrelated observation',year:900,pri
 assert.match(a.forTechnology({name:'Papermaking and manuscript paper'},{civ:'abbasid'}),/Baghdad/);
 assert.match(a.forTechnology({name:'Papermaking and manuscript paper'},{civ:'rome'}),/Paper travelled/);
 assert.equal(a.forSociety({id:'unlinked',name:'Imaginary State'}),'');
-for(const [page,consumer] of [['story.html','story-app.js'],['compare.html','compare.js'],['index.html','app.js']]){
- const html=read('public/'+page);assert.match(html,/atlas-history-stories\.js/);assert.match(html,/atlas-history-stories\.css/);
+// The curated master-context layer is loaded only by readers that include the master bridge.
+for(const [page,consumer] of [['compare.html','compare.js'],['index.html','app.js']]){
+ const html=read('public/'+page);
+ assert.match(html,/atlas-history-stories\\.js/);
+ assert.match(html,/atlas-history-stories\\.css/);
  const before=html.indexOf('atlas-master-core-apply.js'),after=html.indexOf('atlas-history-stories.js');
  assert.ok(before>=0&&after>before,'Context script must load after master bridge: '+page);
  assert.match(read('public/'+consumer),/AtlasHistoryStories/,consumer+' consumes richer research');
 }
-assert.match(read('public/technology-tree.js'),/AtlasHistoryStories/);
+// Story remains a standalone lightweight timeline, without the master bridge.
+assert.match(read('public/story.html'),/story-app\\.js/);
+assert.match(read('public/story-app.js'),/AtlasHistoryStories/);
 console.log('PASS enriched history stories: '+a.seeds.length+' curated topics, source references, Story/Map/Compare/Technology readers and fallback context');
