@@ -11,6 +11,7 @@
    year:params.has('year')&&Number.isSafeInteger(initialYear)&&initialYear>=-9999&&initialYear<=2026?initialYear:1600,
    random:null,recent:[]};
  const classicalRequested=params.has('classical')||location.hash==='#classicalEvidence';
+ const modernV2Requested=params.has('modernV2')||location.hash==='#modernV2Evidence';
  const ids=new Set(M.all.map(r=>r.id));
  function parseYear(text){
    const match=String(text).trim().replace(/,/g,'').match(/^(-?\d+)\s*(BCE|BC|CE|AD)?$/i);
