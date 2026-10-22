@@ -289,7 +289,7 @@
     if (evidence?.evidenceStatus) notes.push('Evidence status: ' + evidence.evidenceStatus.replace(/_/g,' '));
     if (!evidence && selected && !active(selected,state.year)) notes.push('This entry is not dated as active in the selected year.');
     if (!evidence && selected?.datePrecision && !selected?.dating) notes.push('Dating: ' + selected.datePrecision.replace(/_/g,' '));
-    $('selectedNotes').innerHTML = notes.map(note => '<p>' + safe(note) + '</p>').join('');
+    $('selectedNotes').innerHTML = notes.map(note => '<p>' + safe(note) + '</p>').join('') + (evidence ? (globalThis.AtlasHistoryStories?.forEvent(evidence)||'') : selected ? (globalThis.AtlasHistoryStories?.forSociety(selected)||'') : '');
     const sourceAction = '<button type="button" data-open-reader="sourcesDetails">Sources (' + n + ')</button>';
     $('selectedActions').innerHTML = evidence ? '<button type="button" data-action="event-date">Go to this date</button>' + (entities.has(evidence.civ) ? '<button type="button" data-civ="' + safe(evidence.civ) + '">Read ' + safe(entities.get(evidence.civ).name) + '</button>' : '') + sourceAction : selected ? '<button data-action="focus" type="button">Focus its period</button><button data-action="pin" type="button">' + (pinned ? '★ Unpin' : '☆ Pin') + '</button>' + sourceAction + (ui.lastCell ? '<button type="button" data-action="back-cell">Back to era entries</button>' : '') : '';
   }

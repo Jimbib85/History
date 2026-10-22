@@ -1,0 +1,21 @@
+/* v0.30: readable, optional historical depth within existing Atlas readers. */
+.atlas-deeper-story{margin:13px 0;border-top:1px solid rgba(185,159,113,.35);border-bottom:1px solid rgba(185,159,113,.25);color:inherit;background:rgba(186,156,104,.055);border-radius:12px;overflow:hidden}
+.atlas-deeper-story>summary{display:flex;gap:11px;align-items:center;cursor:pointer;list-style:none;padding:13px 14px;min-height:54px;line-height:1.35}
+.atlas-deeper-story>summary::-webkit-details-marker{display:none}
+.atlas-deeper-story>summary:focus-visible{outline:2px solid #c9aa74;outline-offset:-2px}
+.atlas-deeper-story>summary>span:nth-child(2){display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}
+.atlas-deeper-story>summary strong{font-size:14px;font-weight:700;letter-spacing:.01em}
+.atlas-deeper-story>summary small{font-size:11px;opacity:.75;font-weight:400}
+.atlas-deeper-ornament{font-size:20px;color:#bd9254;flex:0 0 auto}
+.atlas-deeper-arrow{opacity:.7;font-size:18px;transition:transform .18s}
+.atlas-deeper-story[open] .atlas-deeper-arrow{transform:rotate(180deg)}
+.atlas-deeper-body{padding:0 15px 15px 16px;font-size:13px;line-height:1.65}
+.atlas-deeper-body p{margin:5px 0 10px;line-height:1.7;font-size:13px}
+.atlas-deeper-label{text-transform:uppercase;letter-spacing:.11em;opacity:.8;font-size:10px!important;font-weight:700}
+.atlas-deeper-references{display:flex;flex-wrap:wrap;gap:6px 12px;margin:7px 0 13px}
+.atlas-deeper-body a{color:#ae854c;text-underline-offset:3px;overflow-wrap:anywhere}
+.atlas-deeper-qualifier{display:block;opacity:.8;line-height:1.6;font-size:11px}
+.atlas-related-entry{padding:10px 0;border-top:1px solid rgba(190,165,123,.18)}
+.atlas-related-entry>strong{font-size:12px}
+.atlas-related-entry p{font-size:12px;margin:5px 0}
+@media(prefers-reduced-motion:reduce){.atlas-deeper-arrow{transition:none}}
