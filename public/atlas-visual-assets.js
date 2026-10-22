@@ -47,7 +47,7 @@
       '<a href="'+asset.sourceUrl+'" target="_blank" rel="noopener noreferrer" title="'+escapeHtml(asset.note)+'">Object &amp; provenance ↗</a></figcaption></figure>';
   }
   function bindImages(parent) {
-    if(!parent)return;
+    if(!parent || typeof parent.querySelectorAll !== 'function')return;
     parent.querySelectorAll('img.atlas-object-image').forEach(img=>{
       const fail=()=>{img.hidden=true;img.closest('.atlas-artwork')?.classList.add('atlas-artwork-fallback');};
       img.addEventListener('error',fail,{once:true});
