@@ -1,6 +1,13 @@
 name: Browser UX and performance smoke
 
 on:
+  push:
+    branches:
+      - 'feat/**'
+    paths:
+      - 'public/**'
+      - 'scripts/browser-audit.mjs'
+      - '.github/workflows/browser-audit.yml'
   pull_request:
     paths:
       - 'public/**'
