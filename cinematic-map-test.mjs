@@ -4,8 +4,8 @@ const read=x=>readFileSync(new URL('./public/'+x,import.meta.url),'utf8');
 const html=read('index.html'),base=read('styles.css'),tokens=read('atlas-cinematic.css'),map=read('atlas-cinematic-map.css');
 assert.match(html,/<body class="atlas-cinematic">/);
 assert.match(html,/atlas-cinematic\.css\?v=0\.26\.0/);
-assert.match(html,/atlas-cinematic-map\.css\?v=0\.26\.0/);
-assert.ok(html.indexOf('styles.css?v=0.26.0')<html.indexOf('atlas-cinematic-map.css'),'Map visual styles must override base styles');
+assert.match(html,/atlas-cinematic-map\.css\?v=0\.27\.0/);
+assert.ok(html.indexOf('styles.css?v=0.27.0')<html.indexOf('atlas-cinematic-map.css'),'Map visual styles must override base styles');
 for(const id of ['worldMap','mapMarkers','yearSlider','yearInput','civilisationList','technologyButton','historicalMap','mapGrid','zoomIn','zoomOut','resetMap','mapEvidence','timelineRows','storyPanel'])
  assert.ok(html.includes('id="'+id+'"'),id+' must remain accessible');
 for(const view of ['actual','historical','known'])assert.ok(html.includes('data-view="'+view+'"'));
