@@ -6,6 +6,8 @@
   'use strict';
   const host=document.getElementById('cinematicCompareDeck'),api=root.HistoryCompare;
   if(!host||!api)return;
+  // Only activate in a full browser DOM; VM unit tests use minimal fixtures.
+  if(typeof MutationObserver!=='function'||typeof document.createElement!=='function')return;
   const societies=new Map(CIVILISATIONS.filter(c=>c.kind!=='overview').map(c=>[c.id,c]));
   const research=[
     ...(typeof ATLAS_RESEARCH_EVENTS==='undefined'?[]:ATLAS_RESEARCH_EVENTS),
