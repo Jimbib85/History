@@ -210,7 +210,7 @@
     $('worldviewLink').href='worldview.html?'+worldviewParams.toString();
     const entityURL=safeURL(civ.source);
     const evidenceSummary='<strong>'+escapeHtml(civ.name)+'</strong> · '+escapeHtml(civ.location||'Location not specified')+
-      ' · '+escapeHtml(life(civ))+'. This point is an illustrative location, not a measured historical boundary or a documented territorial centre.'+
+      ' · '+escapeHtml(life(civ))+(Number.isFinite(civ.lon)&&Number.isFinite(civ.lat)?'. This point is an illustrative location, not a measured historical boundary or a documented territorial centre.':'. No verified map point is available for this research entry; its region is descriptive, not a plotted historical border.')+
       (entityURL?' <a href="'+escapeHtml(entityURL)+'" target="_blank" rel="noopener noreferrer">Background ↗</a>':'')+
       '<span class="geographic-caveat"> Background reading does not independently establish the precise marker coordinates.</span>';
     $('mapEvidence').innerHTML=historical&&selectedMap?'<strong>'+escapeHtml(selectedMap.title)+'</strong> · '+escapeHtml(selectedMap.date)+' · '+escapeHtml(selectedMap.type)+' · <a href="'+escapeHtml(selectedMap.page)+'" target="_blank" rel="noopener noreferrer">Source ↗</a>':state.view==='known'?'Illustrative contact points, not a complete known world. '+evidenceSummary:evidenceSummary;
@@ -287,7 +287,7 @@
         row.datePrecision||row.date_precision||row.dating,row.confidence?row.confidence+' confidence':''].filter(Boolean).map(readable).join(' · ');
       const caveats=[row.evidenceNote,row.evidence_note,row.evidence_status,row.evidenceStatus,row.scope_warning,row.comparison_caveat,row.worldview_caution,row.notes,row.direction_evidence,row.evidence_class,row.object_date_note].filter(Boolean);
       const html=(note?'<p>'+escapeHtml(note)+'</p>':'')+caveats.map(x=>'<p class="evidence-note">'+escapeHtml(readable(x))+'</p>').join('')+extra+
-        (urls.length?urls.map(url=>'<a class="story-link" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">Read record source ↗</a>').join(''):'<p class="evidence-note">No claim-level source attached to this record. The Sources section includes entity background reading.</p>')+
+        (urls.length?urls.map(url=>'<a class="story-link" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">Read record source ↗</a>').join(''):'<p class="evidence-note">No claim-level source attached to this record. The Sources section includes entity background reading.</p>')+(row.catalogueId?'<a class="story-link" href="catalogue.html?record='+encodeURIComponent(row.catalogueId)+'">Full research record ↗</a>':'')+
         (Number.isFinite(row.year)?'<button type="button" class="moment-chip" data-story-year="'+row.year+'">Explore '+compactYear(row.year)+' →</button>':'');
       groups[group].push({id,title,meta:[date,qualifier].filter(Boolean).join(' · '),html,search:[title,date,qualifier,note,...caveats].join(' '),year:row.year??row.start_year??row.birth_year??row.earliest_birth_year});
     }
@@ -295,7 +295,7 @@
       [typeof ATLAS_RESEARCH_EVENTS!=='undefined'?ATLAS_RESEARCH_EVENTS:[],typeof ATLAS_RESEARCH_SOURCES!=='undefined'?ATLAS_RESEARCH_SOURCES:{}],
       [typeof ATLAS_MEDIEVAL_EVENTS!=='undefined'?ATLAS_MEDIEVAL_EVENTS:[],typeof ATLAS_MEDIEVAL_SOURCES!=='undefined'?ATLAS_MEDIEVAL_SOURCES:{}],
       [typeof ATLAS_CLASSICAL_EVENTS!=='undefined'?ATLAS_CLASSICAL_EVENTS:[],typeof ATLAS_CLASSICAL_SOURCES!=='undefined'?ATLAS_CLASSICAL_SOURCES:{}],
-      [typeof ATLAS_MODERN_EVENTS!=='undefined'?ATLAS_MODERN_EVENTS:[],typeof ATLAS_MODERN_SOURCES!=='undefined'?ATLAS_MODERN_SOURCES:{}],[typeof ATLAS_EXPANSION_EVENTS!=='undefined'?ATLAS_EXPANSION_EVENTS:[],{}],[EVENTS,{}]
+      [typeof ATLAS_MODERN_EVENTS!=='undefined'?ATLAS_MODERN_EVENTS:[],typeof ATLAS_MODERN_SOURCES!=='undefined'?ATLAS_MODERN_SOURCES:{}],[typeof ATLAS_EXPANSION_EVENTS!=='undefined'?ATLAS_EXPANSION_EVENTS:[],{}],[globalThis.ATLAS_MASTER_EVENTS||[],{}],[EVENTS,{}]
     ];
     const eventKeys=new Set();
     for(const [events,sources] of eventSets)for(const e of events){
@@ -321,6 +321,22 @@
         const end=row.end_year_exclusive??(Number.isFinite(start)?start+1:null);
         if(related||(Number.isFinite(start)&&Number.isFinite(end)&&start<=state.year&&state.year<end))add('meanwhile',row,sources,prefix,'<p class="evidence-note">Contemporaneity is a comparison, not evidence of contact.</p>');
       }
+    }
+    // The master archive contributes people, cultural practices, geographical
+    // evidence and actual relationship records to this society's reader.
+    // Editorial "connections" are comparisons, never asserted contact.
+    for(const raw of globalThis.ATLAS_MASTER_CONTEXT?.forSociety(c.id)||[]){
+      const dated=Number.isSafeInteger(raw.a)&&raw.a>=-9999&&raw.a<=2026;
+      const midpoint=dated&&Number.isSafeInteger(raw.b)&&raw.b-raw.a>40;
+      const placed=midpoint?Math.floor((raw.a+raw.b-1)/2):raw.a;
+      const row={id:'master-'+raw.i,title:raw.t,summary:raw.s||'',kind:raw.k||raw.c,
+        year:dated?placed:undefined,dateLabel:raw.d||'',datePrecision:midpoint?'approximate midpoint':raw.p||'',
+        sourceUrls:raw.u||[],confidence:raw.h||'',notes:raw.n||'',catalogueId:raw.i,
+        evidenceNote:midpoint?'Placed near the midpoint for browsing; original research period retained.':'Research-linked record; source status '+(raw.v||'not independently checked')+'.'};
+      if(raw.c==='figures'||raw.c==='cultural_practices'||raw.c==='social_impacts')add('people',row,{},'');
+      else if(raw.c==='geographical_knowledge'||raw.c==='visual_assets')add('maps',row,{},'');
+      else if(raw.c==='relationships'||raw.c==='technology_transmission')add('connections',row,{},'');
+      else if(raw.c==='connections')add('meanwhile',row,{},'', '<p class="evidence-note">This is a thematic comparison, not evidence of contact.</p>');
     }
     const m=MAPS[c.mapId];
     if(m){add('maps',{id:'display-map',title:m.title,dateLabel:m.date,kind:m.type,detail:m.description,source:m.page}, {},'', '<p class="evidence-note">Displayed cartographic example: '+escapeHtml(m.type)+'.</p>');}

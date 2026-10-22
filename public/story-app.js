@@ -6,7 +6,7 @@
   if(!M||typeof CIVILISATIONS==='undefined'||typeof EVENTS==='undefined'||typeof ATLAS_RESEARCH_EVENTS==='undefined'||typeof ATLAS_MEDIEVAL_EVENTS==='undefined'||typeof ATLAS_MODERN_EVENTS==='undefined'||typeof ATLAS_CLASSICAL_EVENTS==='undefined'||typeof ATLAS_CONFLICT_STORY_EVENTS==='undefined') {
     error('A required history file did not load. Refresh to retry; no partial timeline has been substituted.');return;
   }
-  const data=M.build({entities:CIVILISATIONS,events:EVENTS,research:[ATLAS_RESEARCH_EVENTS,ATLAS_MEDIEVAL_EVENTS,ATLAS_MODERN_EVENTS,ATLAS_CLASSICAL_EVENTS,...(typeof ATLAS_EXPANSION_EVENTS==='undefined'?[]:[ATLAS_EXPANSION_EVENTS]),ATLAS_CONFLICT_STORY_EVENTS]});
+  const data=M.build({entities:CIVILISATIONS,events:EVENTS,research:[ATLAS_RESEARCH_EVENTS,ATLAS_MEDIEVAL_EVENTS,ATLAS_MODERN_EVENTS,ATLAS_CLASSICAL_EVENTS,...(typeof ATLAS_EXPANSION_EVENTS==='undefined'?[]:[ATLAS_EXPANSION_EVENTS]),ATLAS_CONFLICT_STORY_EVENTS,...(globalThis.ATLAS_MASTER_EVENTS||[])]});
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const paths={
     temple:'M3 9h18L12 3 3 9Zm2 2v8m5-8v8m4-8v8m5-8v8M3 21h18',

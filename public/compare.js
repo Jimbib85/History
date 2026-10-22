@@ -5,7 +5,7 @@
   const all = CIVILISATIONS.filter(c => c.kind !== 'overview' && Number.isFinite(c.start) && Number.isFinite(c.end));
   const entities = new Map(all.map(c => [c.id, c]));
   const nativeEvents = EVENTS.filter(e => entities.has(e.civ) && Number.isFinite(e.year));
-  const researchEvents = [...(typeof ATLAS_RESEARCH_EVENTS !== 'undefined' ? ATLAS_RESEARCH_EVENTS : []), ...(typeof ATLAS_MEDIEVAL_EVENTS !== 'undefined' ? ATLAS_MEDIEVAL_EVENTS : []), ...(typeof ATLAS_MODERN_EVENTS !== 'undefined' ? ATLAS_MODERN_EVENTS : []), ...(typeof ATLAS_CLASSICAL_EVENTS !== 'undefined' ? ATLAS_CLASSICAL_EVENTS : []),...(typeof ATLAS_EXPANSION_EVENTS !== 'undefined'?ATLAS_EXPANSION_EVENTS:[])];
+  const researchEvents = [...(typeof ATLAS_RESEARCH_EVENTS !== 'undefined' ? ATLAS_RESEARCH_EVENTS : []), ...(typeof ATLAS_MEDIEVAL_EVENTS !== 'undefined' ? ATLAS_MEDIEVAL_EVENTS : []), ...(typeof ATLAS_MODERN_EVENTS !== 'undefined' ? ATLAS_MODERN_EVENTS : []), ...(typeof ATLAS_CLASSICAL_EVENTS !== 'undefined' ? ATLAS_CLASSICAL_EVENTS : []),...(typeof ATLAS_EXPANSION_EVENTS !== 'undefined'?ATLAS_EXPANSION_EVENTS:[]),...(globalThis.ATLAS_MASTER_EVENTS||[])];
   const researchIds = new Set(researchEvents.map(e => e.id));
   const events = [
     ...nativeEvents.filter(e => !e.researchId || !researchIds.has(e.researchId)).map((e, i) => ({...e, key:'native-' + i})),
