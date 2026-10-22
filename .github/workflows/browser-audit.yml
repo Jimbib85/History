@@ -1,0 +1,40 @@
+name: Browser UX and performance smoke
+
+on:
+  pull_request:
+    paths:
+      - 'public/**'
+      - 'scripts/browser-audit.mjs'
+      - '.github/workflows/browser-audit.yml'
+  workflow_dispatch:
+
+jobs:
+  chromium-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Find installed Chromium-compatible browser
+        shell: bash
+        run: |
+          CHROME_PATH="$(command -v google-chrome || command -v google-chrome-stable || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_PATH" ]; then
+            echo 'No installed Chrome/Chromium binary on runner' >&2
+            exit 1
+          fi
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          "$CHROME_PATH" --version
+      - name: Install browser control library (no bundled browser)
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright-core@1.56.1
+      - name: Measure real browser rendering and test navigation
+        run: node scripts/browser-audit.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: atlas-browser-screenshots-and-timings
+          path: artifacts/browser-audit/
+          if-no-files-found: warn
+          retention-days: 14
