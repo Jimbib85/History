@@ -4,7 +4,7 @@ import vm from 'node:vm';
 const read=p=>fs.readFileSync(new URL(p,import.meta.url),'utf8');
 const model=vm.createContext({URL,URLSearchParams,console});model.window=model;
 const scriptFiles=[...read('./public/index.html').matchAll(/<script src="([^"?]+)[^"]*"/g)]
-  .map(x=>x[1]).filter(f=>!['story-navigation.js','app.js','technology-tree.js','atlas-links.js'].includes(f));
+  .map(x=>x[1]).filter(f=>!['story-navigation.js','app.js','technology-tree.js','atlas-links.js'].includes(f)&&!f.startsWith('atlas-master-'));
 for(const file of scriptFiles)vm.runInContext(read('./public/'+file),model,{filename:file});
 const stats=JSON.parse(vm.runInContext('JSON.stringify({pack:AtlasModernV2Reconciled,ev:ATLAS_MODERN_V2_REPORT,tech:ATLAS_MODERN_V2_TECH_REPORT,events:ATLAS_MODERN_V2_NEW_EVENTS,societies:CIVILISATIONS.length,allEvents:EVENTS,allTech:TECHNOLOGIES})',model));
 assert.equal(stats.pack.events.length,97);
