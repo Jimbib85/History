@@ -1,0 +1,143 @@
+/* v0.26 cinematic World Map. Presentation only: existing reference SVG,
+   chronology, marker clusters, zoom, tabs, drawers and accessibility remain. */
+.atlas-cinematic .workspace{
+ max-width:1920px;grid-template-columns:minmax(225px,255px) minmax(450px,1fr) minmax(260px,308px);
+ gap:12px;padding:12px;background:
+ radial-gradient(ellipse at 48% 4%,rgba(44,90,105,.27),transparent 56%),
+ linear-gradient(180deg,#0b2030,#06121c 65%,#061520)
+}
+.atlas-cinematic .left-panel,.atlas-cinematic .right-panel{
+ background:linear-gradient(162deg,#152d3b,#091925 65%);border:1px solid var(--atlas-stroke);
+ border-radius:var(--atlas-radius);box-shadow:var(--atlas-shadow);min-width:0
+}
+.atlas-cinematic .left-panel{padding:22px 15px}
+.atlas-cinematic .right-panel{padding:19px 15px}
+.atlas-cinematic .main-panel{padding:4px 2px 14px;min-width:0}
+.atlas-cinematic .sidebar-heading,.atlas-cinematic .scene-heading h1{
+ font-family:Georgia,'Libre Baskerville',serif;color:var(--atlas-ivory)
+}
+.atlas-cinematic .scene-heading h1 em,.atlas-cinematic .timeline-header h2 em{
+ color:var(--atlas-gold-bright);font-style:normal
+}
+.atlas-cinematic .scene-heading p,.atlas-cinematic .small-heading,
+.atlas-cinematic .eyebrow,.atlas-cinematic .section-kicker{
+ color:var(--atlas-gold)
+}
+.atlas-cinematic .scene-heading{padding:3px 10px;margin:8px 0 15px}
+.atlas-cinematic .date-controls{background:#0f2331;border:1px solid var(--atlas-stroke);
+ border-radius:24px;box-shadow:var(--atlas-glow)}
+.atlas-cinematic .date-controls>button{color:var(--atlas-gold-bright)}
+.atlas-cinematic .date-controls>button:hover{background:#264351}
+.atlas-cinematic .current-year input{color:var(--atlas-gold-bright)}
+.atlas-cinematic .current-year span,.atlas-cinematic .current-year small{color:var(--atlas-muted)}
+.atlas-cinematic .search-wrap{background:#091b28;border-color:var(--atlas-stroke);border-radius:22px}
+.atlas-cinematic .search-wrap input{color:#f5ebd8}
+.atlas-cinematic .sidebar-disclosure,.atlas-cinematic .catalogue-disclosure{
+ border-color:rgba(217,180,110,.24)
+}
+.atlas-cinematic :is(.civ-entry.active,.era-btn.active){
+ color:var(--atlas-gold-bright);background:#29434c;border-color:var(--atlas-gold-dim)
+}
+.atlas-cinematic .civ-entry:hover{background:#25424a}
+.atlas-cinematic .region-filter select{background:#0f2634;border-color:var(--atlas-stroke)}
+.atlas-cinematic .map-card,.atlas-cinematic .time-card,.atlas-cinematic .timeline-card{
+ background:#0c2130;border:1px solid var(--atlas-stroke);
+ border-radius:var(--atlas-radius);box-shadow:var(--atlas-shadow);color:var(--atlas-ivory)
+}
+.atlas-cinematic .map-card{overflow:hidden;position:relative;isolation:isolate}
+.atlas-cinematic .map-tabs{
+ height:auto;min-height:54px;gap:7px;padding:8px 12px;background:#071a27;
+ border-bottom:1px solid var(--atlas-stroke);flex-wrap:wrap
+}
+.atlas-cinematic .map-tabs button{
+ min-height:38px;color:var(--atlas-muted);border-radius:22px;padding:8px 15px;
+ border:1px solid transparent;font-size:12px
+}
+.atlas-cinematic .map-tabs button.active{
+ background:linear-gradient(125deg,#304039,#172d34);border-color:var(--atlas-gold);
+ color:var(--atlas-gold-bright);box-shadow:0 0 15px rgba(212,160,72,.22)
+}
+.atlas-cinematic .map-tabs button:hover{background:#25404d;color:var(--atlas-ivory)}
+.atlas-cinematic .map-stage{background:#092638;max-height:590px;min-height:275px;
+ box-shadow:inset 0 0 80px rgba(0,0,0,.25)}
+/* The SVG remains the existing present-day geographic reference; no borders are invented. */
+.atlas-cinematic .map-stage svg{filter:brightness(.84) saturate(.86) contrast(1.16)}
+.atlas-cinematic .map-stage::after{
+ box-shadow:inset 0 0 110px 22px rgba(2,12,23,.72);
+ background:linear-gradient(180deg,rgba(5,21,35,.22),transparent 36%,rgba(3,13,25,.18));
+}
+.atlas-cinematic .map-marker circle.core{stroke:var(--atlas-gold-bright);stroke-width:2.5;
+ filter:drop-shadow(0 0 4px rgba(255,218,144,.66))}
+.atlas-cinematic .map-marker circle.ring{stroke:var(--atlas-gold);stroke-width:2}
+.atlas-cinematic .map-marker text{fill:#fcf0d9;stroke:#071925;stroke-width:4.2;
+ font-size:13px}
+.atlas-cinematic .map-marker:hover circle.core,.atlas-cinematic .map-marker:focus circle.core{
+ stroke:#fff7d8;stroke-width:4
+}
+.atlas-cinematic .map-marker.selected circle.core{fill:#e9bc6f;stroke:#fff5d6}
+.atlas-cinematic .map-marker.selected circle.ring{stroke:#ffd98f}
+.atlas-cinematic .map-ornament.top-left,.atlas-cinematic .bottom-left{
+ background:rgba(8,24,35,.89);border:1px solid var(--atlas-stroke);
+ color:var(--atlas-ivory);backdrop-filter:blur(6px);box-shadow:var(--atlas-shadow)
+}
+.atlas-cinematic .map-ornament strong{color:var(--atlas-gold-bright)}
+.atlas-cinematic .map-ornament-label,.atlas-cinematic .legend-note{color:var(--atlas-muted)}
+.atlas-cinematic .map-zoom{background:rgba(6,22,32,.88);border-color:var(--atlas-stroke)}
+.atlas-cinematic .map-zoom button{color:var(--atlas-ivory);min-width:40px;min-height:42px}
+.atlas-cinematic .map-zoom button:hover{background:#254556}
+.atlas-cinematic .map-zoom button+button{border-top:1px solid var(--atlas-stroke)}
+.atlas-cinematic .compass,.atlas-cinematic .compass span{color:var(--atlas-gold-bright)}
+.atlas-cinematic .geo-controls{background:#142b37;color:var(--atlas-muted);border-color:var(--atlas-stroke)}
+.atlas-cinematic .map-evidence,.atlas-cinematic .map-footer{color:var(--atlas-muted);border-color:var(--atlas-stroke)}
+.atlas-cinematic .map-footer b{color:var(--atlas-gold)}
+.atlas-cinematic .worldview-entry,.atlas-cinematic .map-reader-link{
+ color:var(--atlas-gold-bright);border-color:var(--atlas-stroke)
+}
+.atlas-cinematic .map-about{color:var(--atlas-muted);border-color:var(--atlas-stroke)}
+.atlas-cinematic .historical-map{background:#15242c}
+.atlas-cinematic .historical-map .map-note{background:#102c3be8;color:var(--atlas-ivory);border-color:var(--atlas-stroke)}
+.atlas-cinematic .historical-map .map-note p{color:var(--atlas-muted)}
+.atlas-cinematic .historical-map .map-note a{color:var(--atlas-gold-bright)}
+.atlas-cinematic .time-card{margin-top:10px;padding:16px 20px;
+ background:linear-gradient(100deg,#0a1a27,#18313c 55%,#0a1d2a)}
+.atlas-cinematic #yearSlider{accent-color:var(--atlas-gold-bright)}
+.atlas-cinematic .time-tools button{background:#142e3b;border:1px solid var(--atlas-stroke);
+ color:var(--atlas-gold-bright);border-radius:18px;min-height:38px}
+.atlas-cinematic .range-ends,.atlas-cinematic .timeline-scale,.atlas-cinematic .timeline-explain{
+ color:var(--atlas-muted)
+}
+.atlas-cinematic .timeline-card{margin-top:11px;padding:17px}
+.atlas-cinematic .timeline-header h2{color:var(--atlas-ivory)}
+.atlas-cinematic .main-footer{color:var(--atlas-muted)}
+.atlas-cinematic .right-panel :is(h2,h3,strong){color:var(--atlas-ivory)}
+.atlas-cinematic .right-panel :is(p,small){color:var(--atlas-muted)}
+.atlas-cinematic .right-panel a{color:var(--atlas-gold-bright)}
+/* Never collapse the map into an unusable sliver at small viewports. */
+@media(max-width:1280px){
+ .atlas-cinematic .workspace{grid-template-columns:245px minmax(0,1fr);gap:10px}
+ .atlas-cinematic .right-panel{grid-column:1/-1}
+ .atlas-cinematic .main-panel{min-width:0}
+}
+@media(max-width:820px){
+ .atlas-cinematic .workspace{display:flex;flex-direction:column;padding:9px}
+ .atlas-cinematic .left-panel{padding:13px;order:2}
+ .atlas-cinematic .main-panel{order:1;padding:0}
+ .atlas-cinematic .right-panel{order:3}
+ .atlas-cinematic .scene-heading{flex-wrap:wrap;align-items:start}
+ .atlas-cinematic .map-stage{min-height:250px}
+ .atlas-cinematic .map-tabs{overflow-x:auto;flex-wrap:nowrap}
+ .atlas-cinematic .map-tabs button{flex:0 0 auto;min-height:44px}
+ .atlas-cinematic .map-ornament.top-left{top:9px;left:8px;padding:7px}
+ .atlas-cinematic .bottom-left{bottom:7px;left:8px;max-width:75%;padding:6px}
+ .atlas-cinematic .map-zoom{top:8px;right:8px}
+}
+@media(max-width:480px){
+ .atlas-cinematic .workspace{padding:5px}
+ .atlas-cinematic .scene-heading h1{font-size:29px}
+ .atlas-cinematic .map-stage{min-height:210px}
+ .atlas-cinematic .map-ornament-label{font-size:7px}
+ .atlas-cinematic .map-ornament strong{font-size:15px}
+ .atlas-cinematic .map-marker text{font-size:12px}
+ .atlas-cinematic .time-card{padding:12px 9px}
+ .atlas-cinematic .timeline-card{padding:12px 8px}
+}
