@@ -4,6 +4,8 @@
  */
 (function(root){
   'use strict';
+  // Browser-only visual layer; research test sandboxes may have no DOM.
+  if(typeof document==='undefined'||typeof document.getElementById!=='function')return;
   const host=document.getElementById('cinematicCompareDeck'),api=root.HistoryCompare;
   if(!host||!api)return;
   // Only activate in a full browser DOM; VM unit tests use minimal fixtures.
