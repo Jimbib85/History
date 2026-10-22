@@ -9,7 +9,7 @@ function pack(label,sha){
  const parsed=JSON.parse(bytes);
  assert.equal(parsed.metadata.schema_version,'classical-split-1.0');
  assert.equal(Object.keys(parsed.tables).length,20);
- assert.equal(parsed.tables.claims.every(x=>x.review_status),'SOURCE_CHECKED'),false; // old seed claims intentionally retained
+ assert.ok(parsed.tables.claims.some(x=>x.review_status==='NEEDS_REVIEW'),'Seed claims must remain explicitly unreviewed'); // old seed claims intentionally retained
  return parsed;
 }
 const bce=pack('500BCE-1BCE','a53c31756868c24bb1708edfcefff082dbf9d20a08edad3ed506ddee4383565a');
