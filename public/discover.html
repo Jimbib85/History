@@ -3,11 +3,12 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#142b38"><meta name="description" content="Follow sourced journeys through everyday life, crafts and culture across world history.">
 <title>Discover | World History Atlas</title>
-<link rel="stylesheet" href="discovery.css?v=0.18.0"></head>
+<link rel="stylesheet" href="discovery.css?v=0.18.0">
+<link rel="stylesheet" href="atlas-nav.css?v=0.19.0"></head>
 <body>
 <a href="#journeys" class="skip">Skip to discovery journeys</a>
 <header class="topbar"><a class="brand" href="story.html"><span aria-hidden="true">✳</span> WORLD HISTORY <em>ATLAS</em></a>
-<nav aria-label="Atlas views"><a href="story.html">Story</a><a href="index.html">World Map</a><a href="compare.html">Compare</a><a href="worldview.html">Their World</a><a href="discover.html" aria-current="page">Discover</a></nav></header>
+<nav class="atlas-crossnav" aria-label="Atlas views"><a href="story.html" data-atlas-view="story">Story</a><a href="index.html" data-atlas-view="map">World Map</a><a href="compare.html" data-atlas-view="compare">Compare</a><a href="index.html#technology" data-atlas-view="technology">Technology</a><a href="worldview.html" data-atlas-view="worldview">Their World</a><a href="discover.html" data-atlas-view="discover" aria-current="page">Discover</a><a href="conflicts.html" data-atlas-view="conflicts">Conflicts</a></nav></header>
 <main class="shell">
 <section class="hero">
  <p class="eyebrow">HUMAN HISTORY, ONE CONNECTION AT A TIME</p>
@@ -42,4 +43,5 @@
 <script src="discovery-data.js?v=0.18.0"></script>
 <script src="discovery-model.js?v=0.18.0"></script>
 <script src="discovery.js?v=0.18.0"></script>
+<script src="atlas-links.js?v=0.19.0"></script>
 </body></html>
