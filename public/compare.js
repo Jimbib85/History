@@ -343,23 +343,25 @@
   // and historic intervals. Never creates inferred cross-civilisation links.
   function renderCinematicDeck(){
     const host=$('cinematicCompareDeck');if(!host)return;
-    const selected=entities.get(state.selected);
-    const rangeNow=range();
-    const ordered=[...new Set([state.selected,...state.pinned,...all.filter(c=>c.id!==state.selected&&active(c,state.year)).sort((a,b)=>a.name.localeCompare(b.name)).map(c=>c.id)])]
-      .map(id=>entities.get(id)).filter(c=>c&&overlaps(c,rangeNow)).slice(0,3);
-    const selectedSet=new Set(ordered.map(c=>c.id));
-    const yearTextCompact=y=>yearText(y);
+    const r=range();
+    const suggestions=all.filter(c=>c.id!==state.selected&&active(c,state.year)).sort((a,b)=>a.name.localeCompare(b.name));
+    const ordered=[...new Set([state.selected,...state.pinned,...suggestions.map(c=>c.id)])]
+      .map(id=>entities.get(id)).filter(c=>c&&(c.id===state.selected||overlaps(c,r))).slice(0,3);
+    const media=window.AtlasVisualAssets;
     host.innerHTML='<div class="cinematic-deck-heading"><span>PEOPLES · PLACES · CONNECTIONS</span><strong>'+safe(yearText(state.year))+'</strong></div>'+
       '<div class="cinematic-societies">'+ordered.map((c,i)=>{
-       const hue=['gold','green','violet'][i],isSelected=c.id===state.selected;
-       return '<article class="cinematic-society '+hue+(isSelected?' current':'')+'"><div class="cinematic-society-top"><span class="cinematic-glyph" aria-hidden="true">'+(c.kind==='empire'?'♜':'✥')+'</span><span class="cinematic-region">'+safe(c.region)+'</span></div><h2>'+safe(c.name)+'</h2><div class="cinematic-society-life">'+safe(entityDates(c))+'</div><p>'+safe((c.summary||c.description||'Explore this society’s history and surviving records.').slice(0,230))+'</p><div class="cinematic-card-actions"><button data-deck-civ="'+safe(c.id)+'" '+(isSelected?'aria-current="true"':'')+'>Explore history →</button><button data-deck-pin="'+safe(c.id)+'" aria-pressed="'+state.pinned.includes(c.id)+'">'+(state.pinned.includes(c.id)?'★ Pinned':'☆ Pin')+'</button></div></article>';
+        const hue=['gold','green','violet'][i],isSelected=c.id===state.selected;
+        const artwork=media?.forSociety(c.id);
+        const visual=artwork?media.html(artwork,'card'):'<div class="atlas-artwork atlas-artwork-empty" aria-label="Illustrated placeholder; no reviewed period image available"><div class="atlas-artwork-placeholder"><span aria-hidden="true">✧</span><small>Artwork being researched</small></div></div>';
+        return '<article class="cinematic-society '+hue+(isSelected?' current':'')+'"><div class="cinematic-society-top"><span class="cinematic-glyph" aria-hidden="true">'+(c.kind==='empire'?'♜':'✥')+'</span><span class="cinematic-region">'+safe(c.region)+'</span></div><div class="cinematic-society-main"><div class="cinematic-society-copy"><h2>'+safe(c.name)+'</h2><div class="cinematic-society-life">'+safe(entityDates(c))+'</div><p>'+safe((c.summary||c.description||'Explore its surviving historical evidence.').slice(0,230))+'</p></div>'+visual+'</div><div class="cinematic-card-actions"><button type="button" data-deck-civ="'+safe(c.id)+'" '+(isSelected?'aria-current="true"':'')+'>Explore history →</button><button type="button" data-deck-pin="'+safe(c.id)+'" aria-pressed="'+state.pinned.includes(c.id)+'">'+(state.pinned.includes(c.id)?'★ Pinned':'☆ Pin')+'</button></div></article>';
       }).join('')+'</div>'+
-      '<div class="cinematic-flow-heading"><div><strong>Histories in parallel</strong><span>Actual recorded periods on one shared scale</span></div><span>'+safe(yearText(rangeNow.start))+' — '+safe(yearText(rangeNow.end))+'</span></div>'+
+      '<div class="cinematic-flow-heading"><div><strong>Histories in parallel</strong><span>Recorded periods, positioned on one chronological scale</span></div><span>'+safe(yearText(r.start))+' — '+safe(yearText(r.end))+'</span></div>'+
       '<div class="cinematic-flow-tracks">'+ordered.map((c,i)=>{
-        const x=pct(Math.max(c.start,rangeNow.start),rangeNow),end=pct(Math.min(c.end,rangeNow.end),rangeNow);
-        return '<div class="cinematic-flow-track"><span>'+safe(c.name)+'</span><div class="cinematic-flow-line"><button type="button" data-deck-civ="'+safe(c.id)+'" aria-label="Explore '+safe(c.name)+'" style="--flow-x:'+x.toFixed(3)+'%;--flow-width:'+Math.max(.6,end-x).toFixed(3)+'%;--flow-colour:var(--flow-'+i+')" title="'+safe(entityDates(c))+'"></button><i style="left:'+pct(state.year,rangeNow)+'%" aria-hidden="true"></i></div></div>';
+        const visible=overlaps(c,r),x=pct(Math.max(c.start,r.start),r),end=pct(Math.min(c.end,r.end),r);
+        return '<div class="cinematic-flow-track"><span title="'+safe(c.name)+'">'+safe(c.name)+'</span><div class="cinematic-flow-line">'+(visible?'<button type="button" data-deck-civ="'+safe(c.id)+'" aria-label="Explore '+safe(c.name)+'" style="--flow-x:'+x.toFixed(3)+'%;--flow-width:'+Math.max(.6,end-x).toFixed(3)+'%;--flow-colour:var(--flow-'+i+')" title="'+safe(entityDates(c))+'"></button>':'<small>Outside visible period</small>')+'<i style="left:'+pct(state.year,r)+'%" aria-hidden="true"></i></div></div>';
       }).join('')+'</div>'+
-      '<p class="cinematic-evidence-note">Shared dates are not evidence of contact. Bands reflect the atlas’s recorded intervals and may be incomplete. Select a society or use the sourced event markers in the main timeline below.</p>';
+      '<p class="cinematic-evidence-note">The imagery depicts individual historical objects or artworks, not entire societies. Coloured bands use the atlas’s documented date intervals; co-existence does not establish contact. Select dated event markers below to examine evidence.</p>';
+    media?.bindImages(host);
   }
   function render() {
     const focused = document.activeElement;
