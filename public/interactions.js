@@ -57,7 +57,7 @@
  function visibleRecords(){return linkedRecords().slice(0,80)}
  function artwork(e){
   const asset=root.AtlasVisualAssets?.forSociety(e.participants.find(id=>root.AtlasVisualAssets.forSociety(id)));
-  if(asset)return '<figure class="interaction-object">'+root.AtlasVisualAssets.html(asset,'card')+'<div class="interaction-art-caption">Related period object, not a depiction of this event</div></figure>';
+  if(asset)return '<div class="interaction-object">'+root.AtlasVisualAssets.html(asset,'card')+'<div class="interaction-art-caption">Related period object, not a depiction of this event</div></div>';
   return '<div class="interaction-object interaction-object-empty" aria-label="Original decorative motif, not a historical depiction"><img src="assets/atlas-compass.svg" alt="" loading="lazy"/><span>Decorative illustration · not historical evidence</span></div>';
  }
  function network(rows){
@@ -108,6 +108,7 @@
   const chosen=rows.find(e=>e.key===state.event)||rows[0]||null;
   if(chosen)state.event=chosen.key;else state.event=null;
   $('interactionYear').value=state.year;
+  $('interactionEra').value=state.era;
   $('interactionRangeLabel').textContent=r.label+' · '+rows.length+(linkedRecords().length>rows.length?' of '+linkedRecords().length:'')+' linked records';
   $('interactionCount').textContent=rows.length+' sourced cross-society records'+(linkedRecords().length>rows.length?' (first '+rows.length+' displayed)':'');
   $('interactionNetwork').innerHTML=rows.length?network(rows):'<p class="interaction-no-record">No explicit multi-society records match this selection.</p>';
