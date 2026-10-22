@@ -6,12 +6,13 @@
 <meta name="description" content="Explore surviving historical maps, manuscript copies, sourced geographical knowledge and documented connections between past societies.">
 <title>Through Their Eyes | World History Atlas</title>
 <link rel="stylesheet" href="worldview.css?v=0.17.0">
+<link rel="stylesheet" href="atlas-nav.css?v=0.19.0">
 </head>
 <body>
 <a class="skip" href="#records">Skip to evidence</a>
 <header class="topbar">
  <a class="brand" href="story.html" aria-label="World History Atlas home"><span aria-hidden="true">✳</span><strong>WORLD HISTORY <em>ATLAS</em></strong></a>
- <nav aria-label="Atlas navigation"><a href="story.html" id="storyNav">Story</a><a id="mapNav" href="index.html">World Map</a><a id="compareNav" href="compare.html">Compare</a><a href="worldview.html" aria-current="page">Their World</a></nav>
+ <nav class="atlas-crossnav" aria-label="Atlas views"><a href="story.html" data-atlas-view="story" id="storyNav">Story</a><a href="index.html" data-atlas-view="map" id="mapNav">World Map</a><a href="compare.html" data-atlas-view="compare" id="compareNav">Compare</a><a href="index.html#technology" data-atlas-view="technology">Technology</a><a href="worldview.html" data-atlas-view="worldview" aria-current="page">Their World</a><a href="discover.html" data-atlas-view="discover">Discover</a><a href="conflicts.html" data-atlas-view="conflicts">Conflicts</a></nav>
 </header>
 <main class="shell">
  <section class="hero">
@@ -74,5 +75,6 @@
 <script src="research-classical-apply.js"></script>
 <script src="worldview-model.js?v=0.17.0"></script>
 <script src="worldview.js?v=0.17.0"></script>
+<script src="atlas-links.js?v=0.19.0"></script>
 </body>
 </html>
