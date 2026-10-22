@@ -33,7 +33,7 @@
     const lane = [...chart.querySelectorAll('.lane')].find(x => x.dataset.orderLane === id);
     if (!lane) return [];
     const mode = window.HistoryCompare?.state?.mode;
-    const region = mode === 'regions' ? entity.region : null;
+    const region = ['overlap','regions'].includes(mode) ? entity.region : null;
     return [...chart.querySelectorAll('.lane[data-order-lane]')].filter(x => {
       const c = byId.get(x.dataset.orderLane);
       return c && c.kind === entity.kind && (!region || c.region === region);
@@ -92,7 +92,7 @@
     const row = e.target.closest('.lane[data-order-lane]');
     if (!dragged || !row) return;
     const source = byId.get(dragged), dest = byId.get(row.dataset.orderLane);
-    if (!source || !dest || source.kind !== dest.kind || (window.HistoryCompare?.state?.mode === 'regions' && source.region !== dest.region)) return;
+    if (!source || !dest || source.kind !== dest.kind || (['overlap','regions'].includes(window.HistoryCompare?.state?.mode) && source.region !== dest.region)) return;
     e.preventDefault();e.dataTransfer.dropEffect = 'move';
     chart.querySelectorAll('.lane-drop-target').forEach(el=>el.classList.remove('lane-drop-target'));
     row.classList.add('lane-drop-target');

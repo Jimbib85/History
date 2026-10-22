@@ -50,13 +50,15 @@
       :row.recordKind==='knowledge'
       ?'<p><b>Geographic scope:</b> '+escape(row.area)+'</p><p><b>Interpretation:</b> '+escape(row.caveat)+'</p>'
       :'<p><b>Evidence classification:</b> '+escape(row.assessment)+'</p><p>Do not read this as a reconstructed travel route or continuous territorial boundary.</p>';
+    const duplicate=(window.AtlasMapIntake||[]).find(m=>m.existingId===row.rawId);
+    const variant=duplicate?'<p><a href="#uploadedMapCollection">Supplied alternative reproduction catalogued below; same map identity.</a></p>':'';
     const seen=row.recordKind==='map'?'MAP RECORD':row.recordKind==='knowledge'?'GEOGRAPHIC ACCOUNT':'RELATIONSHIP RECORD';
     return '<details class="evidence-card"><summary><span class="record-type">'+seen+'</span><strong>'+escape(row.title)+'</strong>'+
       '<span class="record-tags">'+tags(row)+'</span>'+(names?'<small class="associated">Linked in research: '+escape(names)+'</small>':'')+
       '<i class="disclosure-indicator" aria-hidden="true">⌄</i></summary><div class="evidence-detail">'+
       image+'<p class="record-description">'+escape(row.description)+'</p>'+metadata+
       '<p class="confidence"><b>Research confidence:</b> '+escape(row.confidence)+'. This is the source pack’s research assessment, not independent verification by the website.</p>'+
-      rowSources(row)+'</div></details>';
+      variant+rowSources(row)+'</div></details>';
   }
   function records(section,items,limitKey){
     const list=model.filter(items,{society:state.society,period:state.period,year:state.year,search:state.search});
@@ -83,7 +85,7 @@
     if(state.society!=='all')q.set('civ',state.society);
     if(state.period==='near')q.set('period','near');
     if(state.search)q.set('search',state.search);
-    try{history.replaceState(null,'','worldview.html?'+q.toString());}catch(_){}
+    try{history.replaceState(null,'','worldview.html?'+q.toString()+(location.hash||''));}catch(_){}
     $('mapNav').href=link('map');$('returnMap').href=link('map');
     $('storyNav').href=link('story');
     $('compareNav').href=link('compare');$('returnCompare').href=link('compare');

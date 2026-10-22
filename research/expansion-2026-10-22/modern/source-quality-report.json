@@ -1,0 +1,126 @@
+{
+  "pack_id": "wha_history_1501_2026",
+  "research_cutoff": "2026-10-22",
+  "timezone": "Australia/Brisbane",
+  "scope_label": "1501-2026 CE",
+  "start_year": 1501,
+  "end_year_exclusive": 2027,
+  "numbered_years": 526,
+  "interval_validation": "AUTHORISED_MACRO_INTERVAL_NOT_A_500_YEAR_PACK",
+  "partial_current_year": true,
+  "record_counts": {
+    "events": 77,
+    "technology_developments": 34,
+    "technologies": 27,
+    "societies": 63,
+    "figures": 14,
+    "relationships": 11,
+    "technology_transmission": 2,
+    "technology_dependencies": 4,
+    "places": 1,
+    "historical_maps": 1,
+    "geographical_knowledge": 1,
+    "cultural_practices": 9,
+    "connections": 10,
+    "statistical_observations": 6,
+    "source_register": 75,
+    "claims": 170,
+    "source_claims": 190,
+    "research_gaps": 15,
+    "coverage_matrix": 112,
+    "entity_reconciliation": 201
+  },
+  "geographic_feature_count": 1,
+  "dated_event_records": 77,
+  "unplaced_context_records": 0,
+  "source_access_distribution": {
+    "SEARCH_EXTRACT": 55,
+    "PARTIAL_WEB_TEXT": 17,
+    "CATALOGUE_ANNOTATION": 1,
+    "ABSTRACT": 2
+  },
+  "source_material_consulted": 75,
+  "source_pages_opened": 17,
+  "sources_completely_reviewed": 0,
+  "independently_corroborated_claims": 0,
+  "confidence_distribution": {
+    "events": {
+      "HIGH": 76,
+      "MEDIUM": 1
+    },
+    "technology_developments": {
+      "HIGH": 34
+    },
+    "claims": {
+      "HIGH": 121,
+      "MEDIUM": 49
+    }
+  },
+  "repository_revision_inspected": "bbf4191d4f2a3a0e8a91dc3b2858d20e591f6f5e",
+  "repository_read_scope": [
+    "git/refs/heads/main",
+    "public/data.js lines 1-45",
+    "public/tech-data.js lines 1-42",
+    "public/research-1500-2026-tech.js"
+  ],
+  "prior_pack_id_reconciliation_only": "World_History_Atlas_1500-2026_CE_Research_Pack.zip",
+  "no_live_changes": true,
+  "validation": {
+    "status": "PASS",
+    "errors": [],
+    "checks": {
+      "schema_records": 1023,
+      "format_pairs_checked": 40,
+      "foreign_key_checks": 2228,
+      "geojson_points_checked": 1
+    },
+    "record_counts": {
+      "claims": 170,
+      "connections": 10,
+      "coverage_matrix": 112,
+      "cultural_practices": 9,
+      "entity_reconciliation": 201,
+      "events": 77,
+      "figures": 14,
+      "geographical_knowledge": 1,
+      "historical_maps": 1,
+      "places": 1,
+      "relationships": 11,
+      "research_gaps": 15,
+      "societies": 63,
+      "source_claims": 190,
+      "source_register": 75,
+      "statistical_observations": 6,
+      "technologies": 27,
+      "technology_dependencies": 4,
+      "technology_developments": 34,
+      "technology_transmission": 2
+    },
+    "geographic_feature_count": 1,
+    "historical_accuracy_audit": "NOT_ESTABLISHED_BY_SOFTWARE_VALIDATION",
+    "live_application_tests": "NOT_RUN"
+  },
+  "live_application_regression": "NOT_RUN",
+  "production_import": "NOT_RUN",
+  "historical_map_catalogue_records": 1,
+  "map_images_inspected": 0,
+  "images_redistributed": 0,
+  "historical_boundaries_produced": 0,
+  "known_limitations": [
+    "Selective high-impact anchors, not an exhaustive history of the entire span.",
+    "Many source references were inspected only through search extracts; access is separately reported.",
+    "Summary-level claims are explicit but not a complete atomic audit of every field.",
+    "Society and figure rows are linked references, not complete political lifespans or biographies.",
+    "Only public heritage-reference points are exported, not ancient borders or exact event locations.",
+    "No live Atlas regression or production import was performed.",
+    "A matching previous-pack ID does not certify identical scope or authorise replacing existing records.",
+    "2026 references may report earlier observation years; no full-year 2026 totals are asserted."
+  ],
+  "staging_merge_test": {
+    "status": "PASS",
+    "first_load_added": 1023,
+    "second_load_added": 0,
+    "conflicts": 0,
+    "scope": "CANONICAL_STAGING_ONLY_NOT_LIVE_APP"
+  }
+}

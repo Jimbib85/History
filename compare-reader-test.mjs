@@ -40,7 +40,7 @@ for(const script of html.matchAll(/<script src="([^"?]+)(?:\?[^"]*)?"><\/script>
 }
 const compare=context.HistoryCompare, chart=nodes.get('comparisonChart');
 const click=(selector,dataset) => chart.listeners.get('click')({target:{closest:value => value===selector ? {dataset} : null}});
-const rowIds=() => [...chart.innerHTML.matchAll(/class="lane-name" data-civ="([^"]+)"/g)].map(m=>m[1]);
+const rowIds=() => [...chart.innerHTML.matchAll(/class="lane-name[^"]*" data-civ="([^"]+)"/g)].map(m=>m[1]);
 const eventCount=() => (chart.innerHTML.match(/class="event-lane(?: selected)?"/g)||[]).length;
 
 assert.equal(compare.parseDate('1 BCE'),0);
@@ -51,11 +51,12 @@ assert.ok(initialOrder.length>8);
 compare.change({selected:initialOrder.at(-1)});
 assert.deepEqual(rowIds(),initialOrder,'Opening a visible entity must not reorder the chart');
 const year=compare.state.year, span=compare.state.span;
-click('[data-group]',{group:'type:society'});
-assert.ok(chart.innerHTML.includes('id="lanes-society" hidden'),'Society section closes');
-const societyId=vm.runInContext("CIVILISATIONS.find(c=>c.kind==='society'&&c.start<=1200&&c.end>=1200).id",context);
+const societyId=initialOrder[0];
+const region=vm.runInContext('CIVILISATIONS.find(c=>c.id==="'+societyId+'").region',context);
+click('[data-group]',{group:'region:'+region});
+assert.ok(/id="lanes-region-\d+" hidden/.test(chart.innerHTML),'Region section closes');
 click('[data-civ]',{civ:societyId});
-assert.ok(!chart.innerHTML.includes('id="lanes-society" hidden'),'Selecting a society reveals its section');
+assert.ok(!/id="lanes-region-\d+" hidden/.test(chart.innerHTML),'Selecting reveals regional section');
 assert.equal(compare.state.year,year);
 assert.equal(compare.state.span,span);
 
@@ -104,8 +105,7 @@ compare.change({mode:'overlap',span:12026,limit:9999,search:'',region:'all',type
 assert.ok(sortedTypes>=2,'Both saved order lists applied');
 const nameById=vm.runInContext("new Map(CIVILISATIONS.map(c=>[c.id,c]))",context);
 for(const kind of ['society','empire']){
-  const names=rowIds().map(id=>nameById.get(id)).filter(c=>c.kind===kind).map(c=>c.name);
-  assert.deepEqual(names,[...names].sort((a,b)=>b.localeCompare(a)),'Saved '+kind+' order survives interleaved candidate rows');
+  for(const region of new Set([...nameById.values()].map(c=>c.region))){const names=rowIds().map(id=>nameById.get(id)).filter(c=>c.kind===kind&&c.region===region).map(c=>c.name);assert.deepEqual(names,[...names].sort((a,b)=>b.localeCompare(a)),'Saved regional order');}
 }
 console.log('PASS Compare date/order regressions: alternate chronologies, actual entity spans and independent saved type ordering.');
 

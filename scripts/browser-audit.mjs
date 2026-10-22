@@ -109,6 +109,32 @@ else{
     fatal.push({device:device.name,page:'reviewed classical evidence',errors:[String(err),JSON.stringify(diag),...reviewedErrors]});
   }
   finally{await classical.close();}
+  const extra=await context.newPage();
+  const errors=[];extra.on('pageerror',e=>errors.push(e.message));
+  try{
+    await extra.goto(base+'discover.html?research=1#researchExpansion',{waitUntil:'load',timeout:30000});
+    await extra.locator('#expansionCards .expansion-card').first().waitFor({timeout:12000});
+    await extra.selectOption('#expansionType','events');
+    if(!(await extra.locator('#expansionCount').textContent()).includes('123 source records'))throw Error('Missing imported event records');
+    await extra.goto(base+'worldview.html#uploadedMapCollection',{waitUntil:'load',timeout:30000});
+    await extra.locator('.map-upload-card').first().waitFor();
+    if(await extra.locator('.map-upload-card').count()!==14)throw Error('Map metadata count');
+    if(await extra.locator('[data-map-image]').count()!==4)throw Error('Map reuse gating');
+    await extra.locator('[data-map-image]').first().click();
+    if(!await extra.locator('#mapImageDialog').evaluate(d=>d.open))throw Error('Image viewer did not open');
+    await extra.keyboard.press('Escape');
+    await extra.goto(base+'compare.html?year=1200&span=4000&limit=12',{waitUntil:'load',timeout:30000});
+    const aligned=await extra.evaluate(()=>{const a=document.querySelector('.axis-track').getBoundingClientRect();return [...document.querySelectorAll('.atlas-lane .lane-track')].every(n=>{const b=n.getBoundingClientRect();return Math.abs(a.left-b.left)<2&&Math.abs(a.width-b.width)<2})});
+    if(!aligned)throw Error('Timeline ruler alignment');
+    await extra.screenshot({path:output+'compare-overlap-'+device.name+'.png',fullPage:true});
+    await extra.locator('[data-mode="eras"]').click();
+    const widths=await extra.locator('.atlas-era-head').evaluateAll(a=>a.map(n=>n.getBoundingClientRect().width));
+    if(widths.length!==8||Math.max(...widths)-Math.min(...widths)>1)throw Error('Era column scale');
+    await extra.screenshot({path:output+'compare-eras-'+device.name+'.png',fullPage:true});
+    if(errors.length)throw Error(errors.join('; '));
+    console.log('PASS',device.name,'research, map provenance and Compare geometry');
+  }catch(e){fatal.push({device:device.name,page:'v0.22 integration',errors:[String(e)]});}
+  finally{await extra.close();}
   await context.close();
  }
  await browser.close();

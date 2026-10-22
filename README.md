@@ -1,12 +1,22 @@
 # World History Atlas
 
-**Version 0.19.0 — Cross-view continuity**
+**Version 0.22.0 - Research expansion, map provenance and regional Compare**
 
 World Map, Compare and Technology now use the Story timeline’s overview-first approach: scan a short heading, open a record, and read its evidence. See [the UX implementation notes](docs/compact-ux.md).
 
 The Technology tree filters its families, topics and evidence to the selected society or empire. Search and Random use the same selection. Choose **All societies & empires** to compare the full collection; a society without linked technology research gets an explicit empty state.
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
+
+## Version 0.22 - Research, maps and atlas-style Compare
+
+The uploaded early/modern research packs are preserved with canonical checksums and source claims. The adapter accounts for 123 event records (59 new, 48 evidence enrichments, 16 contextual) and 61 technology observations (12 new linked appearances, 3 enrichments, 46 contextual). Existing society lifespans are unchanged; unknown dates never become invented polity spans. Full research remains searchable in the lazy Discover source catalogue.
+
+Compare follows the supplied visual references: parchment/navy styling, regional colour rails and icons, aligned bars and selected-year reader; Era Bands uses a full-width eight-column linear overview. The images' historical examples are not copied into the dataset. Sources, filters, pins, row order and progressive detail remain available.
+
+Their World includes 14 supplied map references: four viewable historical reproductions with zoom, ten metadata/source-only items pending provenance and reuse review. Fra Mauro and Kangnido are alternative reproductions, not duplicate historical map records. Speculative newspapers, modern software screenshots and mixed-period map labels are not historical boundaries.
+
+See [v0.22 notes](docs/research-maps-compare-v022.md).
 
 ## Version 0.21 — Lightweight historical worldview
 

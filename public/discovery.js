@@ -47,6 +47,7 @@
    const q=new URLSearchParams({journey:state.journey,step:String(state.step),year:String(state.year)});
    if(state.random)q.set('record',state.random.id);
    if(classicalRequested)q.set('classical','1');
+   if(params.has('research'))q.set('research',params.get('research'));
    try{history.replaceState(null,'','discover.html?'+q.toString());}catch(_){}
    $('snapshotCompare').href='compare.html?year='+encodeURIComponent(state.year);
  }

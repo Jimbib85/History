@@ -104,7 +104,7 @@ function assertSocietyScopes({context,dom,api,technologies,societies,pathways}){
   }
 
   // These exact fixture totals detect accidental broadening from society notes or relationships.
-  for(const [civ,expectedTopics,expectedRecords] of [['abbasid',6,7],['tang',5,8],['rome',11,13],['olmec',0,0]]){
+  for(const [civ,expectedTopics,expectedRecords] of [['abbasid',6,7],['tang',5,8],['rome',11,13],['olmec',1,1]]){
     const related=scopedTopics(civ);
     assert.equal(related.length,expectedTopics,'Real-data topic fixture '+civ);
     assert.equal(related.reduce((sum,t)=>sum+scopedRecords(t,civ).length,0),expectedRecords,'Real-data evidence fixture '+civ);
@@ -225,7 +225,7 @@ function assertSocietyScopes({context,dom,api,technologies,societies,pathways}){
     if(permitted.size)assert.ok(permitted.has(api.state.tech),'Random never leaves '+society.id);
     else blankSelection('Empty Random scope '+society.id);
   }
-  changeScope(dom,'olmec');searchFor(dom,'paper');
+  changeScope(dom,'kush');searchFor(dom,'paper');
   blankSelection('Search within an empty society');
   click(dom.technologyBranches,'[data-tech-clear]');
   blankSelection('Clear search within an empty society');

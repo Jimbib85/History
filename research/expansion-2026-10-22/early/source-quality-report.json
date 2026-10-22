@@ -1,0 +1,129 @@
+{
+  "pack_id": "wha_history_8000BCE_500BCE",
+  "research_cutoff": "2026-10-22",
+  "timezone": "Australia/Brisbane",
+  "scope_label": "8000 BCE-500 BCE",
+  "start_year": -7999,
+  "end_year_exclusive": -498,
+  "numbered_years": 7501,
+  "interval_validation": "AUTHORISED_MACRO_INTERVAL_NOT_A_500_YEAR_PACK",
+  "partial_current_year": false,
+  "record_counts": {
+    "events": 46,
+    "technology_developments": 27,
+    "technologies": 14,
+    "societies": 43,
+    "figures": 6,
+    "relationships": 6,
+    "technology_transmission": 1,
+    "technology_dependencies": 2,
+    "places": 3,
+    "historical_maps": 0,
+    "geographical_knowledge": 0,
+    "cultural_practices": 7,
+    "connections": 8,
+    "statistical_observations": 0,
+    "source_register": 39,
+    "claims": 106,
+    "source_claims": 117,
+    "research_gaps": 14,
+    "coverage_matrix": 96,
+    "entity_reconciliation": 130
+  },
+  "geographic_feature_count": 3,
+  "dated_event_records": 42,
+  "unplaced_context_records": 4,
+  "source_access_distribution": {
+    "SEARCH_EXTRACT": 16,
+    "PARTIAL_WEB_TEXT": 16,
+    "ABSTRACT": 7
+  },
+  "source_material_consulted": 39,
+  "source_pages_opened": 16,
+  "sources_completely_reviewed": 0,
+  "independently_corroborated_claims": 0,
+  "confidence_distribution": {
+    "events": {
+      "HIGH": 26,
+      "MEDIUM": 19,
+      "DISPUTED": 1
+    },
+    "technology_developments": {
+      "MEDIUM": 14,
+      "HIGH": 12,
+      "DISPUTED": 1
+    },
+    "claims": {
+      "HIGH": 49,
+      "MEDIUM": 55,
+      "DISPUTED": 2
+    }
+  },
+  "repository_revision_inspected": "bbf4191d4f2a3a0e8a91dc3b2858d20e591f6f5e",
+  "repository_read_scope": [
+    "git/refs/heads/main",
+    "public/data.js lines 1-45",
+    "public/tech-data.js lines 1-42",
+    "public/research-1500-2026-tech.js"
+  ],
+  "prior_pack_id_reconciliation_only": "World_History_Atlas_1500-2026_CE_Research_Pack.zip",
+  "no_live_changes": true,
+  "validation": {
+    "status": "PASS",
+    "errors": [],
+    "checks": {
+      "schema_records": 665,
+      "format_pairs_checked": 40,
+      "foreign_key_checks": 1330,
+      "geojson_points_checked": 3
+    },
+    "record_counts": {
+      "claims": 106,
+      "connections": 8,
+      "coverage_matrix": 96,
+      "cultural_practices": 7,
+      "entity_reconciliation": 130,
+      "events": 46,
+      "figures": 6,
+      "geographical_knowledge": 0,
+      "historical_maps": 0,
+      "places": 3,
+      "relationships": 6,
+      "research_gaps": 14,
+      "societies": 43,
+      "source_claims": 117,
+      "source_register": 39,
+      "statistical_observations": 0,
+      "technologies": 14,
+      "technology_dependencies": 2,
+      "technology_developments": 27,
+      "technology_transmission": 1
+    },
+    "geographic_feature_count": 3,
+    "historical_accuracy_audit": "NOT_ESTABLISHED_BY_SOFTWARE_VALIDATION",
+    "live_application_tests": "NOT_RUN"
+  },
+  "live_application_regression": "NOT_RUN",
+  "production_import": "NOT_RUN",
+  "historical_map_catalogue_records": 0,
+  "map_images_inspected": 0,
+  "images_redistributed": 0,
+  "historical_boundaries_produced": 0,
+  "known_limitations": [
+    "Selective high-impact anchors, not an exhaustive history of the entire span.",
+    "Many source references were inspected only through search extracts; access is separately reported.",
+    "Summary-level claims are explicit but not a complete atomic audit of every field.",
+    "Society and figure rows are linked references, not complete political lifespans or biographies.",
+    "Only public heritage-reference points are exported, not ancient borders or exact event locations.",
+    "No live Atlas regression or production import was performed.",
+    "A matching previous-pack ID does not certify identical scope or authorise replacing existing records.",
+    "Archaeological ranges and relative dates are not converted into invented event durations. The 500 BCE endpoint overlaps an earlier pack."
+  ],
+  "staging_merge_test": {
+    "status": "PASS",
+    "first_load_added": 665,
+    "second_load_added": 0,
+    "conflicts": 0,
+    "scope": "CANONICAL_STAGING_ONLY_NOT_LIVE_APP"
+  }
+}

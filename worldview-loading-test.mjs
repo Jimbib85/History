@@ -4,7 +4,7 @@ import vm from 'node:vm';
 const read=x=>readFileSync(new URL('./public/'+x,import.meta.url),'utf8');
 const html=read('worldview.html');
 const tags=[...html.matchAll(/<script src="([^"]+)"/g)].map(m=>m[1].split('?')[0]);
-assert.deepEqual(tags,['worldview-slim-data.js','worldview-model.js','worldview.js','atlas-links.js'],
+assert.deepEqual(tags,['worldview-slim-data.js','worldview-model.js','map-intake-data.js','worldview.js','map-intake-view.js','atlas-links.js'],
  'Worldview must not transitively load heavyweight research and application adapters');
 const size=statSync(new URL('./public/worldview-slim-data.js',import.meta.url)).size;
 const archiveBytes=['research-classical-data.js','research-1000-1499.js','research-1500-2026-data.js']
