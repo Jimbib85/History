@@ -1,0 +1,194 @@
+{
+  "archive_sha256": "153c9df87a66f6cff256601500ceab39931a538d5a48872626aaedb52b2fcbb7",
+  "canonical_record_count": 3125,
+  "bridge_record_count": 2999,
+  "excluded_leads": 59,
+  "excluded_sensitive": 67,
+  "core_records": 2816,
+  "technology_records": 183,
+  "categories": {
+    "campaigns": 3,
+    "conflict_phases": 3,
+    "conflicts": 57,
+    "connections": 116,
+    "cultural_practices": 144,
+    "discoveries": 4,
+    "discovery_cards": 31,
+    "engagements": 25,
+    "events": 690,
+    "figures": 246,
+    "geographical_knowledge": 59,
+    "organisations": 40,
+    "relationships": 195,
+    "social_impacts": 2,
+    "societies": 714,
+    "statistics": 34,
+    "technologies": 169,
+    "technology_dependencies": 14,
+    "technology_developments": 372,
+    "technology_transmission": 7,
+    "treaties": 10,
+    "visual_assets": 36,
+    "weapons": 28
+  },
+  "chunks": [
+    {
+      "file": "atlas-master-core-01.js",
+      "bytes": 55957,
+      "records": 91
+    },
+    {
+      "file": "atlas-master-core-02.js",
+      "bytes": 55544,
+      "records": 84
+    },
+    {
+      "file": "atlas-master-core-03.js",
+      "bytes": 55497,
+      "records": 93
+    },
+    {
+      "file": "atlas-master-core-04.js",
+      "bytes": 55661,
+      "records": 100
+    },
+    {
+      "file": "atlas-master-core-05.js",
+      "bytes": 55440,
+      "records": 90
+    },
+    {
+      "file": "atlas-master-core-06.js",
+      "bytes": 55631,
+      "records": 99
+    },
+    {
+      "file": "atlas-master-core-07.js",
+      "bytes": 55518,
+      "records": 111
+    },
+    {
+      "file": "atlas-master-core-08.js",
+      "bytes": 55830,
+      "records": 108
+    },
+    {
+      "file": "atlas-master-core-09.js",
+      "bytes": 55802,
+      "records": 104
+    },
+    {
+      "file": "atlas-master-core-10.js",
+      "bytes": 55696,
+      "records": 102
+    },
+    {
+      "file": "atlas-master-core-11.js",
+      "bytes": 55948,
+      "records": 99
+    },
+    {
+      "file": "atlas-master-core-12.js",
+      "bytes": 55771,
+      "records": 105
+    },
+    {
+      "file": "atlas-master-core-13.js",
+      "bytes": 55540,
+      "records": 119
+    },
+    {
+      "file": "atlas-master-core-14.js",
+      "bytes": 55668,
+      "records": 100
+    },
+    {
+      "file": "atlas-master-core-15.js",
+      "bytes": 55521,
+      "records": 96
+    },
+    {
+      "file": "atlas-master-core-16.js",
+      "bytes": 55467,
+      "records": 103
+    },
+    {
+      "file": "atlas-master-core-17.js",
+      "bytes": 55700,
+      "records": 91
+    },
+    {
+      "file": "atlas-master-core-18.js",
+      "bytes": 55880,
+      "records": 99
+    },
+    {
+      "file": "atlas-master-core-19.js",
+      "bytes": 55720,
+      "records": 122
+    },
+    {
+      "file": "atlas-master-core-20.js",
+      "bytes": 55746,
+      "records": 117
+    },
+    {
+      "file": "atlas-master-core-21.js",
+      "bytes": 55945,
+      "records": 95
+    },
+    {
+      "file": "atlas-master-core-22.js",
+      "bytes": 55592,
+      "records": 81
+    },
+    {
+      "file": "atlas-master-core-23.js",
+      "bytes": 55757,
+      "records": 81
+    },
+    {
+      "file": "atlas-master-core-24.js",
+      "bytes": 56007,
+      "records": 95
+    },
+    {
+      "file": "atlas-master-core-25.js",
+      "bytes": 55639,
+      "records": 83
+    },
+    {
+      "file": "atlas-master-core-26.js",
+      "bytes": 55771,
+      "records": 91
+    },
+    {
+      "file": "atlas-master-core-27.js",
+      "bytes": 55621,
+      "records": 93
+    },
+    {
+      "file": "atlas-master-core-28.js",
+      "bytes": 55886,
+      "records": 89
+    },
+    {
+      "file": "atlas-master-core-29.js",
+      "bytes": 43497,
+      "records": 75
+    },
+    {
+      "file": "atlas-master-tech-01.js",
+      "bytes": 55999,
+      "records": 110
+    },
+    {
+      "file": "atlas-master-tech-02.js",
+      "bytes": 39184,
+      "records": 73
+    }
+  ],
+  "date_policy": "Preserve original date text; use midpoint for broad periods; no year invented when dates are missing",
+  "location_policy": "No inferred historic borders or geocoordinates",
+  "source_policy": "Original source URLs and catalogue record IDs retained; unverified leads remain in Research Explorer only"
+}
