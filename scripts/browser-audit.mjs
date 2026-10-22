@@ -84,7 +84,9 @@ else{
   classical.on('pageerror',err=>reviewedErrors.push(err.message));
   try{
     await classical.goto(base+'discover.html?classical=1#classicalEvidence',{waitUntil:'load',timeout:30000});
-    await classical.waitForFunction(()=>document.querySelector('#classicalStatus')?.textContent.includes('72 distinct reviewed records'),{timeout:15000});
+    await classical.waitForFunction(()=>/distinct reviewed records|unavailable/i.test(document.querySelector('#classicalStatus')?.textContent||''),null,{timeout:12000});
+    const status=await classical.locator('#classicalStatus').textContent();
+    if(!status.includes('72 distinct reviewed records'))throw Error('Review loader status: '+status);
     const result=await classical.evaluate(()=>({
       open:document.querySelector('#classicalEvidence')?.open,
       count:document.querySelectorAll('#classicalCards .classical-card').length,
