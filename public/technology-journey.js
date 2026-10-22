@@ -3,6 +3,8 @@
  */
 (function(root){
   'use strict';
+  // Browser-only visual layer; research test sandboxes may have no DOM.
+  if(typeof document==='undefined'||typeof document.getElementById!=='function')return;
   const details=document.getElementById('technologyDetails'),tech=root.WorldHistoryTechnology;
   if(!details||!tech)return;
   // Only activate in a full browser DOM; VM unit tests use minimal fixtures.
