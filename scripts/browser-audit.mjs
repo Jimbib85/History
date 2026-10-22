@@ -79,6 +79,36 @@ else{
     else console.log('PASS',device.name,'selected Story 500 BCE/Athens → Map context navigation');
   }catch(err){fatal.push({device:device.name,page:'cross-view navigation',errors:[String(err)]});}
   finally{await journey.close();}
+  const classical=await context.newPage();
+  const reviewedErrors=[];
+  classical.on('pageerror',err=>reviewedErrors.push(err.message));
+  try{
+    await classical.goto(base+'discover.html?classical=1#classicalEvidence',{waitUntil:'load',timeout:30000});
+    await classical.waitForFunction(()=>/distinct reviewed records|unavailable/i.test(document.querySelector('#classicalStatus')?.textContent||''),null,{timeout:12000});
+    const status=await classical.locator('#classicalStatus').textContent();
+    if(!status.includes('72 distinct reviewed records'))throw Error('Review loader status: '+status);
+    const result=await classical.evaluate(()=>({
+      open:document.querySelector('#classicalEvidence')?.open,
+      count:document.querySelectorAll('#classicalCards .classical-card').length,
+      hasSources:document.querySelectorAll('#classicalCards .classical-source-links a').length,
+      loaded:performance.getEntriesByType('resource').some(r=>r.name.includes('classical-reviewed-data.js'))
+    }));
+    if(!result.open||result.count!==18||result.hasSources<18||!result.loaded)
+      fatal.push({device:device.name,page:'reviewed classical evidence',errors:['Source-checked lazy import did not render as expected: '+JSON.stringify(result)]});
+    if(reviewedErrors.length)fatal.push({device:device.name,page:'reviewed classical evidence',errors:reviewedErrors});
+    else console.log('PASS',device.name,'72 deduplicated classical review excerpts loaded lazily');
+  }catch(err){
+    const diag=await classical.evaluate(()=>({
+      status:document.querySelector('#classicalStatus')?.textContent,
+      sectionOpen:document.querySelector('#classicalEvidence')?.open,
+      hasModel:!!window.AtlasClassicalReviewed,
+      hasUI:!!window.AtlasClassicalReviewUI,
+      hasPayload:typeof window.ATLAS_CLASSICAL_REVIEW_DEFLATE_BASE64==='string',
+      resources:performance.getEntriesByType('resource').filter(r=>r.name.includes('classical-reviewed')).map(r=>r.name+' '+r.responseStatus)
+    })).catch(()=>null);
+    fatal.push({device:device.name,page:'reviewed classical evidence',errors:[String(err),JSON.stringify(diag),...reviewedErrors]});
+  }
+  finally{await classical.close();}
   await context.close();
  }
  await browser.close();
