@@ -8,6 +8,10 @@ The Technology tree filters its families, topics and evidence to the selected so
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
 
+## Version 0.27 — Living Map exploration
+
+The dark cinematic World Map now has animated, illustrated links between nearby contemporaries and a playable historical year control (pause, playback speed and date step). These are **visual proximity suggestions, not verified trade or diplomatic routes**. The network responds to selected society, year, region and classification filters, works with existing pan/zoom, and can be switched off. Original historical-map reproductions are not overlaid. Reduced-motion preferences disable autoplay. See [v0.27 notes](docs/living-map-v027.md).
+
 ## Version 0.26 — Cinematic World Map visual foundation
 
 The World Map now uses a **dark navy, aged-gold and ivory** look inspired by the uploaded visual concepts. This is a scoped, reusable CSS design system with a responsive map-first layout, high-contrast map markers, clearer time controls, and accessible touch/focus states. Historical research, chronological logic, geography, and controls remain unchanged; no decorative historical routes or territorial claims have been invented. See [v0.26 visual design notes](docs/cinematic-atlas-v026.md).

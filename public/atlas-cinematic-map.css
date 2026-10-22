@@ -141,3 +141,33 @@
  .atlas-cinematic .time-card{padding:12px 9px}
  .atlas-cinematic .timeline-card{padding:12px 8px}
 }
+
+/* Living World Map: imaginative but recognisably interpretive connections. */
+.atlas-cinematic .living-map-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+ background:linear-gradient(90deg,#071923,#132f3c);padding:8px 12px;border-bottom:1px solid var(--atlas-stroke)}
+.atlas-cinematic .living-map-toolbar button,.atlas-cinematic .living-playback button{
+ min-height:42px;border-radius:22px;border:1px solid var(--atlas-gold-dim);
+ color:var(--atlas-gold-bright);background:#162d3a;padding:8px 16px;font-weight:700}
+.atlas-cinematic .living-map-toolbar button.is-on,.atlas-cinematic .living-playback button[aria-pressed="true"]{
+ background:linear-gradient(110deg,#8b6028,#4a3e2c);box-shadow:0 0 16px #daa95555}
+.atlas-cinematic .living-map-toolbar span{font-size:11px;color:var(--atlas-muted)}
+.atlas-cinematic .living-map-toolbar .living-scope{margin-left:auto;letter-spacing:.6px;color:var(--atlas-gold)}
+.atlas-cinematic .living-map-caption{margin:0;padding:9px 15px;font-size:11px;line-height:1.6;
+ color:var(--atlas-muted);background:#0a1c29;border-bottom:1px solid var(--atlas-stroke)}
+.atlas-cinematic .living-playback{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:11px}
+.atlas-cinematic .living-playback label{display:flex;gap:6px;align-items:center;color:var(--atlas-muted);font-size:12px}
+.atlas-cinematic .living-playback select{background:#132d39;color:var(--atlas-ivory);
+ padding:7px 10px;border:1px solid var(--atlas-stroke);border-radius:15px;min-height:38px}
+.atlas-cinematic .living-arc{fill:none;stroke:#f3cd7f;stroke-width:2.5;stroke-dasharray:6 9;
+ opacity:.88;pointer-events:none;filter:drop-shadow(0 0 4px #d7a05a);
+ animation:atlas-arc-flow 9s linear infinite;animation-delay:var(--arc-delay,0s)}
+.atlas-cinematic .living-arc-1{stroke:#72d7d0}
+.atlas-cinematic .living-arc-2{stroke:#d9a3f1}
+.atlas-cinematic .living-arc-3{stroke:#ff9b74}
+@keyframes atlas-arc-flow{to{stroke-dashoffset:-180}}
+@media(max-width:640px){.atlas-cinematic .living-map-toolbar{gap:7px;padding:7px}
+ .atlas-cinematic .living-map-toolbar .living-scope{display:none}
+ .atlas-cinematic .living-playback{gap:6px}
+ .atlas-cinematic .living-playback button{width:100%}
+ .atlas-cinematic .living-map-toolbar span{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.atlas-cinematic .living-arc{animation:none}}
