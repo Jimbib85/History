@@ -1,0 +1,29 @@
+/* Illustrated technology journey — progressive enhancement inside the existing tree modal. */
+.atlas-tech-journey{color:#f1e2c7;box-shadow:0 12px 29px #0004,inset 0 1px #e8c3792a;border:1px solid #e7bc7559;border-radius:20px;padding:16px 15px 12px;margin:12px 0 17px;background:radial-gradient(circle at 19% 12%,#30535898,transparent 35%),url('assets/atlas-texture.svg'),linear-gradient(140deg,#0e2d3b,#071a27);background-blend-mode:normal,soft-light,normal}
+.atlas-tech-journey-head{display:flex;align-items:center;gap:15px}
+.atlas-tech-journey-art{flex:0 0 clamp(105px,24%,180px);aspect-ratio:4/3;position:relative;border-radius:14px;border:1px solid #e0b77272;background:radial-gradient(circle,#3a5056,#0b2431 70%);overflow:hidden;display:grid;place-items:center}
+.atlas-tech-journey-art svg{width:92%;height:92%;filter:drop-shadow(0 4px 15px #ebb96539)}
+.atlas-tech-journey-art>span{position:absolute;bottom:5px;left:5px;padding:2px 6px;background:#061b28dc;border-radius:4px;font:9px Arial,sans-serif;color:#efdbb5}
+.atlas-tech-journey-intro{min-width:0}
+.atlas-tech-journey-intro>span{font:700 9px Arial,sans-serif;letter-spacing:.18em;color:#e0bd83}
+.atlas-tech-journey-intro h3{margin:5px 0 5px;font:26px/1.12 Georgia,serif;color:#fce5bc}
+.atlas-tech-journey-intro p{margin:5px 0 9px;font-size:12px;line-height:1.55;color:#c4d0cd;max-width:58ch}
+.atlas-tech-journey-count{font:10px Arial,sans-serif;color:#a9d5c9}
+.atlas-tech-track-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:19px 4px 8px}
+.atlas-tech-track-heading strong{font:18px Georgia,serif;color:#f4d7a3}
+.atlas-tech-track-heading span{font:11px Arial,sans-serif;color:#acbfc1}
+.atlas-tech-journey-scroll{overflow-x:auto;scrollbar-width:thin;overscroll-behavior-x:contain;padding:16px 1px 12px}
+.atlas-tech-journey-track{display:grid;grid-auto-columns:minmax(145px,1fr);grid-auto-flow:column;gap:10px;position:relative}
+.atlas-tech-journey-track:before{content:"";position:absolute;left:13px;right:13px;top:12px;border-top:2px dashed #e5c07a86}
+.atlas-tech-stop{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:5px;min-height:152px;padding:22px 11px 10px;border-radius:10px;border:1px solid #b7986370;background:linear-gradient(#18333ba8,#081f2a);color:#f2e3ca;cursor:pointer;box-shadow:0 5px 13px #0004}
+.atlas-tech-stop:hover{border-color:#f2d394;background:linear-gradient(#244452,#0e2934)}
+.atlas-tech-stop[aria-pressed="true"]{border-color:#f5d28c;box-shadow:inset 3px 0 #e8bf75,0 0 15px #d6aa6435;background:linear-gradient(#2b3e40,#172832)}
+.atlas-tech-stop-pip{position:absolute;top:-13px;left:13px;width:13px;height:13px;border:3px solid #efc379;border-radius:50%;background:#122836;box-shadow:0 0 14px #efc37976}
+.atlas-tech-stop-date{font:700 11px Arial,sans-serif;color:#f3ca81}
+.atlas-tech-stop strong{font:16px/1.2 Georgia,serif;color:#f8e8ce}
+.atlas-tech-stop small{font:11px/1.4 Arial,sans-serif;color:#aed0c7}
+.atlas-tech-stop em{margin-top:auto;font:9px/1.4 Arial,sans-serif;color:#e0cda8;font-style:normal;letter-spacing:.03em}
+.atlas-tech-journey-note{margin:3px 0 0;color:#b6c9c4;font:11px/1.55 Arial,sans-serif}
+.atlas-tech-linked-object{border-color:#e5c17d9c;box-shadow:0 6px 20px #0004}
+@media(max-width:650px){.atlas-tech-journey{padding:11px}.atlas-tech-journey-art{flex-basis:95px}.atlas-tech-journey-intro h3{font-size:22px}.atlas-tech-journey-intro p{font-size:11px}.atlas-tech-journey-track{grid-auto-columns:minmax(160px,74%)}.atlas-tech-track-heading{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){.atlas-tech-journey-scroll{scroll-behavior:auto!important}}
