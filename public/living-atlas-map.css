@@ -26,7 +26,7 @@
 .atlas-cinematic .map-stage{aspect-ratio:1200/590;max-height:none!important;min-height:400px;overflow:hidden;background:radial-gradient(circle at 52% 42%,#2d5e67,#09283a 67%,#061b2b);position:relative}
 .atlas-cinematic .map-stage:before{content:"";pointer-events:none;position:absolute;inset:0;z-index:1;background:url('assets/atlas-texture.svg') repeat,linear-gradient(125deg,#ddaa5230,transparent 28%,transparent 74%,#d6a25425);opacity:.35;mix-blend-mode:soft-light}
 .atlas-cinematic .map-stage:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse at center,transparent 45%,#04121bb6 100%),linear-gradient(0deg,#0619268c 0%,transparent 25%,transparent 82%,#08222d33);box-shadow:inset 0 0 85px #03152199!important}
-.atlas-cinematic #worldMap{width:100%;height:100%;filter:saturate(1.18) contrast(1.07) brightness(.97) drop-shadow(0 3px 5px #0005)!important}
+ .atlas-cinematic #worldMap{width:100%;height:100%;filter:saturate(1.17) contrast(1.08) brightness(1.05) drop-shadow(0 3px 5px #0005)!important}
 .atlas-cinematic .map-stage[data-illustration="parchment"] #worldMap{filter:sepia(.73) saturate(.72) contrast(1.14)!important}
 .atlas-cinematic .map-stage[data-illustration="night"] #worldMap{filter:brightness(.69) saturate(1.47) contrast(1.18)!important}
 .atlas-cinematic .map-stage .map-marker.selected circle.ring{stroke:#ffe7ad;stroke-width:3.5;filter:drop-shadow(0 0 10px #f9c77b)}
