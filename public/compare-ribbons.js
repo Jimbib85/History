@@ -12,7 +12,8 @@
     ...(typeof ATLAS_MEDIEVAL_EVENTS==='undefined'?[]:ATLAS_MEDIEVAL_EVENTS),
     ...(typeof ATLAS_MODERN_EVENTS==='undefined'?[]:ATLAS_MODERN_EVENTS),
     ...(typeof ATLAS_CLASSICAL_EVENTS==='undefined'?[]:ATLAS_CLASSICAL_EVENTS),
-    ...(typeof ATLAS_EXPANSION_EVENTS==='undefined'?[]:ATLAS_EXPANSION_EVENTS)
+    ...(typeof ATLAS_EXPANSION_EVENTS==='undefined'?[]:ATLAS_EXPANSION_EVENTS),
+    ...(globalThis.ATLAS_MASTER_EVENTS||[])
   ];
   const researchIds=new Set(research.map(e=>e.id));
   const natives=EVENTS.filter(e=>societies.has(e.civ)&&Number.isFinite(e.year))
