@@ -19,3 +19,5 @@
 @media(max-width:960px){.cinematic-societies{grid-template-columns:1fr}.cinematic-society{min-height:0}.cinematic-flow-track{grid-template-columns:100px minmax(0,1fr)}.cinematic-flow-heading{align-items:start;flex-direction:column}}
 @media(max-width:420px){.cinematic-compare-deck{padding:10px}.cinematic-society{padding:14px}.cinematic-flow-track{grid-template-columns:75px minmax(0,1fr);gap:6px}.cinematic-flow-track>span{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.cinematic-compare-deck *, .cinematic-compare-deck *:before,.cinematic-compare-deck *:after{animation:none!important;transition:none!important}}
+
+.cinematic-compare-deck{background-image:radial-gradient(ellipse at 50% 0%,#244f5b88,transparent 68%),url('assets/atlas-texture.svg'),linear-gradient(#102936,#071721);background-size:auto,256px 256px,auto;background-blend-mode:normal,soft-light,normal}
