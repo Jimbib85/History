@@ -278,7 +278,7 @@
       const title=row.title||row.name||row.region_or_place||readable(row.practice_type||row.theme||row.category||row.relationship_type||row.knowledge_type)||'Research record';
       const id=prefix+(row.id||row.researchId||title+'|'+(row.year??row.start_year??''));
       if(seen.has(group+'|'+id))return;seen.add(group+'|'+id);
-      const sourceURLs=[row.source,row.sourceUrl,...(row.source_urls||[]),...(row.source_ids||row.sourceIds||[]).map(id=>sourceIndex[id]?.url)].filter(safeURL);
+      const sourceURLs=[row.source,row.sourceUrl,...(row.sourceUrls||[]),...(row.source_urls||[]),...(row.source_ids||row.sourceIds||[]).map(id=>sourceIndex[id]?.url)].filter(safeURL);
       const urls=[...new Set(sourceURLs)];
       urls.forEach(url=>addSource(url,title));
       const note=row.detail||row.summary||row.description||row.evidence_basis||row.content_scope||'';
@@ -295,7 +295,7 @@
       [typeof ATLAS_RESEARCH_EVENTS!=='undefined'?ATLAS_RESEARCH_EVENTS:[],typeof ATLAS_RESEARCH_SOURCES!=='undefined'?ATLAS_RESEARCH_SOURCES:{}],
       [typeof ATLAS_MEDIEVAL_EVENTS!=='undefined'?ATLAS_MEDIEVAL_EVENTS:[],typeof ATLAS_MEDIEVAL_SOURCES!=='undefined'?ATLAS_MEDIEVAL_SOURCES:{}],
       [typeof ATLAS_CLASSICAL_EVENTS!=='undefined'?ATLAS_CLASSICAL_EVENTS:[],typeof ATLAS_CLASSICAL_SOURCES!=='undefined'?ATLAS_CLASSICAL_SOURCES:{}],
-      [typeof ATLAS_MODERN_EVENTS!=='undefined'?ATLAS_MODERN_EVENTS:[],typeof ATLAS_MODERN_SOURCES!=='undefined'?ATLAS_MODERN_SOURCES:{}],[EVENTS,{}]
+      [typeof ATLAS_MODERN_EVENTS!=='undefined'?ATLAS_MODERN_EVENTS:[],typeof ATLAS_MODERN_SOURCES!=='undefined'?ATLAS_MODERN_SOURCES:{}],[typeof ATLAS_EXPANSION_EVENTS!=='undefined'?ATLAS_EXPANSION_EVENTS:[],{}],[EVENTS,{}]
     ];
     const eventKeys=new Set();
     for(const [events,sources] of eventSets)for(const e of events){

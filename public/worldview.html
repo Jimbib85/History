@@ -5,7 +5,7 @@
 <meta name="theme-color" content="#142b38">
 <meta name="description" content="Explore surviving historical maps, manuscript copies, sourced geographical knowledge and documented connections between past societies.">
 <title>Through Their Eyes | World History Atlas</title>
-<link rel="stylesheet" href="worldview.css?v=0.21.0">
+<link rel="stylesheet" href="worldview.css?v=0.22.0">
 <link rel="stylesheet" href="atlas-nav.css?v=0.19.0">
 </head>
 <body>
@@ -54,13 +54,14 @@
     <p class="reader-warning">A relationship record may describe direct contact, an indirect network or merely contemporaneity. The evidence label on each entry matters.</p>
     <div id="connectionsRecords" class="record-grid"></div><div id="connectionsMore" class="more-row"></div>
   </details>
- </div>
+<details class="evidence-section" id="uploadedMapCollection"><summary><span><b>04</b><strong>Supplied maps and visual references</strong><small>Historical objects, later reconstructions and hypothetical scenarios</small></span><em>14</em></summary><p class="reader-warning">Four historical reproductions are viewable. Fra Mauro and Kangnido are alternatives to existing map identities. Ten references have metadata only pending rights/provenance review. None supply verified political geometry.</p><div class="uploaded-map-filters"><label>Map type<select id="uploadedMapKind"><option value="all">All supplied references</option><option value="historical">Historical reproductions</option><option value="retrospective">Later atlas plates</option><option value="speculative">Hypothetical scenarios</option><option value="reconstruction">Modern reconstructions</option><option value="unverified">Unverified decorative maps</option><option value="software">Software screenshot</option></select></label><label>Find a map<input type="search" id="uploadedMapSearch" placeholder="Fra Mauro, Alexander, 1937..." maxlength="150"></label></div><p id="uploadedMapCount" role="status">Open to inspect the map collection.</p><div id="uploadedMapCards" class="uploaded-map-grid"></div></details> </div>
  <div class="footer-links"><a href="discover.html?classical=1#classicalEvidence">Classical review notes and archaeological sources ↗</a><a id="returnMap" href="index.html">← Return to the selected world's map</a><a id="returnCompare" href="compare.html">Compare these centuries ↗</a></div>
  <footer>Historical atlas research is selective. Missing evidence is not evidence that people lacked geographical knowledge. Original items and their reproduction permissions remain with their respective collections.</footer>
+<a class="expansion-entry-link" href="discover.html?research=1#researchExpansion">New early &amp; modern research &#8599;</a>
 </main>
-<script src="worldview-slim-data.js?v=0.21.0"></script>
+<dialog id="mapImageDialog" class="map-image-dialog" aria-labelledby="mapImageTitle"><header class="map-image-header"><h3 id="mapImageTitle">Map reproduction</h3><form method="dialog"><button aria-label="Close enlarged map">&#215;</button></form></header><div class="map-image-tools"><label for="mapImageZoom">Zoom</label><input id="mapImageZoom" type="range" min="100" max="300" step="25" value="100"><button id="mapImageFit" type="button">Fit width</button><span>Scroll to explore.</span></div><div class="map-image-viewport" tabindex="0" aria-label="Scrollable enlarged map"><img id="mapImageFull" alt=""></div><p id="mapImageCaption"></p></dialog><script src="worldview-slim-data.js?v=0.21.0"></script>
 <script src="worldview-model.js?v=0.17.0"></script>
-<script src="worldview.js?v=0.17.0"></script>
+<script src="map-intake-data.js?v=0.22.0"></script><script src="worldview.js?v=0.22.0"></script><script src="map-intake-view.js?v=0.22.0"></script>
 <script src="atlas-links.js?v=0.19.0"></script>
 </body>
 </html>

@@ -1,0 +1,66 @@
+{
+  "schema": "atlas-expansion-1",
+  "imported_at": "2026-10-22",
+  "packs": [
+    {
+      "id": "early",
+      "label": "8000 BCE-500 BCE",
+      "sourceZip": "World_History_Atlas_8000BCE-500BCE_Research_Pack(1).zip",
+      "sourceZipSha256": "5731ab36db7b3602f790feba7f84ebccf633b43d186b40c2de3856e4302a6844",
+      "canonicalSha256": "20668f4a49e722a96dc7552a620f3c4957d5353536aa66e16cee749cfeeadde1",
+      "archive": "early.json.gz",
+      "tableCounts": {
+        "claims": 106,
+        "connections": 8,
+        "coverage_matrix": 96,
+        "cultural_practices": 7,
+        "entity_reconciliation": 130,
+        "events": 46,
+        "figures": 6,
+        "geographical_knowledge": 0,
+        "historical_maps": 0,
+        "places": 3,
+        "relationships": 6,
+        "research_gaps": 14,
+        "societies": 43,
+        "source_claims": 117,
+        "source_register": 39,
+        "statistical_observations": 0,
+        "technologies": 14,
+        "technology_dependencies": 2,
+        "technology_developments": 27,
+        "technology_transmission": 1
+      }
+    },
+    {
+      "id": "modern",
+      "label": "1501-2026 CE",
+      "sourceZip": "World_History_Atlas_1501-2026_CE_Research_Pack(1).zip",
+      "sourceZipSha256": "053b499e3ba8819c65c3fda2114f61e27526d2872a629ac4209f183ed14217b9",
+      "canonicalSha256": "6a52b7834684a1fac193b0bc96d0e30f3e7db0849cd437adc70571ed7d4bc632",
+      "archive": "modern.json.gz",
+      "tableCounts": {
+        "claims": 170,
+        "connections": 10,
+        "coverage_matrix": 112,
+        "cultural_practices": 9,
+        "entity_reconciliation": 201,
+        "events": 77,
+        "figures": 14,
+        "geographical_knowledge": 1,
+        "historical_maps": 1,
+        "places": 1,
+        "relationships": 11,
+        "research_gaps": 15,
+        "societies": 63,
+        "source_claims": 190,
+        "source_register": 75,
+        "statistical_observations": 6,
+        "technologies": 27,
+        "technology_dependencies": 4,
+        "technology_developments": 34,
+        "technology_transmission": 2
+      }
+    }
+  ]
+}

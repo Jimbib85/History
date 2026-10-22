@@ -36,7 +36,7 @@ for(const match of html.matchAll(/<script src="([^"?]+)(?:\?[^"]*)?"><\/script>/
  vm.runInContext(read('./public/'+match[1]),context,{filename:match[1]});
 }
 const compare=context.HistoryCompare,chart=nodes.get('comparisonChart');
-const rows=()=>[...chart.innerHTML.matchAll(/class="lane-name" data-civ="([^"]+)"/g)].map(x=>x[1]);
+const rows=()=>[...chart.innerHTML.matchAll(/class="lane-name[^"]*" data-civ="([^"]+)"/g)].map(x=>x[1]);
 assert.ok(compare,'Compare API available');
 assert.deepEqual([...compare.state.pinned],['abbasid','tang']);
 assert.equal(compare.state.focusPinned,true);

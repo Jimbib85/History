@@ -1,0 +1,744 @@
+{
+  "pack_id": "wha_history_1501_2026",
+  "generated_on": "2026-10-22",
+  "files": [
+    {
+      "path": "DATA_DICTIONARY.md",
+      "media_type": "text/markdown",
+      "byte_size": 4344,
+      "sha256": "0e48d0e8a9bb526082d759ef8228423cf9d19198b8e4a417531667b1718fdfbe",
+      "record_count": null,
+      "validation_status": "FILE_PRESENT"
+    },
+    {
+      "path": "DEPENDENCIES.md",
+      "media_type": "text/markdown",
+      "byte_size": 624,
+      "sha256": "7c94eada5acb3132f4c88f83aab0b2b866a8b8d418ef124c7caeb2437102242b",
+      "record_count": null,
+      "validation_status": "FILE_PRESENT"
+    },
+    {
+      "path": "IMPORT_NOTES.md",
+      "media_type": "text/markdown",
+      "byte_size": 5145,
+      "sha256": "a1997f3bf801058ce2b6f62ca711c3d841e75f23b632d2c4536a6073c0643cfb",
+      "record_count": null,
+      "validation_status": "FILE_PRESENT"
+    },
+    {
+      "path": "README.md",
+      "media_type": "text/markdown",
+      "byte_size": 1387,
+      "sha256": "6be542cc0f23d4b58d4260d1fae7ff5c78ecceb1a43c59dbbf2f75413ecc3db7",
+      "record_count": null,
+      "validation_status": "FILE_PRESENT"
+    },
+    {
+      "path": "RESEARCH_REPORT.md",
+      "media_type": "text/markdown",
+      "byte_size": 25273,
+      "sha256": "e26b2f07166d1b366c7502742c3208c590f657625b499274b7d697617b0c034d",
+      "record_count": null,
+      "validation_status": "FILE_PRESENT"
+    },
+    {
+      "path": "SELECTION_LEDGER.md",
+      "media_type": "text/markdown",
+      "byte_size": 19217,
+      "sha256": "85c5908eef7584e029e3f1a7e043b9b5def701308c4821f6edf6aed266bbfefd",
+      "record_count": null,
+      "validation_status": "FILE_PRESENT"
+    },
+    {
+      "path": "csv/claims.csv",
+      "media_type": "text/csv",
+      "byte_size": 91341,
+      "sha256": "9bd991eb044c775c0e2332058bde4947a843e27fd81e024049a5a6234266c262",
+      "record_count": 170,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/connections.csv",
+      "media_type": "text/csv",
+      "byte_size": 10462,
+      "sha256": "ced43877eadf925e96279f13dc1d896069d0e152fb5c48de4f8963bc6197b4fb",
+      "record_count": 10,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/coverage_matrix.csv",
+      "media_type": "text/csv",
+      "byte_size": 36075,
+      "sha256": "829293e9b5d90982161dee56732a5dc16f3239f8e2699a982cf40557eb068047",
+      "record_count": 112,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/cultural_practices.csv",
+      "media_type": "text/csv",
+      "byte_size": 5313,
+      "sha256": "94cbe0ea0af133f9347a6c980c66ef710a61121c0b4cdd940da7f99aa512d8f1",
+      "record_count": 9,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/entity_reconciliation.csv",
+      "media_type": "text/csv",
+      "byte_size": 58352,
+      "sha256": "3e40fe4a8649cacd1d2490396ee01d16b4f5b709d1569ab169a6b1e4f2a2e672",
+      "record_count": 201,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/events.csv",
+      "media_type": "text/csv",
+      "byte_size": 77051,
+      "sha256": "85d64bcc795597a3881e4b447c66a73c09afb83116119e8210ce208247802773",
+      "record_count": 77,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/figures.csv",
+      "media_type": "text/csv",
+      "byte_size": 10891,
+      "sha256": "ec3fce8383605142b77e6fa207372b07a17d69c6f54734c94e180f3dd513d927",
+      "record_count": 14,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/geographical_knowledge.csv",
+      "media_type": "text/csv",
+      "byte_size": 888,
+      "sha256": "87ba1098d24ee4504c91d9f97dfb354d7573f7d4d293ce9c4cc7cc85471cf532",
+      "record_count": 1,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/historical_maps.csv",
+      "media_type": "text/csv",
+      "byte_size": 1300,
+      "sha256": "3561191587cbf9e858f8c7e8a48254c193d6c7ce6d9bbaea3b5c88f71704fce0",
+      "record_count": 1,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/places.csv",
+      "media_type": "text/csv",
+      "byte_size": 1243,
+      "sha256": "1a5120fa9207af81aade4cd8b1c7d24a6ee235be062a2bc774411175ae34d896",
+      "record_count": 1,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/relationships.csv",
+      "media_type": "text/csv",
+      "byte_size": 7982,
+      "sha256": "36811ba7ba8c52e8b1b02d365c3e32fa4bcefa2de77cde560d3fcfdc1063c82d",
+      "record_count": 11,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/research_gaps.csv",
+      "media_type": "text/csv",
+      "byte_size": 5419,
+      "sha256": "d58dbe5ad3e9f95b7e4a6f3e825c04f40a877dfd7efec3831a5374a885d50840",
+      "record_count": 15,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/societies.csv",
+      "media_type": "text/csv",
+      "byte_size": 42420,
+      "sha256": "10b1c8ba4e07bcec7303f78b0ec1a5274b77a2298728ce0a55291810a77630e8",
+      "record_count": 63,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/source_claims.csv",
+      "media_type": "text/csv",
+      "byte_size": 104107,
+      "sha256": "bd77419e2758ebb47568d6846d5409f4e1c706265697ef126a873f4a7441f084",
+      "record_count": 190,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/source_register.csv",
+      "media_type": "text/csv",
+      "byte_size": 57703,
+      "sha256": "5ed8f0058333681b7cbd70c8cd754f1b3e3d9f629ac4be74da975dc254d90f86",
+      "record_count": 75,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/statistical_observations.csv",
+      "media_type": "text/csv",
+      "byte_size": 4713,
+      "sha256": "998b8857fe528497ab2f97c47bd8a2c6a1f1cc3712e5a944e3429ecd86abba28",
+      "record_count": 6,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/technologies.csv",
+      "media_type": "text/csv",
+      "byte_size": 13198,
+      "sha256": "94ab234eb3861997800d61e60d7976a6df9afb9205fc91fb48bbc81f42360dbb",
+      "record_count": 27,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/technology_dependencies.csv",
+      "media_type": "text/csv",
+      "byte_size": 3000,
+      "sha256": "f93452140197f026bd6420b6ae1bf4792d553bd463e1941f655960207251c13b",
+      "record_count": 4,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/technology_developments.csv",
+      "media_type": "text/csv",
+      "byte_size": 24604,
+      "sha256": "e2b16845026e6474f653477a3330598e9b17906523a24d24467f2c21e27ea513",
+      "record_count": 34,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "csv/technology_transmission.csv",
+      "media_type": "text/csv",
+      "byte_size": 1777,
+      "sha256": "e26fa133cbe1a0740599ea3fa95f36a45ff022d37abaff0d3cea0cf82abeb01f",
+      "record_count": 2,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/claims.json",
+      "media_type": "application/json",
+      "byte_size": 148417,
+      "sha256": "6a634ca043ef1997ea87d9cdb359837aec94199ad2522bf2a7fec0e9b9105648",
+      "record_count": 170,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/claims.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 127109,
+      "sha256": "550e669122df56c1ec0c5199fad96c3620d751538a772924c45307f93ad84a5e",
+      "record_count": 170,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/connections.json",
+      "media_type": "application/json",
+      "byte_size": 14452,
+      "sha256": "eb6faa4d698fb2db078f1b18f6494ac94dd1dfeb2dcd3cf57d90159c719dbd43",
+      "record_count": 10,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/connections.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 12310,
+      "sha256": "f65946d772784532e466dbc34e18f9cf02e7d3d9736ffb69aa94b2908af6af4a",
+      "record_count": 10,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/coverage_matrix.json",
+      "media_type": "application/json",
+      "byte_size": 61608,
+      "sha256": "6ccbbf4e42c8c3e125501261cd8d0b217cfbae3a6e74d8a1da4b7ff0e96f0477",
+      "record_count": 112,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/coverage_matrix.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 51939,
+      "sha256": "5bf6f90be155cebd99e63bd2ec4a1258e0515d30975d2009f4b04e1b91786103",
+      "record_count": 112,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/cultural_practices.json",
+      "media_type": "application/json",
+      "byte_size": 8020,
+      "sha256": "eb4fcfde5bf4c3a2d21a1d80be14bea133b00796824928be1c1be179f870107d",
+      "record_count": 9,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/cultural_practices.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 6557,
+      "sha256": "a967aa3079befc16cff9b0c7ca047c173dc3c81afc62245d59f4d5bab761d05f",
+      "record_count": 9,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/entity_reconciliation.json",
+      "media_type": "application/json",
+      "byte_size": 101741,
+      "sha256": "de909ede286d88532784e25be855dfad39f8400d7747233bfb75a5dd30e7fd7a",
+      "record_count": 201,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/entity_reconciliation.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 89678,
+      "sha256": "189c99ba380893d3d65e4f161b3b2ffb21729e7d0d85fead77c5b67d8b624393",
+      "record_count": 201,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/events.json",
+      "media_type": "application/json",
+      "byte_size": 140219,
+      "sha256": "a55083b0b62f1711a1a9de65832610dd7d062e58fc1a29f685b27b24ec7af482",
+      "record_count": 77,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/events.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 118887,
+      "sha256": "740cd1e42463b36c8fe343b38f01b29b7766f6f500d0575bb0b8385188bfb2ab",
+      "record_count": 77,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/figures.json",
+      "media_type": "application/json",
+      "byte_size": 16416,
+      "sha256": "5c48d7d89d892e10b9e906d2f2d91a9ca131ec9ed1e53228b442acd19bf6b523",
+      "record_count": 14,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/figures.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 13830,
+      "sha256": "77ff8ebbb75ed2552e393c63c5c22866730f51dee267673e5e6a91610868649a",
+      "record_count": 14,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/geographical_knowledge.json",
+      "media_type": "application/json",
+      "byte_size": 1096,
+      "sha256": "f9bc67418934c458f1cea721219d1120ea77996336b9b828be5ebf10ad5f64d8",
+      "record_count": 1,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/geographical_knowledge.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 912,
+      "sha256": "930c1242d319051f2b40f149267a39b92ef1ea12957715510bd762ebdc2f44c4",
+      "record_count": 1,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/historical_maps.json",
+      "media_type": "application/json",
+      "byte_size": 1554,
+      "sha256": "7b0950591d2f6bc0c583d261aef11b4967463b2adf8e681e3b18b5c7e9e517a0",
+      "record_count": 1,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/historical_maps.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 1346,
+      "sha256": "854527eff8fad16f99dd90abb39e9773292e701b543fba8d70267a010cd29ede",
+      "record_count": 1,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/places.json",
+      "media_type": "application/json",
+      "byte_size": 1512,
+      "sha256": "18f60b85e56410e77ab2ebaf8794bf4c458f6a72e126b839e642ac2d72fa4a46",
+      "record_count": 1,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/places.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 1293,
+      "sha256": "9a7e68bc5e07f5c709384d89d9b47bc1fcfacd4c671a91689671a822104bb7c9",
+      "record_count": 1,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/quality_report.json",
+      "media_type": "application/json",
+      "byte_size": 4007,
+      "sha256": "8762c2aa63010249482ed3f284d8fcac108d62af489f9d647a43d88aefd21243",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/relationships.json",
+      "media_type": "application/json",
+      "byte_size": 13366,
+      "sha256": "833c27d022571d2e1ebc434dcc1dfc5a22ecc9b2901542db588e91de78361670",
+      "record_count": 11,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/relationships.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 11028,
+      "sha256": "b5676c90ed95298ed2366231bf1102a6ae1bfbc1c9c894a5b607d4e06a9879ff",
+      "record_count": 11,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/research_gaps.json",
+      "media_type": "application/json",
+      "byte_size": 7654,
+      "sha256": "2435170cc65b1d87ca08507faf371a9c9b4f6fd346b09269e00443de2e21b16a",
+      "record_count": 15,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/research_gaps.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 6841,
+      "sha256": "e5365096e4d5b4ca9acf4e7d188f19fedb428b735c7c82e13ce97b0ef0094def",
+      "record_count": 15,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/societies.json",
+      "media_type": "application/json",
+      "byte_size": 63929,
+      "sha256": "00b476d3bff434579302a6592bc8b6c5aead84826cb6a0e74e51d8b9d86b7a91",
+      "record_count": 63,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/societies.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 53412,
+      "sha256": "3c778cef04813307e02437291f998f5529a7c25170a9f095eb9d755f2618c621",
+      "record_count": 63,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/source_claims.json",
+      "media_type": "application/json",
+      "byte_size": 146174,
+      "sha256": "0e54bdafeb55747e3f701cfe638d390bae3c2eab76427d05f234407245d471e9",
+      "record_count": 190,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/source_claims.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 133631,
+      "sha256": "d789cf97d9dd6ccb281a79fc60fbf13a9d62cbac7662a6e6f1963b37f7e979f7",
+      "record_count": 190,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/source_register.json",
+      "media_type": "application/json",
+      "byte_size": 95299,
+      "sha256": "eac07d9b542aa8d668a37e0a852a3ed69c460f52cf6570844592f4064458feab",
+      "record_count": 75,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/source_register.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 83691,
+      "sha256": "f36325ce4a50bb2d59f17be767500db544a3d85e2c0e139eeecddaa39df85372",
+      "record_count": 75,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/statistical_observations.json",
+      "media_type": "application/json",
+      "byte_size": 7408,
+      "sha256": "ee34790fbecd7d24db75ca463e0b4c960f88f5e9565de38819556f309ceb25ee",
+      "record_count": 6,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/statistical_observations.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 6124,
+      "sha256": "8a899ee22a723f700f426ffc724adb5e4ff6a4881fe2c38c7c71de35b279d94a",
+      "record_count": 6,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/technologies.json",
+      "media_type": "application/json",
+      "byte_size": 20592,
+      "sha256": "bfa84c5003dc9a7567424ede47c6d9ccdfab5260ac00dc2cafb9d2e36509d6db",
+      "record_count": 27,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/technologies.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 17294,
+      "sha256": "80c13152cebeaa3be4bf4291fa28cee9649469a5749219c7ad1561cfbc62d1a8",
+      "record_count": 27,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/technology_dependencies.json",
+      "media_type": "application/json",
+      "byte_size": 4361,
+      "sha256": "5b7229531fa9ffec416a4d969eb835e7d351d63407b18637fef8450b18814f57",
+      "record_count": 4,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/technology_dependencies.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 3710,
+      "sha256": "7c63e527eec096501a8978b7ce9ec9aad291c64ca5b89fa5e903f52313e1dc62",
+      "record_count": 4,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/technology_developments.json",
+      "media_type": "application/json",
+      "byte_size": 44516,
+      "sha256": "f88fe34cf3a7dd6cabba5e5bf21df55ebb70f9e89eddf292030612de671108e5",
+      "record_count": 34,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/technology_developments.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 36700,
+      "sha256": "7318005c930fab112048b8e82d8970810f7488899def36bc2633690f172e6159",
+      "record_count": 34,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/technology_transmission.json",
+      "media_type": "application/json",
+      "byte_size": 2590,
+      "sha256": "26937ad37823ca268d84c8f5f74897a1700ff0b75efd3ae8dfd2494a0093038c",
+      "record_count": 2,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "data/technology_transmission.jsonl",
+      "media_type": "application/octet-stream",
+      "byte_size": 2160,
+      "sha256": "2920daacedb7a4c887b5b546f91cf9e1730337b093ba02cdcb291f47e66a786f",
+      "record_count": 2,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "geo/historical_geometries.geojson",
+      "media_type": "application/geo+json",
+      "byte_size": 1123,
+      "sha256": "435730d5cf930151891cb016fe7dbae4eadfacb12ce45f26361401641ed5812c",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "review/CHECKED_CLAIMS.md",
+      "media_type": "text/markdown",
+      "byte_size": 47958,
+      "sha256": "0e568bebf62fd55b9faed56a2ab894e0fcd0640dfb7066b27e0e64b95c2e057c",
+      "record_count": null,
+      "validation_status": "FILE_PRESENT"
+    },
+    {
+      "path": "review/staging_merge_test.json",
+      "media_type": "application/json",
+      "byte_size": 145,
+      "sha256": "92a078b307d1deeafc9e711ff07610ec2d5256f3a91c63d3abc0b33a8d94dab7",
+      "record_count": null,
+      "validation_status": "FILE_PRESENT"
+    },
+    {
+      "path": "schemas/claims.schema.json",
+      "media_type": "application/json",
+      "byte_size": 1627,
+      "sha256": "ba5f469eacc48c0b54fe54d25565bfec917b20f118f0c371c73cc9e619493557",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/connections.schema.json",
+      "media_type": "application/json",
+      "byte_size": 1968,
+      "sha256": "fc7df27359883179d5385dc7ff8f0f692cbd88bfbca3e3f2d4d72f6aff55d148",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/coverage_matrix.schema.json",
+      "media_type": "application/json",
+      "byte_size": 1315,
+      "sha256": "7e8bfa330fd1d0ada6c02fc10bf390b818d897cd6ffddc663ccadb807ad6ba98",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/cultural_practices.schema.json",
+      "media_type": "application/json",
+      "byte_size": 1725,
+      "sha256": "1de4cdb24a50b226bd84c1f969054f269918aa4c8e55911d9ce7d76c9a695f74",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/entity_reconciliation.schema.json",
+      "media_type": "application/json",
+      "byte_size": 1069,
+      "sha256": "3b0ee8abfd12aae0f29f34667cf875cd1e88f11dad355af5f0c4bdcc92b57682",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/events.schema.json",
+      "media_type": "application/json",
+      "byte_size": 3471,
+      "sha256": "ce5a3c3386657c967f718afc881e4014e1ba050b6ae0ca871fe3f388561f94cb",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/figures.schema.json",
+      "media_type": "application/json",
+      "byte_size": 2029,
+      "sha256": "8283528bc30c49b670a52b7b3b1b5b1d23a2ad4a3757504802ec32732a928a4a",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/geographical_knowledge.schema.json",
+      "media_type": "application/json",
+      "byte_size": 1977,
+      "sha256": "8c0d610c751e6861dead83c658dcd9cbc9653781a5fe4ea5a73eec9e6084c7f0",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/historical_maps.schema.json",
+      "media_type": "application/json",
+      "byte_size": 2441,
+      "sha256": "596dfbac6266dcf982e899203ef27a17e29f36fb5ba017bdee7fb14fbda442c5",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/places.schema.json",
+      "media_type": "application/json",
+      "byte_size": 2548,
+      "sha256": "c77a6f28857ba2aababb3d897769658f584e125e65c2cd2fdbc1530aa5d92975",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/relationships.schema.json",
+      "media_type": "application/json",
+      "byte_size": 2333,
+      "sha256": "4e6ed7b1e78e1c5ae700a56aa1e943fa36a48a3d2811fcc1d64869ad6df0a56d",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/research_gaps.schema.json",
+      "media_type": "application/json",
+      "byte_size": 861,
+      "sha256": "b5337defcc4e1b824e2eed72c729ec1079c53f0bab64105fe11f6d1571cf8c05",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/societies.schema.json",
+      "media_type": "application/json",
+      "byte_size": 1519,
+      "sha256": "7f359365b3eb3a9ddc99ff8a373f2615136dc2636fbd570db8f42c5f5d07d5f3",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/source_claims.schema.json",
+      "media_type": "application/json",
+      "byte_size": 1045,
+      "sha256": "ab89531792f8129a31b3b82234a13dfbbffb835b2cc5e90b49c50b183c6db495",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/source_register.schema.json",
+      "media_type": "application/json",
+      "byte_size": 2068,
+      "sha256": "e1f92da284a375437906c6eae877795b51ec09ad66c6597d6db525a3c976c660",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/statistical_observations.schema.json",
+      "media_type": "application/json",
+      "byte_size": 2344,
+      "sha256": "cde0d7114c2b77b711a3282fc61c2d56d10094cc5d3f2714f1bd1a97adef7f21",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/technologies.schema.json",
+      "media_type": "application/json",
+      "byte_size": 1401,
+      "sha256": "5203ed595c8fae061151f7007ca54a52717b6b0f3200e571d26f092cb865868e",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/technology_dependencies.schema.json",
+      "media_type": "application/json",
+      "byte_size": 1971,
+      "sha256": "be71668d5fa88109835c13676609c69d527ff3424f05fad4a73c3418f297ae92",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/technology_developments.schema.json",
+      "media_type": "application/json",
+      "byte_size": 2725,
+      "sha256": "1c309678cf8a78f24f611ef8b74d8739c5150accdb7aceb1294a9e374f3adc02",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "schemas/technology_transmission.schema.json",
+      "media_type": "application/json",
+      "byte_size": 2463,
+      "sha256": "7e9b1cb92f5305febc17ddac1ecf278f88d8dc714afa1c312281e466e0308446",
+      "record_count": null,
+      "validation_status": "STRUCTURAL_PASS"
+    },
+    {
+      "path": "scripts/staging_merge.py",
+      "media_type": "text/x-python",
+      "byte_size": 1766,
+      "sha256": "49d350fbe0dd97cea541b1a6c8dc47b90aaf0cb5205f5dcf7b106e4e9d902fc7",
+      "record_count": null,
+      "validation_status": "FILE_PRESENT"
+    },
+    {
+      "path": "scripts/validate_release.py",
+      "media_type": "text/x-python",
+      "byte_size": 6510,
+      "sha256": "b969a35f39d17f983db77f3f679f0169e009be2e97a600bbe4b4492cbfa8156e",
+      "record_count": null,
+      "validation_status": "FILE_PRESENT"
+    }
+  ],
+  "manifest_self_hash": "EXCLUDED_BY_DESIGN",
+  "record_count_note": "Different serialisations repeat the same logical records; do not sum file counts."
+}

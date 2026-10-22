@@ -5,7 +5,7 @@
   const all = CIVILISATIONS.filter(c => c.kind !== 'overview' && Number.isFinite(c.start) && Number.isFinite(c.end));
   const entities = new Map(all.map(c => [c.id, c]));
   const nativeEvents = EVENTS.filter(e => entities.has(e.civ) && Number.isFinite(e.year));
-  const researchEvents = [...(typeof ATLAS_RESEARCH_EVENTS !== 'undefined' ? ATLAS_RESEARCH_EVENTS : []), ...(typeof ATLAS_MEDIEVAL_EVENTS !== 'undefined' ? ATLAS_MEDIEVAL_EVENTS : []), ...(typeof ATLAS_MODERN_EVENTS !== 'undefined' ? ATLAS_MODERN_EVENTS : []), ...(typeof ATLAS_CLASSICAL_EVENTS !== 'undefined' ? ATLAS_CLASSICAL_EVENTS : [])];
+  const researchEvents = [...(typeof ATLAS_RESEARCH_EVENTS !== 'undefined' ? ATLAS_RESEARCH_EVENTS : []), ...(typeof ATLAS_MEDIEVAL_EVENTS !== 'undefined' ? ATLAS_MEDIEVAL_EVENTS : []), ...(typeof ATLAS_MODERN_EVENTS !== 'undefined' ? ATLAS_MODERN_EVENTS : []), ...(typeof ATLAS_CLASSICAL_EVENTS !== 'undefined' ? ATLAS_CLASSICAL_EVENTS : []),...(typeof ATLAS_EXPANSION_EVENTS !== 'undefined'?ATLAS_EXPANSION_EVENTS:[])];
   const researchIds = new Set(researchEvents.map(e => e.id));
   const events = [
     ...nativeEvents.filter(e => !e.researchId || !researchIds.has(e.researchId)).map((e, i) => ({...e, key:'native-' + i})),
@@ -17,6 +17,7 @@
     '1000-1499': typeof ATLAS_MEDIEVAL_SOURCES !== 'undefined' ? ATLAS_MEDIEVAL_SOURCES : {},
     '1500-2026-structured': typeof ATLAS_MODERN_SOURCES !== 'undefined' ? ATLAS_MODERN_SOURCES : {},
     '1500-2026': typeof ATLAS_MODERN_SOURCES !== 'undefined' ? ATLAS_MODERN_SOURCES : {},
+    ...(typeof ATLAS_EXPANSION_SOURCES !== 'undefined'?ATLAS_EXPANSION_SOURCES:{}),
     '500BCE-500CE': typeof ATLAS_CLASSICAL_SOURCES !== 'undefined' ? ATLAS_CLASSICAL_SOURCES : {}
   };
   const params = new URLSearchParams(location.search);
@@ -33,7 +34,8 @@
     return n;
   };
   const yearText = y => y <= 0 ? (1 - y).toLocaleString('en-AU') + ' BCE' : y.toLocaleString('en-AU') + ' CE';
-  const regions = [...new Set(all.map(c => c.region))].sort();
+  const regionOrder=['North Africa','Sub-Saharan Africa','Europe','West Asia','South Asia','East Asia','Southeast Asia','Americas','Oceania'];
+  const regions=[...new Set(all.map(c=>c.region))].sort((a,b)=>(regionOrder.includes(a)?regionOrder.indexOf(a):99)-(regionOrder.includes(b)?regionOrder.indexOf(b):99)||a.localeCompare(b));
   const regionColours = {'Europe':'#497ead','West Asia':'#9c668f','North Africa':'#b98a3c','Sub-Saharan Africa':'#8a9148','East Asia':'#b86f63','South Asia':'#a86b56','Southeast Asia':'#3b9293','Americas':'#5a9872','Oceania':'#6977a7'};
   const colour = c => regionColours[c?.region] || '#678595';
   const spans = [500, 1000, 2000, 4000, 12026];
@@ -57,7 +59,7 @@
     region:regions.includes(params.get('region')) ? params.get('region') : 'all',
     type:['all','empire','society'].includes(params.get('type')) ? params.get('type') : 'all',
     span:spans.includes(Number(params.get('span'))) ? Number(params.get('span')) : 1000,
-    limit:[12,24,60,150,9999].includes(Number(params.get('limit'))) ? Number(params.get('limit')) : 24,
+    limit:[12,24,60,150,9999].includes(Number(params.get('limit'))) ? Number(params.get('limit')) : 12,
     search:(params.get('search') || '').trim().toLowerCase(), pinned:initialPins, focusPinned:params.get('focus')==='1'&&initialPins.length>=2,
     event:eventByKey.has(params.get('event')) ? params.get('event') : null
   };
@@ -106,12 +108,18 @@
     }
     const take = state.focusPinned&&state.pinned.length>=2 ? group.length : Math.min(group.length, state.limit + ui.extraRows);
     const required = new Set([state.selected, ...state.pinned]);
-    const ids = new Set(group.slice(0, take).map(c => c.id));
+    const rowKey=JSON.stringify([state.year,state.span,state.region,state.type,state.search,take,state.focusPinned,state.pinned]);
+    const overview=[];
+    for(const region of regionOrder){const local=group.filter(c=>c.region===region).sort((a,b)=>Number(!b.researchBatch)-Number(!a.researchBatch)||Number(active(b,state.year))-Number(active(a,state.year))||b.end-b.start-(a.end-a.start));if(local.length)overview.push(local[0]);}
+    const priority=[...overview,...group.filter(c=>!overview.includes(c)).sort((a,b)=>Number(!b.researchBatch)-Number(!a.researchBatch))];
+    const ids=new Set(ui.rowKey===rowKey?(ui.rowIDs||[]).filter(id=>group.some(c=>c.id===id)):priority.slice(0,take).map(c=>c.id));
+    for(const c of group){if(ids.size>=take)break;ids.add(c.id);}
     for (const c of group) if (required.has(c.id) && !ids.has(c.id)) {
       const replace = [...ids].reverse().find(id => !required.has(id));
       if (replace) ids.delete(replace);
       ids.add(c.id);
     }
+    ui.rowKey=rowKey;ui.rowIDs=[...ids];
     return {rows:group.filter(c => ids.has(c.id)), total:group.length};
   }
   function qs(extra = {}) {
@@ -133,23 +141,21 @@
   function marker(r) {
     return state.year >= r.start && state.year <= r.end ? '<span class="current-line" style="left:' + pct(state.year,r).toFixed(3) + '%" aria-hidden="true"></span>' : '';
   }
-  function axis(r) {
-    const ticks = Array.from({length:6}, (_,i) => Math.round(r.start + (r.end-r.start)*i/5));
-    return '<div class="axis"><div class="axis-label">' + safe(yearText(r.start)) + ' → ' + safe(yearText(r.end)) + '</div><div class="axis-track">' + ticks.map((y,i) => '<span class="axis-tick" style="left:' + i/5*100 + '%">' + safe(yearText(y)) + '</span>').join('') + marker(r) + '</div></div>';
+  function regionIcon(region){
+    const paths={Europe:'M3 9 14 3 25 9ZM5 11v11M11 11v11M17 11v11M23 11v11M2 24h24','North Africa':'M4 22 13 6 22 22ZM13 6v16M5 22h18','Sub-Saharan Africa':'M6 8 13 3 20 8 18 17 13 25 8 17ZM6 8h14M8 14h10','West Asia':'M21 4a11 11 0 1 0 3 17A10 10 0 0 1 21 4Z','South Asia':'M4 22h20M7 21V14l7-9 7 9v7M5 14h18M10 13h8M12 21v-6h4v6','East Asia':'M3 22h22M6 20v-4h16v4M3 15h22L21 11H7ZM7 10h14l-4-4h-6ZM14 3v3','Southeast Asia':'M3 24h22M5 24V14h6v10M17 24V14h6v10M10 24V9h8v15M4 14l4-6 4 6M16 14l4-6 4 6M10 9l4-6 4 6',Americas:'M3 24h22M5 20h18M8 16h12M10 12h8M12 8h4M5 20v4M8 16v4M10 12v4M12 8v4M16 8v4M18 12v4M20 16v4M23 20v4',Oceania:'M3 21c3-3 5 3 8 0s5 3 8 0 5 2 7 0M4 17h20L14 3v14M13 5 6 15h7'};
+    return '<svg viewBox="0 0 28 28" aria-hidden="true"><path d="'+(paths[region]||paths.Europe)+'" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
   }
-  function bar(c,r) {
-    const left = pct(Math.max(c.start,r.start),r), right = pct(Math.min(c.end,r.end),r);
-    // Display a time-distributed sample of explicitly linked dated records; do not imply
-    // that concurrent records or nearby geographic points prove cultural transmission.
-    const linked = events.filter(e => Number.isFinite(e.year) && e.year >= r.start && e.year <= r.end && e.year >= c.start && e.year <= c.end &&
-      (e.civ === c.id || (e.societyIds || e.allSocietyIds || []).includes(c.id))).sort((a,b)=>a.year-b.year||a.key.localeCompare(b.key));
-    const selectedKeys=new Set();
-    const slots=Math.min(8,linked.length);
-    for(let i=0;i<slots;i++) selectedKeys.add(linked[Math.floor(i*(linked.length-1)/Math.max(1,slots-1))].key);
-    if(state.event && linked.some(e=>e.key===state.event)) selectedKeys.add(state.event);
-    const points=linked.filter(e=>selectedKeys.has(e.key));
-    const ms = points.map(e => '<button type="button" class="milestone' + (state.event === e.key ? ' selected' : '') + '" data-event-key="' + safe(e.key) + '" aria-pressed="' + (state.event === e.key) + '" style="left:' + pct(e.year,r).toFixed(3) + '%" title="' + safe(researchEventDate(e) + ' · ' + e.title) + '" aria-label="Read ' + safe(e.title + ', ' + researchEventDate(e)) + '"></button>').join('');
-    return '<div class="lane ' + (c.id === state.selected ? 'selected ' : '') + (active(c,state.year) ? 'contemporary' : '') + '"><button type="button" class="lane-name" data-civ="' + safe(c.id) + '" aria-pressed="' + (c.id === state.selected) + '" title="' + safe(c.name) + '"><i style="background:' + colour(c) + '"></i><span><strong>' + safe(c.name) + (state.pinned.includes(c.id) ? ' ★' : '') + '</strong><small>' + safe(c.region) + ' · ' + (c.kind === 'empire' ? 'Empire' : 'Society') + '</small></span></button><div class="lane-track"><div class="lane-grid"></div><button type="button" data-civ="' + safe(c.id) + '" class="duration ' + c.kind + '" style="left:' + left.toFixed(3) + '%;width:' + Math.max(right-left,.35).toFixed(3) + '%;--bar:' + colour(c) + '" title="' + safe(c.name + ' · ' + entityDates(c)) + '"><span>' + safe(c.name) + '</span></button>' + ms + marker(r) + '</div><span class="lane-dates">' + safe(yearText(c.start)) + '<br>' + safe(yearText(c.end)) + '</span></div>';
+  function axis(r){const ticks=Array.from({length:7},(_,i)=>Math.round(r.start+(r.end-r.start)*i/6));return '<div class="axis"><div class="axis-label">REGION <small>One shared time scale</small></div><div class="axis-track">'+ticks.map((y,i)=>'<span class="axis-tick" style="left:'+i/6*100+'%">'+safe(yearText(y))+'</span>').join('')+marker(r)+'<strong class="axis-year-badge" style="left:'+pct(state.year,r)+'%">'+safe(yearText(state.year))+'</strong></div></div>';}
+  function bar(c,r){
+    const left=pct(Math.max(c.start,r.start),r),right=pct(Math.min(c.end,r.end),r);
+    const linked=events.filter(e=>Number.isFinite(e.year)&&e.year>=r.start&&e.year<=r.end&&e.year>=c.start&&e.year<=c.end&&(e.civ===c.id||(e.societyIds||e.allSocietyIds||[]).includes(c.id))).sort((a,b)=>a.year-b.year||a.key.localeCompare(b.key));
+    const selectedKeys=new Set();const slots=Math.min(5,linked.length);
+    for(let i=0;i<slots;i++)selectedKeys.add(linked[Math.floor(i*(linked.length-1)/Math.max(1,slots-1))].key);
+    if(state.event&&linked.some(e=>e.key===state.event))selectedKeys.add(state.event);
+    const points=linked.filter(e=>selectedKeys.has(e.key));const labels=[];
+    const ms=points.map((e,i)=>{const x=pct(e.year,r),labelled=i<2&&(!labels.length||Math.abs(x-labels.at(-1))>17);if(labelled)labels.push(x);return '<button type="button" class="milestone'+(state.event===e.key?' selected':'')+'" data-event-key="'+safe(e.key)+'" aria-pressed="'+(state.event===e.key)+'" style="left:'+x.toFixed(3)+'%;--bar:'+colour(c)+'" title="'+safe(researchEventDate(e)+' / '+e.title)+'" aria-label="Read '+safe(e.title+', '+researchEventDate(e))+'"></button>'+(labelled?'<span class="milestone-label'+(x>78?' align-right':'')+'" style="left:'+x.toFixed(3)+'%" aria-hidden="true"><strong>'+safe(e.title)+'</strong><small>'+safe(researchEventDate(e))+'</small></span>':'');}).join('');
+    const date=(c.periodScope?'Recorded: ':'')+yearText(c.start)+' - '+yearText(c.end),narrow=right-left<18;
+    return '<div class="lane atlas-lane '+(c.id===state.selected?'selected ':'')+(active(c,state.year)?'contemporary':'')+'"><div class="lane-track"><div class="lane-grid"></div><button type="button" class="lane-name duration '+c.kind+(narrow?' narrow':'')+'" data-civ="'+safe(c.id)+'" aria-pressed="'+(c.id===state.selected)+'" style="left:'+left.toFixed(3)+'%;width:'+Math.max(right-left,0).toFixed(3)+'%;--bar:'+colour(c)+'" title="'+safe(c.name+' / '+entityDates(c))+'"><span class="bar-type" aria-hidden="true">'+(c.kind==='empire'?'&#9819;':'&#9671;')+'</span><span class="bar-copy"><strong>'+safe(c.name)+(state.pinned.includes(c.id)?' &#9733;':'')+'</strong><small>'+safe(date)+'</small></span></button>'+(narrow?'<span class="floating-bar-label'+(left>76?' align-right':'')+'" style="left:'+left+'%;--bar:'+colour(c)+'"><strong>'+safe(c.name)+'</strong><small>'+safe(date)+'</small></span>':'')+ms+marker(r)+'</div></div>';
   }
   function groupHeading(label,count,key,id) {
     const open = !ui.collapsed.has(key);
@@ -161,37 +167,25 @@
   function empty(message) {
     return '<div class="empty-state"><strong>No matching records</strong><p>' + safe(message) + '</p><button type="button" data-action="reset">Reset comparison ↗</button></div>';
   }
-  function overlapView(r) {
-    const {rows,total} = chooseRows(r);
-    if (!rows.length) return empty('Try a wider time span, another region, or reset the filters.');
-    const sections = ['society','empire'].map(kind => {
-      const found = rows.filter(c => c.kind === kind), key = 'type:' + kind, id = 'lanes-' + kind;
-      return found.length ? groupHeading(kind === 'society' ? 'Societies' : 'Empires',found.length,key,id) + '<div id="' + id + '"' + (ui.collapsed.has(key) ? ' hidden' : '') + '>' + found.map(c => bar(c,r)).join('') + '</div>' : '';
-    }).join('');
-    return '<div class="timeline-scroll" tabindex="0" aria-label="Scrollable timeline"><div class="timeline-canvas">' + axis(r) + '<div class="comparison-lanes">' + sections + '</div></div></div>' + moreButton('rows',rows.length,total,'entries');
-  }
-  function regionsView(r) {
-    const {rows,total} = chooseRows(r);
-    if (!rows.length) return empty('No historical entry matches the selected filters and dates.');
-    const sections = regions.filter(g => rows.some(c => c.region === g)).map((g,i) => {
-      const found = rows.filter(c => c.region === g), key = 'region:' + g, id = 'lanes-region-' + i;
-      return groupHeading(g,found.length,key,id) + '<div id="' + id + '"' + (ui.collapsed.has(key) ? ' hidden' : '') + '>' + found.map(c => bar(c,r)).join('') + '</div>';
-    }).join('');
-    return '<div class="timeline-scroll" tabindex="0" aria-label="Scrollable regional timeline"><div class="timeline-canvas">' + axis(r) + '<div class="comparison-lanes">' + sections + '</div></div></div>' + moreButton('rows',rows.length,total,'entries');
-  }
+  function regionalTracks(r,compact=false){const {rows,total}=chooseRows(r);if(!rows.length)return empty('Try another region or a wider time span.');const parts=regions.filter(g=>rows.some(c=>c.region===g)).map((g,i)=>{const members=rows.filter(c=>c.region===g),key='region:'+g,id='lanes-region-'+i;return '<section class="atlas-region-block" style="--region:'+colour({region:g})+'"><button type="button" class="region-rail" data-group="'+safe(key)+'" aria-expanded="'+!ui.collapsed.has(key)+'" aria-controls="'+id+'">'+regionIcon(g)+'<strong>'+safe(g)+'</strong><small>'+members.length+' entries</small></button><div class="region-tracks" id="'+id+'"'+(ui.collapsed.has(key)?' hidden':'')+'>'+members.map(c=>bar(c,r)).join('')+'</div></section>';}).join('');return '<div class="timeline-scroll" tabindex="0" aria-label="Scrollable regional historical timeline"><div class="timeline-canvas atlas-overlap'+(compact?' condensed-lanes':'')+'">'+axis(r)+'<div class="comparison-lanes">'+parts+'</div></div></div>'+moreButton('rows',rows.length,total,'entries');}
+  function overlapView(r){return regionalTracks(r);}
+  function regionsView(r){return regionalTracks(r,true);}
   function cellMatches(cell) {
     return candidates(range()).filter(c => c.region === cell.region && c.start < cell.hi && c.end >= cell.lo).sort((a,b) => a.name.localeCompare(b.name));
   }
-  function eraView(r) {
-    const rows = candidates(r);
-    if (!rows.length) return empty('No societies or empires overlap this period.');
-    const slots = 8, w = (r.end-r.start+1)/slots, groups = regions.filter(g => rows.some(c => c.region === g));
-    const cells = groups.map(g => '<div class="era-region"><div class="era-name"><i style="background:' + colour({region:g}) + '"></i>' + safe(g) + '</div>' + Array.from({length:slots},(_,i) => {
-      const lo = r.start+i*w, hi = lo+w, matches = rows.filter(c => c.region === g && c.start < hi && c.end >= lo);
-      return '<div class="era-cell">' + matches.slice(0,3).map(c => '<button type="button" data-civ="' + safe(c.id) + '" class="era-entry ' + c.kind + (c.id === state.selected ? ' selected' : '') + '" style="--bar:' + colour(c) + '" title="' + safe(c.name + ' · ' + entityDates(c)) + '">' + safe(c.name) + '</button>').join('') + (matches.length > 3 ? '<button type="button" class="era-more" data-era-region="' + safe(g) + '" data-era-slot="' + i + '">+' + (matches.length-3) + ' more <span class="sr-only">in ' + safe(g) + ', ' + safe(yearText(Math.ceil(lo)) + ' to ' + yearText(Math.ceil(hi)-1)) + '</span></button>' : '') + '</div>';
-    }).join('') + '</div>').join('');
-    return '<p class="era-explain">Eight equal time windows; entries repeat where their dated spans overlap a window. Open “more” to read every entry in a cell. All ' + rows.length + ' matching entries are included.</p><div class="era-grid-scroll" tabindex="0" aria-label="Scrollable era bands"><div class="era-grid"><div class="era-colhead"><span>REGIONS</span>' + Array.from({length:slots},(_,i) => '<div style="--era:' + i + '"><b>' + safe(yearText(Math.ceil(r.start+i*w))) + '</b><small>to ' + safe(yearText(Math.ceil(r.start+(i+1)*w)-1)) + '</small></div>').join('') + '</div>' + cells + '</div></div>';
+  function eraView(r){
+    const rows=candidates(r);if(!rows.length)return empty('No recorded societies overlap this period.');const slots=8,w=(r.end-r.start+1)/slots,groups=regions.filter(g=>rows.some(c=>c.region===g)),colours=['#ddb65e','#dd9554','#ce6f69','#a181bd','#6a9fca','#56aa9e','#86ad62','#c1af60'];
+    const headings=Array.from({length:slots},(_,i)=>'<div class="atlas-era-head" style="--era-colour:'+colours[i]+'"><b>'+safe(yearText(Math.ceil(r.start+i*w)))+'</b><small>to '+safe(yearText(Math.ceil(r.start+(i+1)*w)-1))+'</small><span aria-hidden="true">'+['&#9650;','&#9819;','&#9670;','&#8962;','&#9817;','&#9673;','&#9873;','&#9788;'][i]+'</span></div>').join('');
+    const sections=groups.map(g=>{const members=rows.filter(c=>c.region===g).sort((a,b)=>a.start-b.start||b.end-a.end||a.name.localeCompare(b.name)),laneEnds=[],placed=[];
+      for(const c of members){const x=pct(c.start,r),end=pct(c.end,r);let lane=laneEnds.findIndex(e=>e+1<x);if(lane<0){if(laneEnds.length>=2)continue;lane=laneEnds.length;laneEnds.push(-10);}laneEnds[lane]=end;placed.push({c,x,end,lane});}
+      const bars=placed.map(({c,x,end,lane})=>'<button type="button" class="atlas-era-span'+(c.id===state.selected?' selected':'')+'" data-civ="'+safe(c.id)+'" style="left:'+x+'%;width:'+Math.max(end-x,0)+'%;top:'+(8+lane*36)+'px;--bar:'+colour(c)+'" title="'+safe(c.name+' / '+entityDates(c))+'">'+safe(c.name)+'</button>').join('');
+      const counts=Array.from({length:slots},(_,i)=>{const lo=r.start+i*w,hi=lo+w,n=members.filter(c=>c.start<hi&&c.end>=lo).length;return n?'<button type="button" class="era-more" data-era-region="'+safe(g)+'" data-era-slot="'+i+'" style="left:'+(i*12.5)+'%;width:12.5%">'+n+' records<span class="sr-only"> in '+safe(g)+' '+safe(yearText(Math.ceil(lo))+' to '+yearText(Math.ceil(hi)-1))+'</span></button>':'';}).join('');
+      return {region:g,markup:'<section class="atlas-era-region" style="--region:'+colour({region:g})+'"><div class="region-rail">'+regionIcon(g)+'<strong>'+safe(g)+'</strong><small>'+members.length+' entries</small></div><div class="atlas-era-track" style="height:'+(Math.max(1,laneEnds.length)*36+37)+'px">'+bars+counts+marker(r)+'</div></section>'};});
+    const major=sections.filter(x=>regionOrder.includes(x.region)).map(x=>x.markup).join(''),other=sections.filter(x=>!regionOrder.includes(x.region));
+    const tracks=major+(other.length?'<details class="other-era-regions"'+(state.region!=='all'?' open':'')+'><summary>Other source-specific regions ('+other.length+') &#8595;</summary>'+other.map(x=>x.markup).join('')+'</details>':'');
+    return '<p class="era-explain">Eight equal-duration bands on one linear scale. Bars form a representative overview; cell counts open <b>all</b> matching records. Overlap is not contact. <button type="button" data-action="reader">Read selected society &#8599;</button></p><div class="era-grid-scroll" tabindex="0" aria-label="Scrollable era bands"><div class="atlas-era-grid"><div class="atlas-era-columns"><span class="era-corner">'+regionIcon('Europe')+' REGION</span><div class="atlas-era-heads">'+headings+'</div></div>'+tracks+'</div></div>';
   }
+  function renderAtlasSummary(r){const host=$('atlasRegionSummary');if(!host)return;const rows=candidates(r);host.innerHTML=regions.filter(g=>rows.some(c=>c.region===g)).map(g=>'<span><i style="background:'+colour({region:g})+'"></i><b>'+safe(g)+'</b><small>'+rows.filter(c=>c.region===g).length+' entries</small></span>').join('');$('atlasScaleNote').textContent=yearText(r.start)+' to '+yearText(r.end)+'. One genuine linear scale. Research coverage is not necessarily a complete historical lifespan.';}
   function researchEventDate(e) {
     if (e.humanDate || e.dateLabel) return e.humanDate || e.dateLabel;
     const end = Number.isFinite(e.endExclusive) ? e.endExclusive : e.year+1;
@@ -355,6 +349,8 @@
       regions:['REGIONAL COMPARISON','Different regions, same time','Open a region and compare its entries on the shared ruler.'],
       events:['HISTORICAL MILESTONES','Important moments in context','Dated headings first, supporting evidence when you select one.']
     };
+    $('compareWorkspace').classList.toggle('mode-eras',state.mode==='eras');
+    $('compareWorkspace').classList.toggle('show-era-reader',Boolean(ui.cell||ui.userRead));
     $('modeKicker').textContent = modes[state.mode][0]; $('chartTitle').textContent = modes[state.mode][1]; $('chartSubtitle').textContent = modes[state.mode][2];
     $('resultsCount').textContent = state.mode === 'events' ? filteredEvents(r).length + ' milestones' : state.mode === 'eras' ? total + ' entries' : rows.length + ' of ' + total + ' entries';
     $('compareYear').value = yearText(state.year); $('compareSlider').value = state.year;
@@ -365,7 +361,7 @@
     $('compareSearch').placeholder = state.mode === 'events' ? 'Search every event in this window…' : 'Search names, regions or summaries…';
     document.querySelectorAll('[data-mode]').forEach(b => { const is = b.dataset.mode === state.mode; b.classList.toggle('active',is); b.setAttribute('aria-selected',String(is)); b.tabIndex = is ? 0 : -1; });
     $('comparisonChart').innerHTML = state.mode === 'eras' ? eraView(r) : state.mode === 'regions' ? regionsView(r) : state.mode === 'events' ? eventsView(r) : overlapView(r);
-    insight(); renderPins(); updateLink();
+    insight(); renderPins(); renderAtlasSummary(r); updateLink();
     if (focusAttr && !focused.isConnected) {
       const replacement = [...document.querySelectorAll('[' + focusAttr + ']')].find(el => el.getAttribute(focusAttr) === focusValue);
       replacement?.focus({preventScroll:true});
@@ -373,7 +369,7 @@
     window.AtlasNavigation?.refresh();
   }
   function revealEntity(id) { const c = entities.get(id); if (c) {ui.collapsed.delete('type:' + c.kind); ui.collapsed.delete('region:' + c.region);} }
-  function readOnMobile() { if (window.matchMedia?.('(max-width: 900px)').matches) {$('selectedName').focus({preventScroll:true}); $('selectedName').scrollIntoView({block:'start',behavior:'auto'});} }
+  function readOnMobile() { if(state.mode==='eras'){$('selectedName').scrollIntoView({block:'center',behavior:'smooth'});return;}  if (window.matchMedia?.('(max-width: 900px)').matches) {$('selectedName').focus({preventScroll:true}); $('selectedName').scrollIntoView({block:'start',behavior:'auto'});} }
   function change(patch) {
     const scopeChanged = ['year','span','region','type','search'].some(k => k in patch && patch[k] !== state[k]);
     if (scopeChanged) {ui.eventLimit=8; ui.concurrentLimit=8; ui.nearLimit=8; ui.extraRows=0; ui.cell=null; ui.lastCell=null;}
@@ -390,7 +386,7 @@
     render();
   }
   function moveYear(y) { if (Number.isFinite(y)) change({year:within(Math.round(y),-9999,2026),event:null}); }
-  function choose(id) { if (!entities.has(id)) return; change({selected:id,event:null}); readOnMobile(); }
+  function choose(id) { ui.userRead=true; if (!entities.has(id)) return; change({selected:id,event:null}); readOnMobile(); }
   function togglePin() {
     const id = state.selected; if (!entities.has(id)) return;
     if(state.pinned.includes(id)) return removePin(id);
@@ -418,6 +414,7 @@
     const era = target.closest('[data-era-slot]');
     if (era) {
       const r=range(),w=(r.end-r.start+1)/8,i=Number(era.dataset.eraSlot);
+      ui.userRead=true;$('compareWorkspace').classList.toggle('show-era-reader',true);
       ui.cell={region:era.dataset.eraRegion,lo:r.start+i*w,hi:r.start+(i+1)*w}; ui.lastCell=ui.cell; ui.cellLimit=8;
       insight(); readOnMobile(); return;
     }
@@ -428,6 +425,7 @@
     const event = target.closest('[data-event-key]'); if (event) {selectEvent(event.dataset.eventKey); return;}
     const act = target.closest('[data-action]');
     if (act) {
+      if(act.dataset.action==='reader'){ui.userRead=true;$('compareWorkspace').classList.toggle('show-era-reader',true);$('selectedName').scrollIntoView({block:'center'});}
       if (act.dataset.action === 'reset') reset();
       if (act.dataset.action === 'pin') togglePin();
       if (act.dataset.action === 'close-cell') {ui.cell=null; insight();}
