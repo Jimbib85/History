@@ -12,7 +12,7 @@
 .atlas-cinematic .scene-heading>div:first-child{flex:1 1 290px;min-width:0}
 .atlas-cinematic .scene-heading h1{font:500 clamp(36px,4vw,63px)/1.05 Georgia,serif;letter-spacing:-1.4px;margin:6px 0;color:#f8e6c8}
 .atlas-cinematic .scene-heading p{color:#bfcdcd;line-height:1.5;font-size:13px}
-.atlas-cinematic .date-controls{order:3;flex:none;margin-left:auto}
+.atlas-cinematic .date-controls{order:1;flex:none;margin-left:auto}
 .atlas-stage-actions{display:flex;align-items:center;gap:7px;flex:1 1 100%;order:2;flex-wrap:wrap}
 .atlas-stage-actions :is(button,a){display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:7px 13px;background:#0b2533;border:1px solid #dfb97973;border-radius:999px;color:#f2d69e;font:12px Arial,sans-serif;text-decoration:none;white-space:nowrap;box-shadow:0 6px 15px #0002}
 .atlas-stage-actions :is(button,a):hover{background:#34474a;border-color:#f6d18c;color:#fff2d9}
@@ -85,3 +85,18 @@
 @media(max-width:720px){.atlas-cinematic .workspace{padding:6px!important;gap:8px!important}.atlas-cinematic .scene-heading{padding:2px!important}.atlas-cinematic .scene-heading h1{font-size:35px}.atlas-cinematic .date-controls{order:1;margin-left:0}.atlas-stage-actions{order:3}.atlas-stage-actions :is(button,a){font-size:11px;min-height:38px;padding:7px 10px}.atlas-cinematic .map-stage{min-height:300px;max-height:none}.atlas-cinematic .map-ornament.bottom-left{max-width:65%;bottom:9px;left:8px}.atlas-cinematic .map-ornament.top-left{top:7px;left:7px}.atlas-cinematic .compass{display:none}.atlas-cinematic .map-zoom{right:5px}.atlas-cinematic .atlas-map-spotlight{display:none!important}.atlas-map-spotlight-visual{height:75px}.atlas-map-contemporaries{grid-template-columns:1fr;gap:10px;padding:10px}.atlas-contemporary-list{grid-auto-columns:minmax(165px,65%)}.atlas-cinematic .map-stage{overflow:hidden}.atlas-cinematic .right-panel{padding:13px!important}}
 @media(max-width:480px){.atlas-cinematic .map-stage{min-height:255px}.atlas-cinematic .scene-heading h1{font-size:30px}.atlas-cinematic .map-ornament.top-left{display:none}.atlas-cinematic .map-zoom button{min-width:35px;min-height:39px}.atlas-cinematic .time-card{padding:11px 9px!important}.atlas-cinematic .right-panel{border-radius:16px!important}}
 @media(prefers-reduced-motion:reduce){.atlas-cinematic .left-panel{transition:none!important}.atlas-cinematic .map-stage *{animation:none!important}}
+
+
+/* Hide seldom-used map switches without removing their keyboard access. */
+.atlas-cinematic .living-map-toolbar{position:relative;z-index:9;min-height:47px}
+.atlas-cinematic .living-map-toolbar .living-scope{display:none}
+.atlas-map-layer-tools{margin-left:auto;position:relative;z-index:12;font:12px Arial,sans-serif}
+.atlas-map-layer-tools[hidden]{display:none}
+.atlas-map-layer-tools>summary{cursor:pointer;display:flex;align-items:center;justify-content:center;border:1px solid #d9b87968;border-radius:99px;padding:8px 12px;min-height:36px;color:#f1d295;background:#0a2532}
+.atlas-map-layer-tools[open]>summary{border-color:#f5cb87;background:#523d25}
+.atlas-map-layer-tools .geo-controls{display:flex!important;position:absolute;right:0;top:calc(100% + 7px);z-index:12;width:min(298px,80vw);padding:12px!important;border:1px solid #e0b87898!important;border-radius:14px;flex-direction:column;align-items:stretch;gap:8px;background:linear-gradient(160deg,#193847,#071b28)!important;box-shadow:0 13px 32px #000b}
+.atlas-map-layer-tools:not([open]) .geo-controls{display:none!important}
+.atlas-map-layer-tools .geo-buttons{display:flex;gap:6px;flex-wrap:wrap}
+.atlas-map-layer-tools .geo-buttons button{font-size:11px;min-height:35px;border-radius:9px}
+.atlas-map-layer-tools #mapClusterCount{font-size:10px;line-height:1.4;color:#c0d0c8}
+@media(max-width:720px){.atlas-cinematic .living-map-toolbar{padding:5px 8px!important;gap:6px}.atlas-map-layer-tools{margin-left:auto}.atlas-map-layer-tools>summary{font-size:11px;padding:7px 10px}.atlas-cinematic .living-map-toolbar button{padding:6px 10px;font-size:11px;min-height:36px}.atlas-cinematic .living-map-toolbar #livingMapCount{font-size:10px}.atlas-cinematic .scene-heading .date-controls{order:1}.atlas-cinematic .scene-heading .atlas-stage-actions{order:2}}
