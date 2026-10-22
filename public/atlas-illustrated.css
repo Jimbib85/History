@@ -44,3 +44,5 @@
 .compare-atlas .insight-panel .reader-section{background:#0c222f!important;border-color:#b793565c!important;color:#e4ddd0!important}
 @media(max-width:850px){.atlas-cinematic .illustrated-layer-bar{top:auto;bottom:12px;left:12px;transform:none;max-width:calc(100% - 95px);overflow-x:auto}.atlas-cinematic .illustrated-layer-bar button{padding:9px 10px}.compare-atlas .intro{min-height:140px;padding:21px!important}.compare-atlas .comparison-intro-strip{align-items:flex-start}.compare-atlas .compare-shell{padding:10px!important}}
 @media(prefers-reduced-motion:reduce){.atlas-cinematic #worldMap{transition:none}}
+
+.atlas-cinematic .map-stage[data-illustration="parchment"]{background-image:linear-gradient(145deg,#d9c198a9,#a88b62cf),url('assets/atlas-texture.svg')}
