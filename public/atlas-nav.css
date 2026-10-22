@@ -1,0 +1,20 @@
+/* v0.19: One consistent view menu. Mobile users can swipe instead of having
+   seven entries wrap into a dense two- or three-row header. */
+.atlas-crossnav{min-width:0;max-width:100%;display:flex;align-items:center;gap:4px}
+.atlas-crossnav a{white-space:nowrap;flex:0 0 auto;text-decoration:none}
+.atlas-crossnav a[aria-current="page"]{font-weight:800}
+@media(max-width:1150px){
+  .atlas-crossnav{flex:1 1 100%;order:3;overflow-x:auto;overflow-y:hidden;
+    flex-wrap:nowrap!important;justify-content:flex-start!important;gap:5px!important;
+    max-width:100%;overscroll-behavior-x:contain;scrollbar-width:thin;
+    scroll-padding-inline:10px;-webkit-overflow-scrolling:touch}
+  .atlas-crossnav a{flex:0 0 auto!important;min-height:44px;display:inline-flex;align-items:center;
+    padding:8px 12px!important;scroll-snap-align:start;font-size:12px}
+  .atlas-crossnav a[aria-current="page"]{border-bottom:2px solid #d9ae6b}
+  .topbar .atlas-crossnav,.story-header .atlas-crossnav,.topnav .atlas-crossnav{
+    border-top:1px solid rgba(238,226,198,.18);padding-top:5px}
+}
+@media(max-width:550px){
+  .atlas-crossnav{width:100%;flex-basis:100%;scroll-snap-type:x proximity}
+  .atlas-crossnav a{min-height:44px;line-height:1.4}
+}
