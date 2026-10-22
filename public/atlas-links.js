@@ -7,7 +7,7 @@
  const VIEWS=Object.freeze({
    story:'story.html',map:'index.html',compare:'compare.html',
    technology:'index.html',worldview:'worldview.html',
-   discover:'discover.html',conflicts:'conflicts.html'
+   discover:'discover.html',conflicts:'conflicts.html',catalogue:'catalogue.html'
  });
  function context(){
    const q=new URLSearchParams(root.location?.search||'');
@@ -33,6 +33,11 @@
  function refresh(){
    if(typeof document==='undefined')return;
    const ctx=context();
+   const nav=document.querySelector?.('.atlas-crossnav');
+   if(nav && !nav.querySelector('[data-atlas-view="catalogue"]')){
+     const link=document.createElement('a');link.href='catalogue.html';link.dataset.atlasView='catalogue';link.textContent='Research';
+     nav.appendChild(link);
+   }
    for(const a of document.querySelectorAll?.('[data-atlas-view]')||[]){
      const next=href(a.dataset.atlasView,ctx);
      if(next)a.setAttribute('href',next);
