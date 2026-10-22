@@ -1,5 +1,7 @@
 /* Illustrated surface controls; no invented geographic data or dependencies. */
 (()=>{'use strict';
+// Progressive enhancement requires a browser DOM; research tests use a minimal fixture.
+if(typeof document==='undefined'||typeof document.createElement!=='function')return;
 const map=document.getElementById('mapStage');
 if(map){
  const bar=document.createElement('div');bar.className='illustrated-layer-bar';bar.setAttribute('role','group');bar.setAttribute('aria-label','Illustrated map appearance');
