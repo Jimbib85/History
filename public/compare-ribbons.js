@@ -7,14 +7,18 @@
   const host=document.getElementById('cinematicCompareDeck'),api=root.HistoryCompare;
   if(!host||!api)return;
   const societies=new Map(CIVILISATIONS.filter(c=>c.kind!=='overview').map(c=>[c.id,c]));
-  const sources=[
-    ...EVENTS.filter(e=>societies.has(e.civ)&&Number.isFinite(e.year)).map((e,i)=>({...e,key:'native-'+i})),
+  const research=[
     ...(typeof ATLAS_RESEARCH_EVENTS==='undefined'?[]:ATLAS_RESEARCH_EVENTS),
     ...(typeof ATLAS_MEDIEVAL_EVENTS==='undefined'?[]:ATLAS_MEDIEVAL_EVENTS),
     ...(typeof ATLAS_MODERN_EVENTS==='undefined'?[]:ATLAS_MODERN_EVENTS),
     ...(typeof ATLAS_CLASSICAL_EVENTS==='undefined'?[]:ATLAS_CLASSICAL_EVENTS),
     ...(typeof ATLAS_EXPANSION_EVENTS==='undefined'?[]:ATLAS_EXPANSION_EVENTS)
   ];
+  const researchIds=new Set(research.map(e=>e.id));
+  const natives=EVENTS.filter(e=>societies.has(e.civ)&&Number.isFinite(e.year))
+    .filter(e=>!e.researchId||!researchIds.has(e.researchId))
+    .map((e,i)=>({...e,key:'native-'+i}));
+  const sources=[...natives,...research];
   const events=[...new Map(sources.filter(e=>Number.isFinite(e.year)&&e.title).map((e,i)=>[e.id||e.key||'event-'+i,{...e,key:e.id||e.key||'event-'+i}])).values()];
   const escape=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[c]));
   const clamp=(a,b,c)=>Math.min(c,Math.max(b,a));
@@ -114,9 +118,12 @@
     if(panel&&root.matchMedia?.('(max-width:940px)')?.matches)panel.scrollIntoView({block:'start',behavior:'smooth'});
   });
   const observer=new MutationObserver(changes=>{
-    if(changes.some(c=>c.target===host&&c.type==='childList'))enhance();
+    if(!changes.some(c=>c.target===host&&c.type==='childList'))return;
+    observer.disconnect();
+    enhance();
+    observer.observe(host,{childList:true});
   });
-  observer.observe(host,{childList:true});
   enhance();
+  observer.observe(host,{childList:true});
   root.AtlasCompareRibbons=Object.freeze({refresh:enhance,range,year,samples});
 })(window);
