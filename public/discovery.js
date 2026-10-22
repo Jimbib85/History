@@ -10,6 +10,7 @@
  const state={journey:chosen.id,step:Math.min(chosen.steps.length-1,Math.max(0,Number.isSafeInteger(Number(params.get('step')))?Number(params.get('step')):0)),
    year:params.has('year')&&Number.isSafeInteger(initialYear)&&initialYear>=-9999&&initialYear<=2026?initialYear:1600,
    random:null,recent:[]};
+ const classicalRequested=params.has('classical')||location.hash==='#classicalEvidence';
  const ids=new Set(M.all.map(r=>r.id));
  function parseYear(text){
    const match=String(text).trim().replace(/,/g,'').match(/^(-?\d+)\s*(BCE|BC|CE|AD)?$/i);
@@ -45,6 +46,7 @@
  function syncURL(){
    const q=new URLSearchParams({journey:state.journey,step:String(state.step),year:String(state.year)});
    if(state.random)q.set('record',state.random.id);
+   if(classicalRequested)q.set('classical','1');
    try{history.replaceState(null,'','discover.html?'+q.toString());}catch(_){}
    $('snapshotCompare').href='compare.html?year='+encodeURIComponent(state.year);
  }
