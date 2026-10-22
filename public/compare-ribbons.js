@@ -8,7 +8,7 @@
   if(!host||!api)return;
   const societies=new Map(CIVILISATIONS.filter(c=>c.kind!=='overview').map(c=>[c.id,c]));
   const sources=[
-    ...EVENTS.filter(e=>Number.isFinite(e.year)).map((e,i)=>({...e,key:'native-'+i})),
+    ...EVENTS.filter(e=>societies.has(e.civ)&&Number.isFinite(e.year)).map((e,i)=>({...e,key:'native-'+i})),
     ...(typeof ATLAS_RESEARCH_EVENTS==='undefined'?[]:ATLAS_RESEARCH_EVENTS),
     ...(typeof ATLAS_MEDIEVAL_EVENTS==='undefined'?[]:ATLAS_MEDIEVAL_EVENTS),
     ...(typeof ATLAS_MODERN_EVENTS==='undefined'?[]:ATLAS_MODERN_EVENTS),
@@ -57,11 +57,12 @@
     const connected=featured(c,r);
     const chosen=samples(connected).filter((e,i,arr)=>arr.findIndex(v=>Math.abs(fraction(v.year,r)-fraction(e.year,r))<.035)===i);
     const fill=colour[index%3];
+    const xStart=(fraction(lo,r)*100).toFixed(3),xWidth=Math.max(0,(fraction(hi,r)-fraction(lo,r))*100).toFixed(3);
     line.innerHTML='<svg class="atlas-ribbon-visual" viewBox="0 0 1000 62" preserveAspectRatio="none" role="img" aria-label="'+escape(c.name+' from '+year(c.start)+' to '+year(c.end)+' on the shared chronological scale')+'">'+
       '<defs><linearGradient id="atlas-ribbon-'+index+'" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff9de" stop-opacity=".96"/><stop offset=".2" stop-color="'+fill+'"/><stop offset=".75" stop-color="'+fill+'"/><stop offset="1" stop-color="#0d2330"/></linearGradient></defs>'+
       (visible?'<path d="'+d+'" stroke="'+fill+'" stroke-width="27" opacity=".17" fill="none" stroke-linecap="round"/><path d="'+d+'" stroke="url(#atlas-ribbon-'+index+')" stroke-width="17" fill="none" stroke-linecap="round"/><path d="'+d+'" stroke="#fff9e7" stroke-width="1.3" opacity=".57" fill="none" stroke-linecap="round"/>':'')+
       '</svg>'+
-      (visible?'<button type="button" class="atlas-ribbon-select" data-deck-civ="'+escape(c.id)+'" style="left:'+(fraction(lo,r)*100)+'%;width:'+(Math.max(.3,fraction(hi,r)*100-fraction(lo,r)*100))+'%" aria-label="Select '+escape(c.name+' historical period, '+year(c.start)+' to '+year(c.end)+'"></button>':'<span class="atlas-ribbon-none">Outside visible interval</span>')+
+      (visible?'<button type="button" class="atlas-ribbon-select" data-deck-civ="'+escape(c.id)+'" style="left:'+xStart+'%;width:'+xWidth+'%" aria-label="Select '+escape(c.name+' historical period, '+year(c.start)+' to '+year(c.end))+'"></button>':'<span class="atlas-ribbon-none">Outside visible interval</span>')+
       chosen.map((e,i)=>'<button type="button" class="atlas-ribbon-event" data-atlas-event="'+escape(e.key)+'" data-atlas-civ="'+escape(c.id)+'" style="left:'+(fraction(e.year,r)*100).toFixed(3)+'%;--ribbon-accent:'+fill+'" title="'+escape(readableDate(e)+' — '+e.title)+'" aria-label="Open dated record: '+escape(e.title)+' ('+escape(readableDate(e))+')"><span></span></button>').join('')+
       '<i class="atlas-ribbon-now" style="left:'+(fraction(api.state.year,r)*100).toFixed(3)+'%" aria-hidden="true"></i>';
   }
@@ -84,11 +85,12 @@
       (chosen.length?'<div class="atlas-moments-strip">'+chosen.map(({e,c})=>{
         const art=root.AtlasVisualAssets?.forSociety(c.id);
         const scene=['abbasid','song','byzantium'].includes(c.id)?'assets/scene-'+(c.id==='byzantium'?'byzantium':c.id)+'.svg':null;
-        const visual=art?'<img src="'+escape(art.imageUrl)+'" alt="" loading="lazy" decoding="async" onerror="this.remove()" />':scene?'<img src="'+scene+'" alt="" loading="lazy" decoding="async"/>':'<span class="atlas-event-ornament" aria-hidden="true">✧</span>';
+        const visual=art?'<img src="'+escape(art.imageUrl)+'" alt="" loading="lazy" decoding="async" class="atlas-object-image" />':scene?'<img src="'+scene+'" alt="" loading="lazy" decoding="async"/>':'<span class="atlas-event-ornament" aria-hidden="true">✧</span>';
         return '<article class="atlas-moment-card"><div class="atlas-moment-image">'+visual+'<span>Contextual artwork · not an event depiction</span></div><div class="atlas-moment-copy"><b>'+escape(readableDate(e))+'</b><span>'+escape(c.name)+'</span><button type="button" data-atlas-event="'+escape(e.key)+'" data-atlas-civ="'+escape(c.id)+'">'+escape(e.title)+' <i aria-hidden="true">↗</i></button><small>'+escape(e.kind||'Historical event')+'</small></div></article>';
       }).join('')+'</div>':'<p class="atlas-moments-empty">No dated records are linked to the featured societies in this time window. Widen the date range or select another society.</p>')+
       '<p class="atlas-moments-foot">Event dates and society associations come from the atlas research records. Select a milestone to inspect sources and uncertainty.</p>';
     host.append(section);
+    root.AtlasVisualAssets?.bindImages(section);
   }
   function enhance(){
     const cards=[...host.querySelectorAll('.cinematic-society[data-entity]')];
