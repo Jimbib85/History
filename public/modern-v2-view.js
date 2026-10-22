@@ -21,7 +21,7 @@
      '<p><b>Evidence meaning:</b> '+esc(row.temporal_kind||'Context record without a sourced complete lifespan')+'. '+esc(interpretation)+'</p>'+
      (contact?'<p><b>Linked actors:</b> '+esc(contact)+' (actor references are not automatically political map bars)</p>':'')+
      '<p><b>Review:</b> '+esc(row.review_status||'Not specified')+'; confidence '+esc(row.confidence||'not assessed')+'. Independently corroborated: '+(row.independently_corroborated===true?'recorded as yes':'not established')+'.</p>'+
-     (row.content_sensitivity?'<p><b>Content note:</b> '+esc(row.content_sensitivity)+'</p>':'')+
+     (row.content_level?'<p><b>Content note:</b> '+esc(row.content_level)+'</p>':'')+
      (claims.length?'<details><summary>Source-scoped claims ('+claims.length+')</summary>'+claims.slice(0,8).map(c=>'<p><b>'+esc(c.id)+':</b> '+esc(c.claim_text)+'</p>').join('')+'</details>':'')+
      '<div class="expansion-sources">'+citations+href+'</div>'+
      '<small>Record '+esc(row.id)+' · pack wha_1501_2026_priority_v2 · 22 October 2026 cutoff</small></div></details>';
