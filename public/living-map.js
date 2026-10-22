@@ -9,7 +9,7 @@
  const layer=$('livingConnections'),controls=$('livingMapControls');
  if(!layer||!controls)return;
  const SVG='http://www.w3.org/2000/svg',state=atlas.state;
- const ui={enabled:true,playing:false,speed:1,step:25};
+ const ui={enabled:false,playing:false,speed:1,step:25};
  const reduced=()=>root.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
  const finite=c=>Number.isFinite(c.lon)&&Number.isFinite(c.lat);
  const point=c=>root.WorldAtlasGeo.project(c.lon,c.lat);
