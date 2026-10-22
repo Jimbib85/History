@@ -1,0 +1,35 @@
+name: Generate modern v2 reconciled index
+on:
+  push:
+    branches:
+      - feat/v024-modern-v2-reconciliation
+    paths:
+      - scripts/build-modern-v2-reconciliation.mjs
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build historical ID crosswalk
+        run: |
+          node scripts/build-modern-v2-reconciliation.mjs --print
+          node scripts/build-modern-v2-reconciliation.mjs
+      - name: Commit generated index if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/modern-v2-reconciled-data.js
+          if ! git diff --cached --quiet; then
+            git commit -m "Generate reconciled modern v2 source index"
+            git push origin HEAD:feat/v024-modern-v2-reconciliation
+          fi
