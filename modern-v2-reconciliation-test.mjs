@@ -12,7 +12,7 @@ assert.equal(stats.pack.tech.length,28);
 assert.equal(stats.pack.conflicts.length,18);
 assert.equal(stats.pack.additionalConflictEvidence.length,8);
 assert.equal(stats.societies,511,'Identity-only actor references must not become societies');
-assert.equal(stats.pack.report.events.existing+stats.pack.report.events.point+stats.pack.report.events.context+stats.pack.report.events.review,97);
+assert.equal(stats.pack.report.events.existing+stats.pack.report.events.point+stats.pack.report.events.context+(stats.pack.report.events.review||0),97);
 assert.equal(stats.ev.pointsAdded.length+stats.ev.sourceEnriched.length+stats.ev.context.length+stats.ev.ambiguous.length,97);
 assert.equal(new Set(stats.ev.pointsAdded).size,stats.ev.pointsAdded.length);
 assert.ok(stats.ev.sourceEnriched.length>=25,'Existing events should gain matching v2 evidence');
