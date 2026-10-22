@@ -41,7 +41,7 @@
  root.AtlasCrossLinks=Object.freeze({context,href,refresh});
  // Update before click, keyboard activation, link copy and context menu; no polling.
  if(typeof document!=='undefined'){
-   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',refresh,{once:true});
+   if(document.readyState==='loading')document.addEventListener?.('DOMContentLoaded',refresh,{once:true});
    else refresh();
    for(const action of ['pointerdown','focusin','click','auxclick','contextmenu'])
      document.addEventListener(action,refresh,true);
