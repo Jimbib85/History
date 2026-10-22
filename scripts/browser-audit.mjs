@@ -58,6 +58,26 @@ else{
     });
     if(info.navLinks!==7)errors.push('Not all seven view destinations are accessible');
     if(device.name==='mobile'&&info.bodyWidth>info.viewport+24)errors.push('Page overflows mobile viewport by '+(info.bodyWidth-info.viewport)+' px');
+    // v0.24: the integrated evidence must be present on main screens,
+    // not only in the research viewer. All assertions are source-identity based.
+    if(name==='story.html'){
+      const x=await page.evaluate(()=>({
+        newExact:typeof ATLAS_MODERN_V2_NEW_EVENTS!=='undefined'?ATLAS_MODERN_V2_NEW_EVENTS.length:0,
+        enriched:typeof ATLAS_MODERN_V2_REPORT!=='undefined'?ATLAS_MODERN_V2_REPORT.sourceEnriched.length:0
+      }));
+      if(x.newExact!==10||x.enriched<25)errors.push('Modern event reconciliation missing: '+JSON.stringify(x));
+    }
+    if(name==='index.html'){
+      const x=await page.evaluate(()=>typeof ATLAS_MODERN_V2_TECH_REPORT!=='undefined'?
+        ATLAS_MODERN_V2_TECH_REPORT:null);
+      if(!x||x.enriched.length<4)errors.push('Modern technology sources were not reconciled');
+    }
+    if(name==='conflicts.html'){
+      const x=await page.evaluate(()=>typeof ATLAS_MODERN_V2_CONFLICT_REPORT!=='undefined'?
+        ATLAS_MODERN_V2_CONFLICT_REPORT:null);
+      if(!x||x.added.length!==18||x.enriched.length!==8)
+        errors.push('Modern conflict hierarchy reconciliation incomplete: '+JSON.stringify(x));
+    }
     await page.screenshot({path:output+name.replace('.html','')+'-'+device.name+'.png',fullPage:false});
     results.push({page:name,device:device.name,...info,errors});
     if(errors.length)fatal.push({page:name,device:device.name,errors});
