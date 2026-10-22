@@ -40,7 +40,8 @@ check(data.events.every(e=>e.subject&&e.start<e.end&&data.idMap.has(e.id)),true)
 check(data.events.some(e=>e.start<=0),true);check(data.events.some(e=>e.start>=2000),true);
 check(input.entities.find(c=>c.id==='aboriginal').kind,'overview');
 check(scripts.indexOf('story-model.js')>scripts.indexOf('research-classical-apply.js'),true);
-check(scripts[scripts.length-1],'story-app.js');
+check(scripts.includes('story-app.js'),true);
+check(scripts[scripts.length-1],'atlas-links.js');
 // Routing bridge is tested separately from network-dependent hosting redirects.
 const navigation=read('./public/story-navigation.js');
 function navFixture(pathname,search='',hash='',staticViews=[],separateContainers=false) {

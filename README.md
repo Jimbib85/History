@@ -1,12 +1,18 @@
 # World History Atlas
 
-**Version 0.18.0 — Discovery & Refinement**
+**Version 0.19.0 — Cross-view continuity**
 
 World Map, Compare and Technology now use the Story timeline’s overview-first approach: scan a short heading, open a record, and read its evidence. See [the UX implementation notes](docs/compact-ux.md).
 
 The Technology tree filters its families, topics and evidence to the selected society or empire. Search and Random use the same selection. Choose **All societies & empires** to compare the full collection; a society without linked technology research gets an explicit empty state.
 
 Explore what different societies were doing at the same time. The application is a simple static website with no login, database, user accounts or paid map services. GitHub changes deploy through Cloudflare Workers Builds.
+
+## Version 0.19 — Navigation continuity and browser usability
+
+The seven main views now share a readable, swipeable navigation row on narrow screens. Story, Map, Compare, Technology and Their World retain a selected year and society when both views understand those fields; Discover keeps the year only, while Conflicts remains unfiltered rather than implying support for a year parameter.
+
+A separate **real Chromium browser audit** runs on UI pull requests, checking six views at desktop and phone widths and publishing screenshots, navigation timings and layout regressions as build artifacts. It measures a local static server, not production network performance. See [v0.19 notes](docs/usability-v019.md).
 
 ## Version 0.18 — Discovery & Refinement
 
