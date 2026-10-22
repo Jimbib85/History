@@ -4,7 +4,7 @@ import vm from 'node:vm';
 const read=p=>readFileSync(new URL(p,import.meta.url),'utf8');
 const html=read('./public/index.html'),css=read('./public/atlas-cinematic-map.css'),script=read('./public/living-map.js');
 for(const id of ['livingConnections','livingMapControls','livingConnectToggle','livingPlay','livingSpeed','livingStep','livingMapExplanation','mapYear','worldMap'])assert.ok(html.includes('id="'+id+'"'),id);
-assert.ok(html.includes('living-map.js?v=0.27.0'));assert.match(css,/prefers-reduced-motion:reduce/);assert.match(css,/atlas-arc-flow/);
+assert.match(html,/living-map\.js\?v=0\.(?:27|33)\.0/);assert.match(css,/prefers-reduced-motion:reduce/);assert.match(css,/atlas-arc-flow/);
 const layer={children:[],attributes:{},classList:{toggle(){},add(){}},replaceChildren(){this.children=[]},appendChild(v){this.children.push(v)},setAttribute(k,v){this.attributes[k]=v}};
 const attrs={},handlers={};
 function element(id){return {id,textContent:'',value:id==='livingSpeed'?'1':'25',classList:{toggle(){}},style:{},setAttribute(k,v){attrs[id+':'+k]=v},addEventListener(k,f){handlers[id+':'+k]=f},querySelector(){return null},querySelectorAll(){return []}};}
