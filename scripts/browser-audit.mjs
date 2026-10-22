@@ -64,6 +64,21 @@ else{
    }catch(err){fatal.push({page:name,device:device.name,errors:[String(err)]});}
    await page.close();
   }
+  // One actual navigation exercise per device, including horizontally scrolled
+  // mobile links and a selected BCE year. Do not rely only on the href unit test.
+  const journey=await context.newPage();
+  try{
+    await journey.goto(base+'story.html?year=-499&entity=athens',{waitUntil:'load',timeout:30000});
+    const link=journey.locator('[data-atlas-view="map"]');
+    await link.click({timeout:10000});
+    await journey.waitForURL(u=>u.pathname.endsWith('/index.html')&&
+      u.searchParams.get('year')==='-499'&&u.searchParams.get('civ')==='athens',{timeout:15000});
+    const actual=await journey.evaluate(()=>({year:window.WorldHistoryAtlas?.state?.year,civ:window.WorldHistoryAtlas?.state?.civ}));
+    if(actual.year!==-499||actual.civ!=='athens')
+      fatal.push({device:device.name,page:'cross-view navigation',errors:['Selected Story BCE year and society not retained on Map']});
+    else console.log('PASS',device.name,'selected Story 500 BCE/Athens → Map context navigation');
+  }catch(err){fatal.push({device:device.name,page:'cross-view navigation',errors:[String(err)]});}
+  finally{await journey.close();}
   await context.close();
  }
  await browser.close();
