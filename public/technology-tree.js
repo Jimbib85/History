@@ -145,13 +145,16 @@
       return;
     }
     const visible=records.slice(0,state.evidenceLimit);
-    details.innerHTML=`<section class="tech-intro"><div class="tech-kicker">${esc(TECH_BRANCHES.find(b=>b.id===t.branch).name)} · ${esc(t.era)}</div><h2>${esc(t.name)}</h2><p>${esc(t.description)}</p></section>
+    const technologyArtwork=window.AtlasVisualAssets?.forTechnology(t.id);
+    const technologyMedia=technologyArtwork?window.AtlasVisualAssets.html(technologyArtwork,'tech'):'';
+    details.innerHTML=`<section class="tech-intro"><div class="tech-kicker">${esc(TECH_BRANCHES.find(b=>b.id===t.branch).name)} · ${esc(t.era)}</div><h2>${esc(t.name)}</h2><p>${esc(t.description)}</p></section>${technologyMedia}
       <p class="tech-current"><strong>${esc(scopeName())}.</strong> ${state.civ==='all'?'Comparing linked evidence from all societies and empires.':'Showing only technology evidence linked to this selection.'}${hasSearch()?` Search: “${esc(state.search.trim())}”.`:''}</p>
       <div class="tviz-head"><div><strong>${state.civ==='all'?'Across societies':'Technology evidence'}</strong><span>${records.length} ${hasSearch()?'matching ':''}evidence ${records.length===1?'record':'records'} · ${new Set(records.map(a=>a.source)).size} source links</span></div><div class="tviz-modes" role="group" aria-label="Technology evidence view"><button type="button" data-viz="timeline" aria-pressed="${state.view==='timeline'}" class="${state.view==='timeline'?'active':''}">◫ Time</button><button type="button" data-viz="map" aria-pressed="${state.view==='map'}" class="${state.view==='map'?'active':''}">◎ World map</button></div></div>
       <div class="tviz-legend">${Object.values(kind).map(k=>`<span><i style="background:${k.colour}"></i>${esc(k.label)}</span>`).join('')}</div><p class="tech-plot-note">Dates may be approximate. A record covering a period is plotted at its midpoint, not an invention date. The full date label stays with its evidence.</p>
       ${state.view==='timeline'?timeline(t,records):mapGraphic(t,records)}
       <section class="tech-evidence-list"><div class="tech-evidence-heading"><h3>Selected evidence</h3><span>One milestone at a time</span></div>${recordCard(chosen)}<details class="tech-all-evidence" data-tech-disclosure="evidence" ${state.allEvidenceOpen?'open':''}><summary>Browse ${hasSearch()?'matching':state.civ==='all'?'all':'linked'} evidence <span class="tech-count">${records.length}</span><span class="tech-chevron" aria-hidden="true">›</span></summary>${hasSearch()?`<p class="tech-evidence-filter">${records.length} records match “${esc(state.search.trim())}”. <button type="button" data-tech-clear>Clear search</button></p>`:''}<div class="tech-evidence-choices">${visible.map(a=>compactRecord(a)).join('')}</div>${records.length>visible.length?`<button type="button" class="tech-more" data-evidence-more>Show ${Math.min(BATCH,records.length-visible.length)} more records <span>${records.length-visible.length} remaining</span></button>`:''}<p class="tviz-count">${visible.length} of ${records.length} ${hasSearch()?'matching ':''}records shown.</p></details></section>
       <p class="tech-disclaimer">These are selected evidence points, not definitive invention dates. Independently developed technologies are not proof of cultural isolation. Chronology alone cannot establish contact or influence.</p>`;
+    window.AtlasVisualAssets?.bindImages(details);
   }
   function draw(){reconcileSelection();renderTree();renderDetail();}
   function selectRecord(key){
