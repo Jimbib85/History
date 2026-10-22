@@ -1,0 +1,50 @@
+name: Apply verified v0.22 source bundle
+on:
+  push:
+    branches: ['feat/v022-research-maps-compare']
+    paths: ['.github/workflows/apply-v022-verified-bundle.yml']
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          ref: feat/v022-research-maps-compare
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify and apply exact reviewed bundle
+        env:
+          BUNDLE_URL: 'https://sdmntprnznorth.oaiusercontent.com/files/00000000-ab6c-820b-a7a4-f208671205ef/raw?se=2026-10-22T05%3A43%3A59Z&sp=r&sv=2026-02-06&sr=b&scid=49bb8641-3ef6-557c-999b-c32cc39f09b4&skoid=f5e14fda-2af7-44a3-9d18-d372ffcad871&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-10-22T01%3A50%3A39Z&ske=2026-10-23T01%3A50%3A39Z&sks=b&skv=2026-02-06&sig=rvVFljsb8dAtURUTPfhylsrlpbz/VoAqqJgPaZotHio%3D'
+        run: |
+          python - <<'PY'
+          import os,urllib.request,hashlib,zipfile,io,json,pathlib,subprocess
+          data=urllib.request.urlopen(os.environ['BUNDLE_URL'],timeout=45).read()
+          assert hashlib.sha256(data).hexdigest()=='0150ef7b2ce4f7428d5926aaa5232562e4ee565aedaf5d98124731a77ede080d','Bundle hash mismatch'
+          z=zipfile.ZipFile(io.BytesIO(data));m=json.loads(z.read('patch-manifest.json'))
+          assert m['repository']=='Jimbib85/History' and m['branch']=='feat/v022-research-maps-compare'
+          parent=subprocess.check_output(['git','rev-parse','HEAD^'],text=True).strip()
+          assert parent==m['expectedHead'],'Concurrent branch change: refuse to apply'
+          root=pathlib.Path.cwd().resolve()
+          for f in m['files']:
+            p=root/f['path'];assert p.resolve().is_relative_to(root) and not f['path'].startswith(('.git/','.github/'))
+            content=z.read('files/'+f['path']);assert len(content)==f['bytes'] and hashlib.sha256(content).hexdigest()==f['sha256']
+            p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(content)
+          for name in m['deletes']:
+            assert name=='.github/workflows/workspace-snapshot.yml','Unexpected deletion'
+          print('Applied',len(m['files']),'checksum-verified files. Temporary workflow cleanup is separate.')
+          PY
+      - name: Run all data and interaction regressions
+        run: npm test
+      - name: Commit only to requested feature branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git diff --cached --stat
+          git commit -m 'v0.22: merge early/modern research, catalog supplied maps and redesign Compare'
+          git push origin HEAD:refs/heads/feat/v022-research-maps-compare
