@@ -49,11 +49,11 @@
    document.addEventListener('click',event=>{if(layerTools.open&&!layerTools.contains(event.target))layerTools.open=false;});
  }
  const caution=document.getElementById('livingMapExplanation');
- if(caution)caution.classList.add('atlas-geography-disclaimer');
+ if(caution)caution.hidden=true;
  const evidence=document.getElementById('mapEvidence');
  if(evidence){
    const drawer=document.createElement('details');drawer.className='atlas-map-source-drawer';
-   const summary=document.createElement('summary');summary.textContent='Sources, historical geography and map reading notes ↘';
+   const summary=document.createElement('summary');summary.textContent='More maps, stories & sources ↘';
    drawer.append(summary);
    evidence.parentElement.insertBefore(drawer,evidence);
    const things=[evidence,...mapCard.querySelectorAll('.worldview-entry,.map-about')];
@@ -77,16 +77,16 @@
      active(selected,y)?'Part of the world at this date':'Selected from another historical period';
    if(layerTools.parentNode)layerTools.hidden=api.state.view==='historical';
    hero.hidden=api.state.view!=='actual';
-   hero.innerHTML='<div class="atlas-map-spotlight-visual">'+image(selected)+'</div><div class="atlas-map-spotlight-copy"><span>SELECTED SOCIETY · '+esc(description)+'</span><h3>'+esc(selected.name)+'</h3><p>'+esc(selected.region)+' · '+esc(selected.location||'')+'</p><div><a href="'+link(selected,y)+'">Compare ↗</a><a href="story.html?year='+encodeURIComponent(y)+'&entity='+encodeURIComponent(selected.id)+'">Read story ↗</a></div>'+(item?'<small>'+esc(item.title)+' · '+esc(item.date)+' · Object context, not a territorial map</small>':'<small>Decorative artwork, not archaeological evidence</small>')+'</div>';
+   hero.innerHTML='<div class="atlas-map-spotlight-visual">'+image(selected)+'</div><div class="atlas-map-spotlight-copy"><span>EXPLORE · '+esc(description)+'</span><h3>'+esc(selected.name)+'</h3><p>'+esc(selected.region)+' · '+esc(selected.location||'')+'</p><div><a href="'+link(selected,y)+'">Compare ↗</a><a href="story.html?year='+encodeURIComponent(y)+'&entity='+encodeURIComponent(selected.id)+'">Read story ↗</a></div>'+(item?'<small>'+esc(item.title)+' · '+esc(item.date)+'</small>':'')+'</div>';
    const activeSocieties=api.civilisations.filter(c=>active(c,y));
    const prioritised=activeSocieties.sort((a,b)=>
       Number(b.id===selected.id)-Number(a.id===selected.id)||
       Number(Boolean(media?.forSociety(b.id)))-Number(Boolean(media?.forSociety(a.id)))||
       Number(b.region!==selected.region)-Number(a.region!==selected.region)||a.name.localeCompare(b.name));
    const chosen=[selected,...prioritised.filter(c=>c.id!==selected.id)].filter((c,i,a)=>a.findIndex(x=>x.id===c.id)===i).slice(0,5);
-   strip.innerHTML='<div class="atlas-contemporary-intro"><span>AT THIS MOMENT</span><h3>Meanwhile in other worlds</h3><p>Contemporary does not mean connected. Select a society to see its records.</p></div><div class="atlas-contemporary-list">'+chosen.map(c=>{
+   strip.innerHTML='<div class="atlas-contemporary-intro"><span>AT THIS MOMENT</span><h3>Meanwhile in other worlds</h3></div><div class="atlas-contemporary-list">'+chosen.map(c=>{
     const object=media?.forSociety(c.id);
-    return '<button type="button" data-map-contemporary="'+esc(c.id)+'" aria-pressed="'+(c.id===selected.id)+'"><span class="atlas-contemporary-art">'+image(c)+'</span><span class="atlas-contemporary-text"><strong>'+esc(c.name)+'</strong><small>'+esc(c.region)+'</small>'+(object?'<em>Period object available</em>':'<em>Explore records</em>')+'</span></button>';
+    return '<button type="button" data-map-contemporary="'+esc(c.id)+'" aria-pressed="'+(c.id===selected.id)+'"><span class="atlas-contemporary-art">'+image(c)+'</span><span class="atlas-contemporary-text"><strong>'+esc(c.name)+'</strong><small>'+esc(c.region)+'</small>'+(object?'<em>Explore</em>':'<em>Explore</em>')+'</span></button>';
    }).join('')+'</div>';
    media?.bindImages(hero);media?.bindImages(strip);
    const interaction=document.getElementById('atlasExploreConnections');

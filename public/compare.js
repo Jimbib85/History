@@ -248,7 +248,7 @@
   function renderSources(record,isEvent) {
     const sources = sourcesFor(record,isEvent), explicit = sources.some(s => s.kind === 'Record source');
     $('sourceNumber').textContent = sources.length;
-    $('selectedSources').innerHTML = (isEvent && !explicit ? '<p class="source-caution">This atlas record has no claim-specific source link. Any background reference below should not be treated as verification of this event.</p>' : '<p class="small-caption">' + (isEvent ? 'References attached to this record. Editorial confidence is not a verification status.' : 'Background references for this entry; individual events have their own evidence.') + '</p>') + sources.slice(0,ui.sourceLimit).map(s => '<a class="reader-source" href="' + safe(s.url) + '" target="_blank" rel="noopener noreferrer"><strong>' + safe(s.title) + ' ↗</strong><small>' + safe(s.kind) + '</small></a>').join('') + (sources.length ? moreButton('sources',ui.sourceLimit,sources.length,'references') : '<p class="small-caption">No source link is attached.</p>');
+    $('selectedSources').innerHTML = '' + sources.slice(0,ui.sourceLimit).map(s => '<a class="reader-source" href="' + safe(s.url) + '" target="_blank" rel="noopener noreferrer"><strong>' + safe(s.title) + ' ↗</strong><small>' + safe(s.kind) + '</small></a>').join('') + (sources.length ? moreButton('sources',ui.sourceLimit,sources.length,'references') : '<p class="small-caption">No source link is attached.</p>');
     return sources.length;
   }
   function insight() {
@@ -260,7 +260,7 @@
     $('yearCaption').textContent = now.length + ' matching atlas ' + (now.length === 1 ? 'entry' : 'entries') + ' dated as active at this time.';
     $('activeNumber').textContent = concurrent.length;
     $('nearNumber').textContent = near.length;
-    $('concurrentList').innerHTML = concurrent.length ? concurrent.slice(0,ui.concurrentLimit).map(entityButton).join('') + moreButton('concurrent',ui.concurrentLimit,concurrent.length,'entries') : '<p class="small-caption">No other matching entry in this sample. This does not mean the region was uninhabited.</p>';
+    $('concurrentList').innerHTML = concurrent.length ? concurrent.slice(0,ui.concurrentLimit).map(entityButton).join('') + moreButton('concurrent',ui.concurrentLimit,concurrent.length,'entries') : '<p class="small-caption">No other matching societies in this selection.</p>';
     $('nearEvents').innerHTML = near.length ? near.slice(0,ui.nearLimit).map(cardEvent).join('') + moreButton('near',ui.nearLimit,near.length,'records') : '<p class="small-caption">No matching records within 200 years.</p>';
     const pinned = state.pinned.includes(state.selected);
     $('pinCompare').textContent = pinned ? '★ Unpin selected' : '☆ Pin selected';
@@ -367,7 +367,7 @@
         const visible=overlaps(c,r),x=pct(Math.max(c.start,r.start),r),end=pct(Math.min(c.end,r.end),r);
         return '<div class="cinematic-flow-track"><span title="'+safe(c.name)+'">'+safe(c.name)+'</span><div class="cinematic-flow-line">'+(visible?'<button type="button" data-deck-civ="'+safe(c.id)+'" aria-label="Explore '+safe(c.name)+'" style="--flow-x:'+x.toFixed(3)+'%;--flow-width:'+Math.max(.6,end-x).toFixed(3)+'%;--flow-colour:var(--flow-'+i+')" title="'+safe(entityDates(c))+'"></button>':'<small>Outside visible period</small>')+'<i style="left:'+pct(state.year,r)+'%" aria-hidden="true"></i></div></div>';
       }).join('')+'</div>'+
-      '<p class="cinematic-evidence-note">The imagery depicts individual historical objects or artworks, not entire societies. Coloured bands use the atlas’s documented date intervals; co-existence does not establish contact. Select dated event markers below to examine evidence.</p>';
+      '';
     media?.bindImages(host);
   }
   function render() {

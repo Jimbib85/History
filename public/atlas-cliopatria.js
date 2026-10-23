@@ -50,7 +50,7 @@
  function svg(rows,geo,projector,colour,id){
   if(!safeId(id))return '';
   return paths(rows,geo,projector).map(({d,row})=>{
-   const label=esc((row.name||id)+' · Seshat Cliopatria approximate area '+row.from+' to '+row.to+' (Atlas astronomical years), simplified');
+   const label=esc((row.name||id)+' · '+row.from+'–'+row.to);
    return '<path class="atlas-cliopatria-extent" data-polity="'+esc(id)+'" d="'+esc(d)+'" fill="'+safeHex(colour)+
     '" stroke="'+safeHex(colour)+'" stroke-width="2" fill-opacity=".3" stroke-opacity=".89" fill-rule="evenodd"><title>'+label+'</title></path>';
   }).join('');

@@ -11,7 +11,7 @@
  if(!map||!geo||!source||!projector||!layer||!markers||!status||!toggle)return;
  const byId=new Map(map.civilisations.map(c=>[c.id,c]));
  const requested=new Set(),loaded=new Map();
- let index=null,version=0;
+ let index=null,indexReady=false,version=0;
  const date=y=>y<=0?(1-y)+' BCE':y+' CE';
  function candidateIds(year){
   if(!index?.coverage)return [];
@@ -50,26 +50,17 @@
    path.style.display=snapshot.some(s=>drawnIds.has(s.id))?'none':'';
   });
   if(!index){
-   status.textContent='Seshat Cliopatria geography is unavailable on this build. Existing location clouds and independently sourced snapshot outlines remain usable.';
+   status.hidden=!indexReady;
+   status.textContent=indexReady?'Historical regions unavailable.':'';
    return;
   }
-  const matched=Object.keys(index.coverage).length;
-  if(!available){
-   status.textContent='Dated Seshat boundaries are hidden in this map mode. Source coverage: '+matched+' verified atlas identity matches.';
-   return;
-  }
-  const selected=map.state.civ,chosen=loaded.get(selected);
-  const rows=source.atYear(chosen,year);
-  const info=rows.length?' '+(byId.get(selected)?.name||selected)+' has '+rows.length+' documented map '+(rows.length===1?'shape':'shapes')+' for '+date(year)+'.':
-    (index.coverage[selected]?' No Seshat polygon for the selected society at '+date(year)+'; the illustrative cloud is retained.':' This society has no reviewed Cliopatria identity match.');
-  status.innerHTML='<strong>Seshat Cliopatria · v0.2.1</strong> · '+drawnIds.size+
-   ' mapped societies at '+date(year)+' · '+matched+' curated atlas identities.'+
-   source.esc(info)+
-   ' <span>Territories are scholarly reconstructions, not exact or uncontested borders; original dates and simplified polygons are preserved.</span>'+
-   ' <a href="'+source.CITATION+'" target="_blank" rel="noopener noreferrer">Dataset and methodology ↗</a>'+
-   ' <a href="'+source.LICENSE+'" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>';
+  status.hidden=!available;
+  if(!available)return;
+  const count=drawnIds.size;
+  status.textContent=count?count+' historical '+(count===1?'region':'regions')+' · '+date(year):'';
+  status.hidden=!count;
  }
- source.loadIndex().then(data=>{index=data;render();});
+ source.loadIndex().then(data=>{index=data;indexReady=true;render();});
  // The existing map changes its marker group whenever year, society or mode changes.
  if(typeof root.MutationObserver==='function'){
   new root.MutationObserver(render).observe(markers,{childList:true});

@@ -15,11 +15,11 @@
 <section class="hero">
  <p class="eyebrow">HUMAN HISTORY, ONE CONNECTION AT A TIME</p>
  <h1>Follow your <em>curiosity.</em></h1>
- <p>Read a handful of real research records instead of searching through thousands. Follow a theme, see what people were doing around the same time, or take a random detour.</p>
- <p class="honesty">These are editorial comparisons of selective evidence, not claims that societies influenced or knew each other.</p>
+ <p>Choose a theme, explore life in other centuries, or discover something unexpected.</p>
+ 
 </section>
 <section id="journeys" aria-labelledby="journeysTitle">
- <div class="section-top"><div><p class="eyebrow">CHOOSE A THREAD</p><h2 id="journeysTitle">Four paths through history</h2></div><span class="quiet">Research-linked, expandable reading</span></div>
+ <div class="section-top"><div><p class="eyebrow">CHOOSE A THREAD</p><h2 id="journeysTitle">Four paths through history</h2></div><span class="quiet">Pick a journey to begin</span></div>
  <div id="journeyChoices" class="journey-choices" role="group" aria-label="Choose a guided history journey"></div>
  <div id="journeyReader" class="reader" aria-live="polite">
   <div class="reader-head"><div><span class="eyebrow" id="guideProgress">GUIDED JOURNEY</span><h3 id="guideTitle">A day in different worlds</h3><p id="guideNote"></p></div><div class="step-nav"><button type="button" id="prevStep" aria-label="Previous discovery">← Back</button><button type="button" id="nextStep">Next →</button></div></div>
@@ -28,7 +28,7 @@
 </section>
 <section class="same-time" aria-labelledby="sameTimeTitle">
  <div class="section-top"><div><p class="eyebrow">SAME TIME, DIFFERENT LIVES</p><h2 id="sameTimeTitle">Look across one period</h2></div></div>
- <p class="section-intro">Only records with source-provided date intervals appear here. A broad interval is not proof that an activity happened in this exact year; undated records are never assigned invented dates.</p>
+ 
  <div class="snapshot-tools"><label for="snapshotYear">Historical year</label><input id="snapshotYear" type="text" value="1600 CE" inputmode="text" autocomplete="off">
  <div class="year-presets" aria-label="Example historical years"><button type="button" data-snapshot="200">200 CE</button><button type="button" data-snapshot="1600">1600 CE</button><button type="button" data-snapshot="1800">1800 CE</button></div></div>
  <p id="snapshotSummary" class="snapshot-summary" role="status"></p><div id="snapshotCards" class="snapshot-cards"></div>
@@ -37,14 +37,14 @@
 <section class="random-area" aria-labelledby="randomTitle">
  <div class="section-top"><div><p class="eyebrow">A LITTLE SERENDIPITY</p><h2 id="randomTitle">Surprise me with a human story</h2></div>
  <button type="button" id="randomDiscovery" class="random-button">✦ Find another discovery</button></div>
- <p class="section-intro">Each suggestion comes from an existing cultural-practice record with a research source. Random means variety, not certainty.</p>
+ 
  <div id="randomRecord" class="random-record" aria-live="polite">Choose a discovery to begin.</div>
 </section>
 <section class="classical-section" aria-label="Reviewed ancient and classical evidence">
  <details id="classicalEvidence">
   <summary><span><small>NEW RESEARCH · 500 BCE–500 CE</small><strong>Explore reviewed classical evidence</strong><em>Source-linked events, technology, culture and maps from two research packs</em></span><span class="classical-chevron" aria-hidden="true">⌄</span></summary>
   <div class="classical-content">
-   <p class="classical-intro">Reviewed claim excerpts from the 500 BCE–1 BCE and 1–500 CE research packs. A partially checked entry does not mean every historical claim has been independently verified. These records complement the existing classical data; unreviewed and uncertain records are not promoted into precise timeline points.</p>
+   
    <div class="classical-tools">
     <label for="classicalKind">Evidence type<select id="classicalKind"><option value="all">All evidence</option><option value="event">Historical events</option><option value="technology">Technology evidence</option><option value="culture">Cultural practices</option><option value="map">Historical maps</option><option value="geography">Geographical knowledge</option></select></label>
     <label for="classicalBatch">Research period<select id="classicalBatch"><option value="all">Both periods</option><option value="500 BCE–1 BCE">500 BCE–1 BCE</option><option value="1–500 CE">1–500 CE</option></select></label>
@@ -55,12 +55,12 @@
   </div>
  </details>
 </section>
-<section class="expansion-section"><details id="researchExpansion"><summary><span><small>NEW SOURCE COLLECTIONS</small><strong>From early communities to the modern world</strong><em>8000 BCE-500 BCE / 1501-2026 CE</em></span><span aria-hidden="true">+</span></summary><div class="expansion-body"><p class="expansion-caution">Two source-linked research packs, not an independently verified encyclopaedia. Unknown lifespans remain unknown. Approximate occurrence windows are not fabricated event durations. Overlapping periods are reconciled by identity.</p><div class="expansion-controls"><label>Collection<select id="expansionBatch"><option value="all">Both research packs</option><option value="early">8000 BCE-500 BCE</option><option value="modern">1501-2026 CE</option></select></label><label>Record type<select id="expansionType"></select></label><label>Find evidence<input id="expansionSearch" type="search" placeholder="Person, society, place or event" maxlength="200"></label></div><p id="expansionCount" role="status">Open to load research evidence.</p><div id="expansionCards"></div><button type="button" id="expansionMore" hidden>Show more evidence</button></div></details></section>
+<section class="expansion-section"><details id="researchExpansion"><summary><span><small>NEW SOURCE COLLECTIONS</small><strong>From early communities to the modern world</strong><em>8000 BCE-500 BCE / 1501-2026 CE</em></span><span aria-hidden="true">+</span></summary><div class="expansion-body"><div class="expansion-controls"><label>Collection<select id="expansionBatch"><option value="all">Both research packs</option><option value="early">8000 BCE-500 BCE</option><option value="modern">1501-2026 CE</option></select></label><label>Record type<select id="expansionType"></select></label><label>Find evidence<input id="expansionSearch" type="search" placeholder="Person, society, place or event" maxlength="200"></label></div><p id="expansionCount" role="status">Open to load research evidence.</p><div id="expansionCards"></div><button type="button" id="expansionMore" hidden>Show more evidence</button></div></details></section>
 <section class="expansion-section" aria-label="Modern research revision 2">
 <details id="modernV2Evidence">
 <summary><span><small>RESEARCH UPDATE · 1501–2026 CE</small><strong>Modern history — priority research v2</strong><em>Events, conflicts, technology, social impact and original evidence records</em></span><span aria-hidden="true">+</span></summary>
 <div class="expansion-body">
-<p class="expansion-caution">This is an updated source-linked research collection, not a second independent set of events. Some records refine earlier entries. A source-checked claim has not necessarily been independently corroborated, broad evidence windows are not exact event dates, and actor references without lifespans are not empires.</p>
+
 <div class="expansion-controls">
 <label>Evidence category<select id="modernV2Type"><option value="events">Events and processes</option><option value="conflicts">Conflicts</option><option value="conflict_participations">Conflict participants</option><option value="battles_and_sieges">Battles and sieges</option><option value="treaties_and_settlements">Treaties and settlements</option><option value="technology_developments">Technology observations</option><option value="technologies">Technology topics</option><option value="technology_dependencies">Technology dependencies</option><option value="technology_transmission">Technology transmission</option><option value="cultural_practices">Cultural practices</option><option value="historical_figures">Historical figures</option><option value="social_impacts">Social impacts</option><option value="relationships">Relationships</option><option value="connections">Connections</option><option value="statistical_observations">Statistical observations</option><option value="discovery_cards">Discovery cards</option><option value="societies">Society and actor references</option><option value="research_gaps">Research gaps</option></select></label>
 <label>Find research<input id="modernV2Search" type="search" placeholder="War, independence, invention..." maxlength="160"></label>
@@ -68,13 +68,13 @@
 </div>
 <p id="modernV2Status" role="status">Expand to load the complete source-linked revision.</p><div id="modernV2Cards"></div><button type="button" id="modernV2More" hidden>Show more records</button>
 </div></details></section>
-<footer><span>✳ Built for curiosity, not productivity.</span><span>Dates, source quality and cultural accounts require care. Similarity is not proof of contact.</span></footer>
+<footer><span>✳ Built for curiosity, not productivity.</span></footer>
 </main>
 <script src="discovery-data.js?v=0.18.0"></script>
 <script src="discovery-model.js?v=0.18.0"></script>
-<script src="discovery.js?v=0.22.0"></script><script src="classical-reviewed-model.js?v=0.20.0"></script><script src="classical-reviewed-view.js?v=0.20.0"></script>
-<script src="research-expansion-view.js?v=0.22.0"></script>
+<script src="discovery.js?v=0.43.0"></script><script src="classical-reviewed-model.js?v=0.20.0"></script><script src="classical-reviewed-view.js?v=0.43.0"></script>
+<script src="research-expansion-view.js?v=0.43.0"></script>
 <script src="modern-v2-model.js?v=0.23.0"></script>
-<script src="modern-v2-view.js?v=0.23.0"></script>
+<script src="modern-v2-view.js?v=0.43.0"></script>
 <script src="atlas-links.js?v=0.42.0"></script>
 </body></html>

@@ -76,7 +76,7 @@
  function renderContext(){
   if(!queryEvent){panel.hidden=true;return;}
   panel.hidden=false;
-  if(!record){panel.innerHTML='<div class="atlas-interaction-overline">SHARED HISTORICAL RECORD</div><h3>Interaction record unavailable</h3><p>The requested event could not be matched to a current dated research record. The map still works independently.</p><div class="atlas-interaction-foot"><a href="interactions.html">Explore interactions ↗</a></div>';return;}
+  if(!record){panel.innerHTML='<div class="atlas-interaction-overline">HISTORICAL CONNECTION</div><h3>Record unavailable</h3><p>Choose another connection.</p><div class="atlas-interaction-foot"><a href="interactions.html">Explore interactions ↗</a></div>';return;}
   const mapped=record.participants.filter(id=>presence.mapped(societyById.get(id),geo));
   const selected=atlas.state.civ;
   const actors=record.participants.map(id=>{
@@ -91,12 +91,12 @@
   const source=sources.find(v=>{try{return /^https?:$/.test(new URL(v).protocol)}catch(_){return false}});
   const trail=availableTrail(),index=trail.findIndex(e=>e.key===record.key);
   const snapshot=extents?.atYear(atlas.state.year)||[];
-  panel.innerHTML='<span class="atlas-interaction-overline">CONNECTED HISTORY · DATED RESEARCH RECORD</span>'+
+  panel.innerHTML='<span class="atlas-interaction-overline">CONNECTED HISTORY</span>'+
    '<h3>'+esc(record.title)+'</h3>'+
    '<p class="atlas-interaction-date">Record dated '+esc(readableYear(record.year))+
    (yearDifferent?' · Current map: '+esc(readableYear(atlas.state.year)):'')+'</p>'+
    (record.detail?'<p>'+esc(record.detail)+'</p>':'')+
-   '<p class="atlas-interaction-geo-summary">'+mapped.length+' of '+record.participants.length+' named societies have representative map points. The coloured outlines are location guides; only individually sourced territory snapshots qualify as historical extents. Neither plotting nor shared evidence proves the event occurred at these points.</p>'+
+   '<p class="atlas-interaction-geo-summary">'+mapped.length+' of '+record.participants.length+' societies on the map.</p>'+
    '<div class="atlas-interaction-actors" role="group" aria-label="Focus a society named in this research record">'+actors+'</div>'+
    '<div class="atlas-map-evidence-trail"><span>Record '+(index+1)+' of '+trail.length+' for '+esc(societyById.get(trail.length?(record.participants.includes(selected)?selected:origin):origin)?.name||'this society')+'</span>'+
    '<button type="button" data-map-evidence-step="-1"'+(index<=0?' disabled':'')+' aria-label="Previous dated record">‹ Previous</button>'+
@@ -104,9 +104,9 @@
    '<div class="atlas-interaction-foot">'+
    (yearDifferent?'<button type="button" id="returnInteractionYear">Return to record year</button>':'')+
    (mapped.length>1?'<button type="button" id="fitInteractionSocieties">Fit society locations on map</button>':'')+
-   '<a href="interactions.html?'+back.toString()+'">Open evidence trail ↗</a>'+
+   '<a href="interactions.html?'+back.toString()+'">Explore connections ↗</a>'+
    (source?'<a href="'+esc(source)+'" target="_blank" rel="noopener noreferrer">Record source ↗</a>':'')+
-   (snapshot.length?'<a href="'+esc(extents.SOURCE)+'" target="_blank" rel="noopener noreferrer">Extent GIS source ↗</a>':'')+
+   
    '</div>';
  }
  function render(){
@@ -122,17 +122,8 @@
   toggle.textContent=enabled?'☁ Presence clouds on':'☁ Presence clouds off';
   toggle.disabled=!canShow;
   if(chooser)chooser.querySelectorAll('[data-atlas-snapshot]').forEach(b=>b.setAttribute('aria-pressed',String(extents?.SNAPSHOTS.some(s=>s.id===b.dataset.atlasSnapshot&&s.year===state.year))));
-  const extentMessage=shapes.map(s=>{
-   if(researched.has(s.id))return s.name+' · published approximate peak extent at '+readableYear(s.year)+' (University of Minnesota GIS; geometry simplified for viewing)';
-   if(pending.has(s.id))return s.name+' · loading sourced GIS boundary';
-   if(failed.has(s.id))return s.name+' · GIS currently unavailable; illustrative location cloud retained';
-   return '';
-  }).filter(Boolean).join(' · ');
-  note.textContent=!canShow?'Historical boundaries and location clouds are hidden on surviving historic-map and worldview modes.':
-   !enabled?'Geographical overlays hidden. Turn them on to see locations and researched peak snapshots.':
-   (extentMessage?extentMessage+'. ':'')+
-   clouds.length+' illustrative coloured cloud areas near representative map points'+(record?' · '+related.filter(id=>presence.mapped(societyById.get(id),geo)).length+' mapped societies from the selected interaction':'')+
-   '. Cloud sizes are decorative; only named, dated GIS outlines are approximate researched extents. Neither shows exact borders or routes.';
+  note.textContent=enabled&&canShow&&shapes.some(s=>failed.has(s.id))?'Some historical regions are unavailable.':'';
+  note.hidden=!note.textContent;
   renderContext();
  }
  toggle.addEventListener('click',()=>{enabled=!enabled;render();});

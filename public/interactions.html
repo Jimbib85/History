@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="atlas-journey.css?v=0.42.0">
 </head>
 <body class="atlas-interactions">
-<a class="interaction-skip" href="#interactionNetwork">Skip to interaction evidence</a>
+<a class="interaction-skip" href="#interactionNetwork">Skip to interactions</a>
 <header class="topbar">
  <a class="brand" href="index.html"><span class="brand-seal" aria-hidden="true">✳</span><span><strong>WORLD HISTORY <em>ATLAS</em></strong><small>PEOPLES · PLACES · CONNECTIONS</small></span></a>
  <nav class="atlas-crossnav" aria-label="Atlas views">
@@ -27,25 +27,24 @@
 </header>
 <main class="interaction-shell">
  <section class="interaction-hero">
-  <div class="interaction-hero-copy"><span class="interaction-eyebrow">THE LIVING ATLAS · CONNECTED HISTORIES</span><h1>How worlds <em>met</em></h1><p>Discover historical relationships through trade, diplomacy, conflict, knowledge and movement. Every connection shown here is anchored to a record naming the societies involved.</p></div>
+  <div class="interaction-hero-copy"><span class="interaction-eyebrow">SOCIETIES · CONNECTIONS · HISTORY</span><h1>How worlds <em>met</em></h1><p>Discover historical relationships through trade, diplomacy, conflict, knowledge and movement. Choose a society to follow its connections through time.</p></div>
   <div class="interaction-hero-art" aria-hidden="true"><img src="assets/atlas-compass.svg" alt=""></div>
  </section>
  <section class="interaction-filters" aria-label="Explore interaction records">
   <div class="interaction-filter-top">
-   <label class="interaction-society-label">Explore a society <select id="interactionSociety" aria-label="Choose a society with shared research records"><option value="">All evidenced societies</option></select></label>
+   <label class="interaction-society-label">Explore a society <select id="interactionSociety" aria-label="Choose a society with shared research records"><option value="">All societies</option></select></label>
    <label>Period <select id="interactionEra" aria-label="Historical period"><option value="medieval">850–1500 CE</option><option value="classical">500 BCE–500 CE</option><option value="earlymodern">1450–1800 CE</option><option value="modern">1800–2026 CE</option><option value="all">All recorded history</option><option value="window">Custom year ±250</option></select></label>
-   <label>Connection type <select id="interactionType" aria-label="Interaction type"><option value="All">All evidenced types</option><option>Trade</option><option>Conflict</option><option>Diplomacy</option><option>Knowledge</option><option>Migration</option><option>Political change</option><option>Other</option></select></label>
-   <label class="interaction-search-label">Find a society or event <input id="interactionSearch" type="search" placeholder="Search historical evidence…" autocomplete="off"></label>
+   <label>Connection type <select id="interactionType" aria-label="Interaction type"><option value="All">All types</option><option>Trade</option><option>Conflict</option><option>Diplomacy</option><option>Knowledge</option><option>Migration</option><option>Political change</option><option>Other</option></select></label>
+   <label class="interaction-search-label">Find a society or event <input id="interactionSearch" type="search" placeholder="Search societies or events…" autocomplete="off"></label>
    <button type="button" id="interactionFocus">Explore all societies</button>
   </div>
   <div class="interaction-era-ruler"><span id="interactionRangeLabel" role="status">850–1500 CE</span><input id="interactionYear" type="range" min="-9999" max="2026" step="1" value="1200" aria-label="Choose a year and a 500-year exploration window"><span class="interaction-ruler-hint">Drag to explore a ±250-year window</span></div>
  </section>
- <section class="interaction-explainer"><span class="interaction-key" aria-hidden="true">✧</span><p><strong>Evidence network, not a route map.</strong> Each arc reflects a research record that explicitly names multiple societies. It does not imply direct travel, a border or a verified bilateral relationship. Records and source limitations open on selection.</p></section>
- <section class="interaction-focus-shelf" id="interactionFocusShelf" aria-label="Evidence-linked societies" hidden>
-  <div class="interaction-focus-head"><div><span class="interaction-eyebrow">SOCIETIES IN SHARED RECORDS</span><h2 id="interactionFocusTitle">Connections in the record</h2><p id="interactionFocusSummary">Only societies explicitly named in the same research record appear here. Co-mention alone does not establish bilateral contact.</p></div><button id="interactionClearPartner" type="button" hidden>Show all shared records</button></div>
+  <section class="interaction-focus-shelf" id="interactionFocusShelf" aria-label="Evidence-linked societies" hidden>
+  <div class="interaction-focus-head"><div><span class="interaction-eyebrow">SOCIETIES IN SHARED RECORDS</span><h2 id="interactionFocusTitle">Connections in the record</h2><p id="interactionFocusSummary">Choose a society to explore its connections.</p></div><button id="interactionClearPartner" type="button" hidden>Show all shared records</button></div>
   <div id="interactionPartners" class="interaction-partners" role="group" aria-label="Choose another society named in the same records"></div>
  </section>
- <section class="interaction-time-panel" aria-label="Distribution of dated interaction records"><div class="interaction-time-heading"><div><span class="interaction-eyebrow">EVIDENCE THROUGH TIME</span><h2>Follow the recorded moments</h2></div><p id="interactionTimeSummary">Select a period to explore its records.</p></div><div id="interactionTimeRibbon" class="interaction-time-ribbon" role="group" aria-label="Choose a time period containing dated records"></div><p class="interaction-time-note">Bars count research records dated in each interval, not the intensity or duration of historical relationships.</p></section>
+ <section class="interaction-time-panel" aria-label="Distribution of dated interaction records"><div class="interaction-time-heading"><div><span class="interaction-eyebrow">THROUGH TIME</span><h2>Follow the recorded moments</h2></div><p id="interactionTimeSummary">Select a period to explore its records.</p></div><div id="interactionTimeRibbon" class="interaction-time-ribbon" role="group" aria-label="Choose a time period containing dated records"></div></section>
  <div class="interaction-workspace">
   <div class="interaction-main">
    <div class="interaction-controls"><div><span id="interactionCount" role="status">Historical interactions</span><h2>Connections across time</h2></div><div class="interaction-switch" role="group" aria-label="Interaction display"><button type="button" class="active" data-interaction-mode="network" aria-pressed="true">◉ Network</button><button type="button" data-interaction-mode="stories" aria-pressed="false">▤ Stories</button></div></div>
@@ -55,15 +54,15 @@
     <button type="button" id="interactionNextRecord" aria-label="Next dated research record" title="Next record">›</button>
     <button type="button" id="interactionPlayRecords" aria-pressed="false" title="Play the dated research records in sequence">▶ Play records</button>
    </div>
-   <p class="interaction-network-hint">Select a line or society to explore its evidence. On smaller screens, swipe sideways to inspect the network, or use the society chips above.</p>
+   <p class="interaction-network-hint">Tap a society or connection to explore. Swipe to move around the network.</p>
    <div id="interactionNetwork" class="interaction-network" tabindex="0" aria-label="Interactive, non-geographic historical interaction network. Swipe horizontally on small screens."></div>
-   <a class="interaction-mobile-evidence-link" href="#interactionDetailPanel">Read selected evidence ↓</a>
+   <a class="interaction-mobile-evidence-link" href="#interactionDetailPanel">See details ↓</a>
    <div id="interactionStories" class="interaction-stories" hidden aria-label="Linked historical interaction stories"></div>
    <div class="interaction-legend"><span><i style="--swatch:#edc16c"></i>Trade</span><span><i style="--swatch:#f17a75"></i>Conflict</span><span><i style="--swatch:#67c9e7"></i>Diplomacy</span><span><i style="--swatch:#ba98f0"></i>Knowledge</span><span><i style="--swatch:#76d4ad"></i>Migration</span><span><i style="--swatch:#e6a279"></i>Political change</span></div>
   </div>
   <aside id="interactionDetailPanel" class="interaction-detail-panel" aria-label="Selected record and evidence"><div id="interactionDetail" aria-live="polite"></div></aside>
  </div>
- <footer class="interaction-footer"><p>This is a deliberately selective research network, not a complete history of human connections. Missing records do not mean a society was isolated. Images are authentic objects or clearly marked decorative illustrations; dates and source access have varying uncertainty.</p><a href="compare.html">Explore shared timelines ↗</a></footer>
+ <footer class="interaction-footer"><a href="compare.html">Explore shared timelines ↗</a></footer>
 </main>
 <script src="data.js?v=0.4.0"></script>
 <script src="entity-types.js?v=0.4.0"></script>
@@ -118,6 +117,6 @@
 <script src="atlas-master-core-apply.js?v=0.29.0"></script>
 <script src="atlas-visual-assets.js?v=0.33.0"></script>
 <script src="interaction-evidence.js?v=0.35.0"></script>
-<script src="interactions.js?v=0.39.0"></script>
+<script src="interactions.js?v=0.43.0"></script>
 <script src="atlas-links.js?v=0.42.0"></script>
 </body></html>
