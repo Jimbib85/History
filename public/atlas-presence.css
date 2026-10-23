@@ -32,3 +32,29 @@
  .atlas-presence-note{font-size:11px}
 }
 @media(prefers-reduced-motion:reduce){#mapPresenceClouds .atlas-presence-cloud{transition:none!important;animation:none!important}}
+
+/* v0.38 · research-backed snapshots remain separate from illustrative location clouds */
+#mapPresenceClouds .atlas-researched-extent{pointer-events:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:6 3;filter:drop-shadow(0 0 4px #0006)}
+.atlas-extent-choices{display:flex;flex-wrap:wrap;gap:10px 15px;align-items:center;border:1px solid #d8b47a64;padding:12px 14px;border-radius:13px;margin:10px 0;background:#102d3a;color:#e7d4b4}
+.atlas-extent-choices>div:first-child{display:flex;flex-direction:column;gap:4px}
+.atlas-extent-choices strong{font:17px/1.25 Georgia,serif;color:#f6dbab}
+.atlas-extent-choices small{font:10px/1.4 'DM Sans',Arial,sans-serif;color:#b5ccc8}
+.atlas-extent-buttons{display:flex;flex-wrap:wrap;gap:6px}
+.atlas-extent-buttons button{padding:8px 12px;min-height:43px;font-size:11px;color:#eedab3;background:#1d3b45;border:1px solid #cfac737d;border-radius:99px}
+.atlas-extent-buttons button:hover,.atlas-extent-buttons button[aria-pressed="true"]{color:#0b222d;background:#e8c48a;border-color:#ffe3ac}
+.atlas-extent-choices>a{font:10px 'DM Sans',Arial,sans-serif;color:#f2ce96}
+.atlas-extent-result{font:11px/1.5 'DM Sans',Arial,sans-serif;color:#d8c5a5}
+.atlas-map-evidence-trail{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:12px 0 4px;border-top:1px solid #d0ac6b55}
+.atlas-map-evidence-trail span{color:#c6d0cc;font:11px 'DM Sans',Arial,sans-serif;flex:1 1 175px}
+.atlas-map-evidence-trail button{min-height:43px;background:#173a48;border:1px solid #e7c2887d;color:#f7deb4;border-radius:10px;font-size:12px;padding:8px 13px}
+.atlas-map-evidence-trail button:disabled{opacity:.38;cursor:default}
+.atlas-map-evidence-trail button:not(:disabled):hover{background:#34515e}
+.atlas-interaction-geo-summary{border-left:3px solid #d9b378;padding-left:10px;background:#1c3b421e}
+@media(max-width:640px){
+ .atlas-extent-choices{padding:11px}
+ .atlas-extent-choices>div:first-child{flex:1 1 100%}
+ .atlas-extent-buttons{overflow-x:auto;flex-wrap:nowrap;max-width:100%;scrollbar-width:thin}
+ .atlas-extent-buttons button{white-space:nowrap;flex:0 0 auto}
+ .atlas-map-evidence-trail span{flex:1 1 100%}
+ .atlas-map-evidence-trail button{flex:1 1 auto}
+}
