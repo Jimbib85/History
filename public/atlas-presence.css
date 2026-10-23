@@ -1,0 +1,34 @@
+/* Atlas v0.37 — illustrated presence halos, NOT historical territorial boundaries.
+   Shapes have fixed illustrative size around reference locations only. */
+#mapPresenceClouds{pointer-events:none;isolation:isolate}
+#mapPresenceClouds .atlas-presence-cloud{pointer-events:none;stroke-linecap:round;stroke-linejoin:round;paint-order:stroke fill;filter:drop-shadow(0 0 6px #03121ac2)}
+#mapPresenceClouds .atlas-presence-cloud.is-highlighted{filter:drop-shadow(0 0 8px #ffe7a54a);stroke-dasharray:7 4}
+#mapPresenceClouds .atlas-presence-cloud.is-outside-lifespan{stroke-dasharray:2 8;fill-opacity:.08;stroke-opacity:.53}
+.atlas-cinematic #togglePresenceClouds{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid #b49565a3;border-radius:10px;background:#142e39;color:#f3d6a2;min-height:40px;padding:7px 13px;white-space:nowrap}
+.atlas-cinematic #togglePresenceClouds[aria-pressed="true"]{color:#091b25;background:#e5bd79;border-color:#ffe1a8;box-shadow:inset 0 0 0 1px #805d30}
+.atlas-cinematic #togglePresenceClouds:hover{border-color:#fff0c4}
+.atlas-presence-note{color:#e6cfaa;font:11px/1.55 'DM Sans',Arial,sans-serif;letter-spacing:.012em;border-left:3px solid #e4b976;padding:9px 12px;margin:10px 0;border-radius:0 9px 9px 0;background:#112d3aa8}
+.atlas-interaction-context{margin:11px 0 13px;border:1px solid #d4af73a3;border-radius:17px;padding:17px 18px;background:linear-gradient(135deg,#123a46,#0a2433 76%);box-shadow:0 8px 20px #0005}
+.atlas-interaction-context[hidden]{display:none!important}
+.atlas-interaction-overline{font:700 10px 'DM Sans',Arial,sans-serif;letter-spacing:.16em;color:#ebc785}
+.atlas-interaction-context h3{color:#f7e5c8;font:24px/1.2 Georgia,serif;margin:8px 0}
+.atlas-interaction-context p{color:#c6d7d1;font:12px/1.6 'DM Sans',Arial,sans-serif;margin:8px 0;max-width:76ch}
+.atlas-interaction-context .atlas-interaction-date{color:#f2cc8f;font-size:12px}
+.atlas-interaction-actors{display:flex;flex-wrap:wrap;gap:9px;margin:15px 0}
+.atlas-interaction-actors button{border:1px solid #e0bf8a80;background:#183a46;border-radius:11px;color:#fbe1b6;display:flex;gap:7px;align-items:center;padding:9px 11px;min-height:44px;font-size:12px;text-align:left}
+.atlas-interaction-actors button:hover,.atlas-interaction-actors button[aria-pressed="true"]{border-color:#ffe2a9;background:#3a4a42}
+.atlas-interaction-actors button:disabled{opacity:.65;cursor:not-allowed}
+.atlas-interaction-actors .atlas-presence-dot{flex:none;display:inline-block;width:13px;height:13px;border-radius:50%;background:var(--actor-colour,#d4ae72);border:2px solid #fff2cfaa}
+.atlas-interaction-actors small{color:#b3c7c4;font-size:10px}
+.atlas-interaction-foot{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.atlas-interaction-foot a,.atlas-interaction-foot button{background:#14323c;color:#f4d39c;border:1px solid #d0a9638c;border-radius:999px;text-decoration:none;padding:9px 12px;min-height:40px;font-size:11px;display:inline-flex;align-items:center}
+.atlas-interaction-foot a:hover,.atlas-interaction-foot button:hover{background:#34515a}
+@media(max-width:700px){
+ .atlas-cinematic #togglePresenceClouds{font-size:11px;min-height:44px;flex:1 1 auto}
+ .atlas-interaction-context{padding:12px}
+ .atlas-interaction-context h3{font-size:21px}
+ .atlas-interaction-actors{gap:6px}
+ .atlas-interaction-actors button{flex:1 1 155px;justify-content:flex-start}
+ .atlas-presence-note{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){#mapPresenceClouds .atlas-presence-cloud{transition:none!important;animation:none!important}}
