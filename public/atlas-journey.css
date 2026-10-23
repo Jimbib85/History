@@ -1,28 +1,12 @@
-/* Atlas v0.41 · one connected navigation language across seven experiences.
-   Scoped: keeps each page's chosen editorial palette and imagery. */
-.atlas-journey-rail{position:relative;z-index:9;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:11px max(17px,calc((100vw - 1520px)/2));background:linear-gradient(105deg,#173745,#0a2432 74%);color:#ecdec3;border-bottom:1px solid #d8b47970;box-shadow:0 4px 14px #00121b18;font-family:'DM Sans',Arial,sans-serif}
+/* Shared compact contextual navigation across Atlas readers. */
+.atlas-journey-rail{position:relative;z-index:9;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 16px;background:linear-gradient(110deg,#173745,#0a2432);color:#ecdec3;border-bottom:1px solid #d8b47970;font-family:'DM Sans',Arial,sans-serif}
 .atlas-journey-rail[hidden]{display:none!important}
-.atlas-journey-copy{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0}
-.atlas-journey-copy strong{font:18px/1.2 Georgia,serif;color:#ffe1ab;text-transform:none}
-.atlas-journey-copy>span:not(.atlas-journey-kicker){font:11px/1.3 'DM Sans',Arial,sans-serif;color:#d0d9d6}
-.atlas-journey-kicker{font:700 9px/1.3 'DM Sans',Arial,sans-serif;letter-spacing:.17em;color:#bdbda5;white-space:nowrap}
-.atlas-journey-rail nav{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
-.atlas-journey-rail nav a{display:inline-flex;align-items:center;min-height:37px;padding:7px 11px;border:1px solid #bd9f6a7a;border-radius:99px;background:#0b2b39;color:#f6daa4!important;text-decoration:none;font:600 11px/1.25 'DM Sans',Arial,sans-serif;white-space:nowrap;transition:background-color .18s,border-color .18s}
-.atlas-journey-rail nav a:hover,.atlas-journey-rail nav a:focus-visible{background:#345460;border-color:#f2d49d;outline-offset:2px}
-/* Typography and discovery rhythm, without forcing every page into boxes. */
-body:not(.atlas-interactions) :is(.story-card,.discovery-card,.conflict-card,.map-evidence,.reader-panel){scroll-margin-top:84px}
-body:not(.atlas-interactions) :is(.story-card,.discovery-card,.conflict-card) :is(h2,h3){text-wrap:balance}
-body :is(.atlas-crossnav,.atlas-journey-rail nav){-webkit-overflow-scrolling:touch}
-@media(max-width:760px){
- .atlas-journey-rail{padding:9px 12px;gap:8px}
- .atlas-journey-copy{gap:6px 9px;flex-basis:100%}
- .atlas-journey-kicker{flex:1 1 100%;font-size:9px}
- .atlas-journey-copy strong{font-size:16px}
- .atlas-journey-rail nav{flex-wrap:nowrap;overflow-x:auto;width:100%;scrollbar-width:none}
- .atlas-journey-rail nav::-webkit-scrollbar{display:none}
- .atlas-journey-rail nav a{flex:0 0 auto;min-height:42px;padding:9px 13px}
-}
-@media(prefers-reduced-motion:reduce){.atlas-journey-rail nav a{transition:none}}
-
-/* An active context trail link keeps each screen oriented without extra panels. */
-.atlas-journey-rail nav a[aria-current="page"]{background:#4c533f;border-color:#f9d39c;color:#fff0cb!important;box-shadow:inset 0 -2px #f9d39c}
+.atlas-journey-copy{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;min-width:0}
+.atlas-journey-copy strong{font:18px Georgia,serif;color:#ffe1ab}
+.atlas-journey-copy>span:not(.atlas-journey-kicker){font-size:11px;color:#d0d9d6}
+.atlas-journey-kicker{font-size:9px;font-weight:700;letter-spacing:.13em;color:#bdbda5}
+.atlas-journey-rail nav{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.atlas-journey-rail nav a{display:inline-flex;align-items:center;min-height:40px;padding:8px 11px;border:1px solid #bd9f6a7a;border-radius:99px;background:#0b2b39;color:#f6daa4!important;text-decoration:none;font:600 11px 'DM Sans',Arial,sans-serif;white-space:nowrap}
+.atlas-journey-rail nav a:hover,.atlas-journey-rail nav a:focus-visible{background:#345460;border-color:#f2d49d}
+.atlas-journey-rail nav a[aria-current="page"]{background:#4c533f;border-color:#f9d39c;color:#fff0cb!important}
+@media(max-width:760px){.atlas-journey-rail{padding:9px 12px}.atlas-journey-copy{flex-basis:100%}.atlas-journey-kicker{flex-basis:100%}.atlas-journey-copy strong{font-size:16px}.atlas-journey-rail nav{flex-wrap:nowrap;overflow-x:auto;width:100%;scrollbar-width:none}.atlas-journey-rail nav a{flex:0 0 auto;min-height:44px}}
