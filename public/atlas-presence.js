@@ -46,7 +46,7 @@
    if(!d)return '';
    // All geometry is derived from a point + fixed visual halo size.
    // It does not encode historical area, influence radius or political claims.
-   return '<path class="atlas-presence-cloud'+(highlighted?' is-highlighted':'')+(isActive?'':' is-outside-lifespan')+'" d="'+d+'" fill="'+colour+'" stroke="'+colour+'" stroke-width="'+(highlighted?3.6:2.3)+'" fill-opacity="'+(highlighted?.29:.16)+'" stroke-opacity="'+(highlighted?.95:.75)+'"><title>'+escape(c.name)+' · illustrative presence halo around reference location; not a historical border'+(isActive?'':' · atlas lifespan does not cover selected date')+'</title></path>';
+   return '<path data-atlas-id="'+escape(c.id)+'" class="atlas-presence-cloud'+(highlighted?' is-highlighted':'')+(isActive?'':' is-outside-lifespan')+'" d="'+d+'" fill="'+colour+'" stroke="'+colour+'" stroke-width="'+(highlighted?3.6:2.3)+'" fill-opacity="'+(highlighted?.29:.16)+'" stroke-opacity="'+(highlighted?.95:.75)+'"><title>'+escape(c.name)+' · illustrative presence halo around reference location; not a historical border'+(isActive?'':' · atlas lifespan does not cover selected date')+'</title></path>';
   }).join('');
  }
  function interaction(sources,key,civs){

@@ -12,7 +12,7 @@ for(const page of pages){
  for(const v of views)assert.ok(nav.includes('data-atlas-view="'+v+'"'),page+' missing '+v);
  assert.equal((nav.match(/aria-current="page"/g)||[]).length,1,'Current view label for '+page);
  assert.match(html,/atlas-nav\.css\?v=0\.19\.0/);
- assert.match(html,/atlas-links\.js\?v=0\.(?:19|33)\.0/);
+ assert.match(html,/atlas-links\.js\?v=0\.(?:19|33|41)\.0/);
  assert.ok(html.indexOf('atlas-links.js')>html.indexOf('app.js?v=') || !html.includes('app.js?v='));
 }
 assert.match(read('./public/atlas-nav.css'),/overflow-x:auto/);

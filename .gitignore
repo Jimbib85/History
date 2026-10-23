@@ -2,3 +2,7 @@
 node_modules/
 
 artifacts/
+
+# Reproducible source downloads and deployment-time Seshat map slices.
+.cache/
+public/seshat/
