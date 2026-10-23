@@ -47,6 +47,9 @@
      header.insertAdjacentElement('afterend',rail);
    }
    rail.hidden=false;
+   const contextKey=JSON.stringify([ctx.year,ctx.civ,ctx.event]);
+   if(rail.dataset?.context===contextKey)return;
+   if(rail.dataset)rail.dataset.context=contextKey;
    const known=root.WorldHistoryAtlas?.civilisations||[];
    const society=known.find?.(x=>x.id===ctx.civ)?.name||String(ctx.civ||'the selected historical record').replace(/[-_]/g,' ');
    const labelYear=ctx.year===null?'':ctx.year<=0?(1-ctx.year)+' BCE':ctx.year+' CE';
