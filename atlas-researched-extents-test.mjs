@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 const read=p=>fs.readFileSync(new URL('./public/'+p,import.meta.url),'utf8');
-const ctx=vm.createContext({window:{}});vm.runInContext(read('geo-layers.js'),ctx);vm.runInContext(read('atlas-researched-extents.js'),ctx);
+const ctx=vm.createContext({window:{},URLSearchParams});vm.runInContext(read('geo-layers.js'),ctx);vm.runInContext(read('atlas-researched-extents.js'),ctx);
 const geo=ctx.window.WorldAtlasGeo,m=ctx.window.AtlasResearchedExtents;
 assert.ok(geo&&m);
 assert.deepEqual(Array.from(m.atYear(117)).map(x=>x.id),['rome']);
