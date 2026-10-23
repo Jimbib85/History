@@ -34,5 +34,5 @@ state.view='actual';state.year=900;exposed.draw();
 assert.equal(layer.children.length,0,'No active societies produces no links');
 const reducedWindow={...window,matchMedia(){return {matches:true}}}; // separate accessibility rule checked in CSS
 assert.ok(script.includes('if(reduced())return'));
-assert.ok(html.includes('Not historical borders'),'Historical marker caveat preserved');
+assert.ok(html.includes('Society locations'),'Historical map legend remains available');
 console.log('PASS v0.27 interactive living map: arcs, toggle, date filtering, historical-map isolation, controls and reduced-motion safety');
