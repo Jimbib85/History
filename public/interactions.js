@@ -154,6 +154,7 @@
    return '<button type="button" class="interaction-time-bin'+(active?' active':'')+'" data-interaction-year="'+centre+'"'+(bin.count?'':' disabled')+' aria-label="'+esc(label+': '+bin.count+' dated records')+'" aria-pressed="'+active+'" title="'+esc(label+': '+bin.count+' records')+'"><span class="interaction-time-count">'+(bin.count||'')+'</span><span class="interaction-time-bar" style="height:'+height+'px"></span><span class="interaction-time-year">'+esc(year(bin.start))+'</span></button>';
   }).join('');
  }
+ let previouslyFocusedSociety=null;
  function render(){
   const r=timeWindow(),total=linkedRecords(),rows=total.slice(0,80);
   renderEvidenceNavigation(total,r);
@@ -166,7 +167,11 @@
   $('interactionRangeLabel').textContent=r.label+' · '+rows.length+(total.length>rows.length?' of '+total.length:'')+' linked records';
   $('interactionCount').textContent=rows.length+' sourced cross-society records'+(total.length>rows.length?' (first '+rows.length+' displayed)':'');
   const networkRows=state.focus?contextualRecords():rows;
-  $('interactionNetwork').innerHTML=networkRows.length?network(networkRows):'<p class="interaction-no-record">No explicit multi-society records match this selection.</p>';
+  const networkScroller=$('interactionNetwork'),previousX=networkScroller.scrollLeft;
+  networkScroller.innerHTML=networkRows.length?network(networkRows):'<p class="interaction-no-record">No explicit multi-society records match this selection.</p>';
+  networkScroller.scrollLeft=state.focus&&previouslyFocusedSociety!==state.focus?
+   Math.max(0,(networkScroller.scrollWidth-networkScroller.clientWidth)/2):previousX;
+  previouslyFocusedSociety=state.focus;
   $('interactionStories').innerHTML=rows.length?rows.slice(0,24).map(storyCard).join(''):'<p class="interaction-no-record">No linked stories for this period and filter.</p>';
   $('interactionNetwork').hidden=state.mode!=='network';
   $('interactionStories').hidden=state.mode!=='stories';
