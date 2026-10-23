@@ -43,7 +43,7 @@ assert.equal(seq.length,3);
 assert.deepEqual([...seq].map(x=>x.year),[100,150,1279]);
 assert.equal(seq[1].key,'multi-3','Fallback keys follow the dated source index, including single-society records');
 assert.equal(m.step(seq,'one',-1).key,'one');
-assert.equal(m.step(seq,'one',1).key,'multi-2');
+assert.equal(m.step(seq,'one',1).key,'multi-3');
 assert.equal(m.step(seq,seq.at(-1).key,1).key,seq.at(-1).key);
 assert.equal(m.step([],'none',1),null);
 const html=read('index.html'),js=read('atlas-presence-map.js'),css=read('atlas-presence.css'),interactions=read('interactions.js');
