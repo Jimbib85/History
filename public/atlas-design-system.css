@@ -1,0 +1,51 @@
+/* Shared visual language for Atlas reading surfaces. Loaded after page styles. */
+:root{--atlas-ink:#263d49;--atlas-paper:#f8f4eb;--atlas-gold:#bd955b;--atlas-radius:16px;--atlas-focus:#c79855}
+html{scroll-padding-top:20px}
+body:not(.atlas-interactions){-webkit-font-smoothing:antialiased}
+body:not(.atlas-interactions) :is(.topbar,.topnav,.story-header){border-bottom-color:var(--atlas-gold)}
+body:not(.atlas-interactions) :is(.hero h1,.intro h1,.story-intro h1){letter-spacing:-.025em;text-wrap:balance}
+body:not(.atlas-interactions) :is(.hero p,.intro p,.story-intro p){text-wrap:pretty}
+body:not(.atlas-interactions) :is(button,select,input,summary){accent-color:var(--atlas-gold)}
+body:not(.atlas-interactions) :is(button,a,input,select,summary):focus-visible{outline:3px solid var(--atlas-focus);outline-offset:3px}
+body:not(.atlas-interactions) :is(button,select,input){min-height:40px}
+body:not(.atlas-interactions) :is(details){scroll-margin-top:20px}
+body:not(.atlas-interactions) :is(details > summary){cursor:pointer}
+body:not(.atlas-interactions) :is(details > summary)::marker{color:var(--atlas-gold)}
+body:not(.atlas-interactions) :is(.atlas-crossnav a){transition:background-color .18s ease,color .18s ease,border-color .18s ease}
+body:not(.atlas-interactions) :is(.atlas-crossnav a[aria-current="page"]){box-shadow:inset 0 -2px var(--atlas-gold)}
+body.atlas-interactions .atlas-crossnav a[aria-current="page"]{box-shadow:inset 0 -2px #e6bf77}
+@media(max-width:700px){
+ body:not(.atlas-interactions) :is(.shell,.story-shell,.compare-shell){max-width:100%;min-width:0}
+ body:not(.atlas-interactions) :is(.hero h1,.intro h1,.story-intro h1){line-height:1.13}
+ body:not(.atlas-interactions) :is(.atlas-crossnav){scrollbar-width:none}
+ body:not(.atlas-interactions) :is(.atlas-crossnav)::-webkit-scrollbar{display:none}
+ body:not(.atlas-interactions) :is(input,select,textarea){font-size:max(16px,1em)}
+}
+@media(prefers-reduced-motion:reduce){
+ body :is(.atlas-crossnav a){transition:none!important}
+ html{scroll-behavior:auto!important}
+}
+
+/* Editorial landing treatments for the four legacy reading experiences. */
+body:has(.story-intro),body:has(#journeys),body:has(#mapsSection),body:has(#resultsTitle){background-image:radial-gradient(ellipse 70% 340px at 80% 90px,rgba(189,149,91,.12),transparent 75%)}
+.story-intro,.shell > .hero,.shell > .hero:first-child{position:relative;isolation:isolate}
+.story-intro:before,.shell > .hero:before{content:"";position:absolute;z-index:-1;inset:-12px -14px auto auto;width:min(35vw,260px);height:170px;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(189,149,91,.13),transparent 67%);border-radius:50%}
+.story-intro h1,.shell > .hero h1{max-width:20ch}
+.story-intro .eyebrow,.shell > .hero .eyebrow{letter-spacing:.18em}
+body:has(#journeys) .shell > section,body:has(#mapsSection) .shell > section,body:has(#resultsTitle) .shell > section{scroll-margin-top:20px}
+body:has(#journeys) :is(.journey-choices,.snapshot-cards),body:has(#mapsSection) .record-grid{min-width:0}
+body:has(#journeys) :is(.journey-choices > *, .snapshot-cards > *),body:has(#mapsSection) .record-grid > *{transition:transform .2s ease,box-shadow .2s ease}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ body:has(#journeys) :is(.journey-choices > *, .snapshot-cards > *):hover,body:has(#mapsSection) .record-grid > *:hover{transform:translateY(-2px)}
+}
+body:has(#mapsSection) .context-strip{border-inline-start:3px solid var(--atlas-gold)}
+body:has(#resultsTitle) .research-note{max-width:72ch}
+body:has(#resultsTitle) .sensitive-toggle{border-inline-start:3px solid #a95d52}
+body:has(#resultsTitle) .results-head{border-bottom:1px solid rgba(189,149,91,.25)}
+@media(max-width:700px){
+ .story-intro:before,.shell > .hero:before{width:120px;height:110px}
+ body:has(#journeys) .shell,body:has(#mapsSection) .shell,body:has(#resultsTitle) .shell{padding-inline:clamp(14px,4vw,22px)}
+ body:has(#journeys) :is(.section-top,.reader-head){gap:12px;flex-wrap:wrap}
+ body:has(#mapsSection) .control-row{gap:10px}
+ body:has(#resultsTitle) .filter-row{gap:10px}
+}
