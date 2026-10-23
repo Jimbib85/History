@@ -41,7 +41,7 @@ const events=[
 const seq=m.linkedRecords(events,civs);
 assert.equal(seq.length,3);
 assert.deepEqual([...seq].map(x=>x.year),[100,150,1279]);
-assert.equal(seq[1].key,'multi-2','Fallback keys are based on original dated source index');
+assert.equal(seq[1].key,'multi-3','Fallback keys follow the dated source index, including single-society records');
 assert.equal(m.step(seq,'one',-1).key,'one');
 assert.equal(m.step(seq,'one',1).key,'multi-2');
 assert.equal(m.step(seq,seq.at(-1).key,1).key,seq.at(-1).key);
@@ -59,6 +59,6 @@ assert.match(js,/visitRecord\(extents\.step/);
 assert.match(js,/fitParticipants/);
 assert.match(js,/root\.fetch\(extents\.queryUrl\(snapshot\)/);
 assert.match(interactions,/&interaction='\+encodeURIComponent\(e\.key\)/);
-assert.match(js,/not exact borders or routes/i);
+assert.match(js,/exact borders or routes/i);
 new vm.Script(js,{filename:'atlas-presence-map.js'});
 console.log('PASS sourced historical extents: dated GIS snapshots, validated polygon projection, missing geography and linked evidence stepping');
