@@ -1,0 +1,273 @@
+{
+  "sourceVersion": "v0.2.1",
+  "matchingPolicy": "Exact Cliopatria entity name and compatible Wikidata ID when one is present. No inferred substitutions; POLITY only.",
+  "matches": {
+    "sumer": {
+      "names": [
+        "Sumerian City-States"
+      ],
+      "wikidata": [
+        "Q2345840"
+      ]
+    },
+    "old-egypt": {
+      "names": [
+        "Old Kingdom of Egypt"
+      ],
+      "wikidata": [
+        "Q177819"
+      ]
+    },
+    "indus": {
+      "names": [
+        "Indus Valley Civilization"
+      ],
+      "wikidata": [
+        "Q42534"
+      ]
+    },
+    "minoans": {
+      "names": [
+        "Minoan civilization"
+      ],
+      "wikidata": [
+        "Q134178"
+      ]
+    },
+    "shang": {
+      "names": [
+        "Shang Dynasty"
+      ],
+      "wikidata": [
+        "Q128938"
+      ]
+    },
+    "olmec": {
+      "names": [
+        "Olmec Civilization"
+      ],
+      "wikidata": [
+        "Q135364"
+      ]
+    },
+    "kush": {
+      "names": [
+        "Kingdom of Kush"
+      ],
+      "wikidata": [
+        "Q241790"
+      ]
+    },
+    "persia": {
+      "names": [
+        "Achaemenid Empire"
+      ],
+      "wikidata": [
+        "Q389688"
+      ]
+    },
+    "maurya": {
+      "names": [
+        "Maurya Empire"
+      ],
+      "wikidata": [
+        "Q62943"
+      ]
+    },
+    "han": {
+      "names": [
+        "Han Dynasty"
+      ],
+      "wikidata": [
+        "Q1068371"
+      ]
+    },
+    "rome": {
+      "names": [
+        "Roman Empire"
+      ],
+      "wikidata": [
+        "Q12544"
+      ]
+    },
+    "maya": {
+      "names": [
+        "Mayan City-States",
+        "Later Mayan City-States"
+      ],
+      "wikidata": [
+        "Q28567"
+      ]
+    },
+    "teotihuacan": {
+      "names": [
+        "Teotihuacan"
+      ],
+      "wikidata": [
+        "Q172613"
+      ]
+    },
+    "aksum": {
+      "names": [
+        "Kingdom of Axum"
+      ],
+      "wikidata": [
+        "Q139377"
+      ]
+    },
+    "gupta": {
+      "names": [
+        "Gupta Empire"
+      ],
+      "wikidata": [
+        "Q11774"
+      ]
+    },
+    "byzantium": {
+      "names": [
+        "Eastern Roman Empire",
+        "Byzantine Empire"
+      ],
+      "wikidata": [
+        "Q12544",
+        "Q112039853"
+      ]
+    },
+    "ghana": {
+      "names": [
+        "Ghana Empire"
+      ],
+      "wikidata": [
+        "Q206789"
+      ]
+    },
+    "tang": {
+      "names": [
+        "Tang Dynasty"
+      ],
+      "wikidata": [
+        "Q9683"
+      ]
+    },
+    "abbasid": {
+      "names": [
+        "Abbasid Caliphate"
+      ],
+      "wikidata": [
+        "Q12536"
+      ]
+    },
+    "angkor": {
+      "names": [
+        "Khmer Empire"
+      ],
+      "wikidata": [
+        "Q201705"
+      ]
+    },
+    "mali": {
+      "names": [
+        "Mali Empire"
+      ],
+      "wikidata": [
+        "Q184536"
+      ]
+    },
+    "mongols": {
+      "names": [
+        "Mongol Empire"
+      ],
+      "wikidata": [
+        "Q12557"
+      ]
+    },
+    "ottomans": {
+      "names": [
+        "Ottoman Empire"
+      ],
+      "wikidata": [
+        "Q12560"
+      ]
+    },
+    "ming": {
+      "names": [
+        "Ming Dynasty"
+      ],
+      "wikidata": [
+        "Q9903"
+      ]
+    },
+    "joseon": {
+      "names": [
+        "Joseon"
+      ],
+      "wikidata": [
+        "Q28405"
+      ]
+    },
+    "inca": {
+      "names": [
+        "Inca Empire"
+      ],
+      "wikidata": [
+        "Q28573"
+      ]
+    },
+    "aztec": {
+      "names": [
+        "Aztec Triple Alliance"
+      ],
+      "wikidata": [
+        "Q2608489"
+      ]
+    },
+    "songhai": {
+      "names": [
+        "Songhai Empire"
+      ],
+      "wikidata": [
+        "Q202687"
+      ]
+    },
+    "british": {
+      "names": [
+        "British Empire"
+      ],
+      "wikidata": [
+        "Q8680"
+      ]
+    },
+    "usa": {
+      "names": [
+        "United States of America"
+      ],
+      "wikidata": [
+        "Q30"
+      ]
+    },
+    "australia": {
+      "names": [
+        "Commonwealth of Australia"
+      ],
+      "wikidata": [
+        "Q408"
+      ]
+    },
+    "soviet": {
+      "names": [
+        "Union of Soviet Socialist Republics"
+      ],
+      "wikidata": [
+        "Q15180"
+      ]
+    },
+    "prc": {
+      "names": [
+        "People's Republic of China"
+      ],
+      "wikidata": [
+        "Q148"
+      ]
+    }
+  }
+}
