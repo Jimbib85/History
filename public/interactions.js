@@ -7,6 +7,7 @@
   if(typeof document==='undefined'||typeof document.getElementById!=='function')return;
  const $=id=>document.getElementById(id);
  const societies=new Map(CIVILISATIONS.filter(c=>c.kind!=='overview').map(c=>[c.id,c]));
+ const evidence=root.AtlasInteractionEvidence;
  const allSources=[
   ...(typeof ATLAS_RESEARCH_EVENTS!=='undefined'?ATLAS_RESEARCH_EVENTS:[]),
   ...(typeof ATLAS_MEDIEVAL_EVENTS!=='undefined'?ATLAS_MEDIEVAL_EVENTS:[]),
@@ -33,7 +34,9 @@
  const palettes={'Trade':'#edc16c','Conflict':'#f17a75','Diplomacy':'#67c9e7','Knowledge':'#ba98f0','Migration':'#76d4ad','Political change':'#e6a279','Other':'#afc5c9'};
  const params=new URLSearchParams(location.search);
  const eraList={medieval:{start:850,end:1500,label:'850–1500 CE'},classical:{start:-499,end:500,label:'500 BCE–500 CE'},earlymodern:{start:1450,end:1800,label:'1450–1800 CE'},modern:{start:1800,end:2026,label:'1800–2026 CE'},all:{start:-9999,end:2026,label:'All recorded history'}};
- const state={era:eraList[params.get('era')]?params.get('era'):'medieval',year:Number.isFinite(Number(params.get('year')))&&params.has('year')?Math.max(-9999,Math.min(2026,Number(params.get('year')))):1200,type:'All',search:'',focus:societies.has(params.get('civ'))?params.get('civ'):'',event:null,mode:'network'};
+ const initialFocus=societies.has(params.get('civ'))?params.get('civ'):'';
+ const initialPartner=initialFocus&&societies.has(params.get('with'))&&params.get('with')!==initialFocus?params.get('with'):'';
+ const state={era:eraList[params.get('era')]?params.get('era'):'medieval',year:Number.isFinite(Number(params.get('year')))&&params.has('year')?Math.max(-9999,Math.min(2026,Number(params.get('year')))):1200,type:'All',search:'',focus:initialFocus,partner:initialPartner,event:null,mode:params.get('view')==='stories'?'stories':'network'};
  if(params.has('year'))state.era='window';
  const records=[...new Map(allSources.filter(e=>e&&Number.isFinite(e.year)&&e.title).map((e,i)=>{
   const participants=[...new Set((e.societyIds||e.allSocietyIds||[]).filter(id=>societies.has(id)))];
@@ -49,21 +52,39 @@
   return null;
  };
  const dates=e=>e.humanDate||e.dateLabel||e.original_date_text||(/approx|circa|century/i.test(e.datePrecision||'')?'c. ':'')+year(e.year);
- const linkedRecords=()=>{
-  const r=timeWindow(),q=state.search.trim().toLocaleLowerCase();
-  return records.filter(e=>e.year>=r.start&&e.year<=r.end&&(!e.endExclusive||e.endExclusive>r.start))
-   .filter(e=>state.type==='All'||e.type===state.type)
-   .filter(e=>!state.focus||e.participants.includes(state.focus))
-   .filter(e=>!q||[e.title,e.detail,e.kind,...e.participants.map(id=>societies.get(id)?.name)].join(' ').toLocaleLowerCase().includes(q))
-   .sort((a,b)=>a.year-b.year||a.title.localeCompare(b.title));
- };
+ const filterFor=(partner='')=>{const r=timeWindow();return evidence.filter(records,{start:r.start,end:r.end,type:state.type,focus:state.focus,partner,search:state.search,societyNames:societies});};
+ const linkedRecords=()=>filterFor(state.partner);
+ const contextualRecords=()=>filterFor('');
  function visibleRecords(){return linkedRecords().slice(0,80)}
  function artwork(e){
   const asset=root.AtlasVisualAssets?.forSociety(e.participants.find(id=>root.AtlasVisualAssets.forSociety(id)));
   if(asset)return '<div class="interaction-object">'+root.AtlasVisualAssets.html(asset,'card')+'<div class="interaction-art-caption">Related period object, not a depiction of this event</div></div>';
   return '<div class="interaction-object interaction-object-empty" aria-label="Original decorative motif, not a historical depiction"><img src="assets/atlas-compass.svg" alt="" loading="lazy"/><span>Decorative illustration · not historical evidence</span></div>';
  }
+ function focusedNetwork(rows){
+  const focal=societies.get(state.focus);
+  const partners=evidence.partners(rows,state.focus,societies).slice(0,12);
+  if(!focal||!partners.length)return '<p class="interaction-no-record">No societies share an explicit research record in this selection. Try a wider period or clear the paired society.</p>';
+  const anchor={x:500,y:277},radiusX=343,radiusY=193;
+  const positions=partners.map((item,i)=>{
+   const angle=-Math.PI/2+i*Math.PI*2/partners.length;
+   return {...item,x:anchor.x+Math.cos(angle)*radiusX,y:anchor.y+Math.sin(angle)*radiusY};
+  });
+  const edges=positions.map(item=>{
+   const selected=state.partner===item.id;
+   const colour=item.types.length===1?(palettes[item.types[0]]||palettes.Other):'#d4b886';
+   const midX=(anchor.x+item.x)/2,midY=(anchor.y+item.y)/2-14;
+   return '<path data-network-partner="'+esc(item.id)+'" role="button" tabindex="0" class="interaction-edge interaction-focus-edge'+(selected?' selected':'')+'" d="M'+anchor.x+' '+anchor.y+' Q'+midX.toFixed(1)+' '+midY.toFixed(1)+' '+item.x.toFixed(1)+' '+item.y.toFixed(1)+'" stroke="'+colour+'" stroke-width="'+Math.min(5,2+Math.sqrt(item.count)).toFixed(1)+'" aria-label="'+esc(item.count+' shared research records naming '+focal.name+' and '+item.name)+'"><title>'+esc(item.count+' shared records · '+focal.name+' / '+item.name+' · Co-mention does not prove contact')+'</title></path>';
+  }).join('');
+  const nodes=positions.map(item=>{
+   const chosen=state.partner===item.id;
+   const name=item.name.length>24?item.name.slice(0,21)+'…':item.name;
+   return '<g data-network-partner="'+esc(item.id)+'" class="interaction-node interaction-partner-node'+(chosen?' selected':'')+'" role="button" tabindex="0" aria-label="Show '+esc(item.count+' shared records involving '+item.name)+'"><circle cx="'+item.x.toFixed(1)+'" cy="'+item.y.toFixed(1)+'" r="27" fill="#102e3a" stroke="'+(chosen?'#fff0ba':'#d7b67c')+'" stroke-width="'+(chosen?4:2)+'"/><text x="'+item.x.toFixed(1)+'" y="'+(item.y+5).toFixed(1)+'" class="interaction-node-glyph" text-anchor="middle">'+esc(item.count)+'</text><text x="'+item.x.toFixed(1)+'" y="'+(item.y+44).toFixed(1)+'" class="interaction-node-name" text-anchor="middle">'+esc(name)+'</text></g>';
+  }).join('');
+  return '<svg class="interaction-network-svg" viewBox="0 0 1000 560" role="group" aria-label="Focused evidence network for '+esc(focal.name)+'. Lines indicate shared research records, not proven routes or bilateral contact"><circle cx="500" cy="277" r="207" fill="#17404a" fill-opacity=".28" stroke="#c9a66a" stroke-opacity=".2" stroke-dasharray="2 10"/><g class="interaction-net-lines">'+edges+'</g><g class="interaction-net-nodes">'+nodes+'<g class="interaction-focus-anchor"><circle cx="500" cy="277" r="57" fill="#0d2a39" stroke="#f1c786" stroke-width="3"/><text x="500" y="272" text-anchor="middle">'+esc(focal.name.length>20?focal.name.slice(0,17)+'…':focal.name)+'</text><text x="500" y="293" text-anchor="middle">FOCUS SOCIETY</text></g></g></svg>';
+ }
  function network(rows){
+  if(state.focus)return focusedNetwork(rows);
   const degrees=new Map();
   for(const e of rows)for(const id of e.participants)degrees.set(id,(degrees.get(id)||0)+1);
   const leaders=[...degrees.keys()].sort((a,b)=>(degrees.get(b)||0)-(degrees.get(a)||0)||societies.get(a).name.localeCompare(societies.get(b).name)).slice(0,13);
@@ -103,17 +124,47 @@
   const item=$('interactionDetail');
   if(!e){item.innerHTML='<div class="interaction-no-record"><strong>No matching documented multi-society records</strong><p>Change the date, type or search terms. An empty result reflects atlas coverage, not proof that societies were isolated.</p></div>';return;}
   const names=e.participants.map(id=>societies.get(id)?.name).filter(Boolean),url=sourceUrl(e);
-  item.innerHTML='<div class="interaction-detail-overline">SELECTED HISTORICAL RECORD</div>'+artwork(e)+'<div class="interaction-detail-date">'+esc(dates(e))+' · '+esc(e.type)+'</div><h2>'+esc(e.title)+'</h2><p>'+esc(e.detail||'No further summary is attached to this record.')+'</p><h3>Societies named in this record</h3><div class="interaction-actors">'+e.participants.map(id=>'<button type="button" data-interaction-civ="'+esc(id)+'">'+esc(societies.get(id).name)+' ↗</button>').join('')+'</div><div class="interaction-evidence"><strong>Evidence boundaries</strong><p>These societies are explicitly linked to the same research record. This does not on its own prove direct bilateral contact, a travelled route, or equal involvement.</p><span>Editorial confidence: '+esc(e.confidence||'not rated')+' · Not independently re-verified for this visual layer</span></div><div class="interaction-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Open linked source ↗</a>':'<span>No claim-specific source URL attached</span>')+'<a href="compare.html?year='+encodeURIComponent(e.year)+'&mode=events&event='+encodeURIComponent(e.key)+'&civ='+encodeURIComponent(e.participants[0])+'">See in Compare ↗</a></div>';
+  item.innerHTML='<div class="interaction-detail-overline">SELECTED HISTORICAL RECORD</div>'+artwork(e)+'<div class="interaction-detail-date">'+esc(dates(e))+' · '+esc(e.type)+'</div><h2>'+esc(e.title)+'</h2><p>'+esc(e.detail||'No further summary is attached to this record.')+'</p><h3>Societies named in this record</h3><div class="interaction-actors">'+e.participants.map(id=>'<button type="button" data-interaction-civ="'+esc(id)+'">'+esc(societies.get(id).name)+' ↗</button>').join('')+'</div><div class="interaction-evidence"><strong>Evidence boundaries</strong><p>These societies are explicitly linked to the same research record. This does not on its own prove direct bilateral contact, a travelled route, or equal involvement.</p><span>Editorial confidence: '+esc(e.confidence||'not rated')+' · Not independently re-verified for this visual layer</span></div><div class="interaction-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Open linked source ↗</a>':'<span>No claim-specific source URL attached</span>')+'<a href="compare.html?year='+encodeURIComponent(e.year)+'&mode=events&event='+encodeURIComponent(e.key)+'&civ='+encodeURIComponent(state.focus||e.participants[0])+'">See in Compare ↗</a><a href="index.html?year='+encodeURIComponent(e.year)+'&civ='+encodeURIComponent(state.focus||e.participants[0])+'">Explore on World Map ↗</a><a href="story.html?year='+encodeURIComponent(e.year)+'&entity='+encodeURIComponent(state.focus||e.participants[0])+'">Follow society timeline ↗</a></div>';
   root.AtlasVisualAssets?.bindImages(item);
  }
+ const availableSocieties=new Set(records.flatMap(e=>e.participants));
+ if(state.focus&&!availableSocieties.has(state.focus))availableSocieties.add(state.focus);
+ const select=$('interactionSociety');
+ select.innerHTML='<option value="">All evidenced societies</option>'+[...availableSocieties].sort((a,b)=>societies.get(a).name.localeCompare(societies.get(b).name))
+  .map(id=>'<option value="'+esc(id)+'">'+esc(societies.get(id).name)+(records.some(e=>e.participants.includes(id))?'':' (no shared record)')+'</option>').join('');
+ function renderEvidenceNavigation(total,range){
+  select.value=state.focus||'';
+  const shelf=$('interactionFocusShelf');shelf.hidden=!state.focus;
+  if(state.focus){
+   const focusRows=contextualRecords(),partners=evidence.partners(focusRows,state.focus,societies);
+   $('interactionFocusTitle').textContent=societies.get(state.focus).name+' in the historical record';
+   $('interactionFocusSummary').textContent=focusRows.length+' dated shared records with '+partners.length+' other societies in the selected period. Shared mentions are not automatically direct contact.';
+   $('interactionClearPartner').hidden=!state.partner;
+   $('interactionPartners').innerHTML=partners.length?partners.slice(0,30).map(item=>{
+    const chosen=state.partner===item.id;
+    return '<button type="button" class="interaction-partner-chip'+(chosen?' selected':'')+'" data-interaction-partner="'+esc(item.id)+'" aria-pressed="'+chosen+'"><strong>'+esc(item.name)+'</strong><span>'+item.count+' shared '+(item.count===1?'record':'records')+'</span></button>';
+   }).join(''):'<p class="interaction-partner-empty">No shared dated records for this society under these filters. Try another period or category.</p>';
+  }
+  const bins=evidence.timeline(total,range.start,range.end,12),peak=Math.max(1,...bins.map(b=>b.count));
+  $('interactionTimeSummary').textContent=total.length+' dated records in this selection';
+  $('interactionTimeRibbon').innerHTML=bins.map((bin,i)=>{
+   const centre=Math.round((bin.start+bin.end)/2),height=12+Math.round(48*bin.count/peak);
+   const label=year(bin.start)+' to '+year(bin.end);
+   const active=state.era==='window'&&state.year>=bin.start&&state.year<=bin.end;
+   return '<button type="button" class="interaction-time-bin'+(active?' active':'')+'" data-interaction-year="'+centre+'"'+(bin.count?'':' disabled')+' aria-label="'+esc(label+': '+bin.count+' dated records')+'" aria-pressed="'+active+'" title="'+esc(label+': '+bin.count+' records')+'"><span class="interaction-time-count">'+(bin.count||'')+'</span><span class="interaction-time-bar" style="height:'+height+'px"></span><span class="interaction-time-year">'+esc(year(bin.start))+'</span></button>';
+  }).join('');
+ }
  function render(){
-  const r=timeWindow(),rows=visibleRecords();
+  const r=timeWindow(),total=linkedRecords(),rows=total.slice(0,80);
+  renderEvidenceNavigation(total,r);
   const chosen=rows.find(e=>e.key===state.event)||rows[0]||null;
   if(chosen)state.event=chosen.key;else state.event=null;
   $('interactionYear').value=state.year;
   $('interactionEra').value=state.era;
-  $('interactionRangeLabel').textContent=r.label+' · '+rows.length+(linkedRecords().length>rows.length?' of '+linkedRecords().length:'')+' linked records';
-  $('interactionCount').textContent=rows.length+' sourced cross-society records'+(linkedRecords().length>rows.length?' (first '+rows.length+' displayed)':'');
+  $('interactionType').value=state.type;
+  $('interactionSearch').value=state.search;
+  $('interactionRangeLabel').textContent=r.label+' · '+rows.length+(total.length>rows.length?' of '+total.length:'')+' linked records';
+  $('interactionCount').textContent=rows.length+' sourced cross-society records'+(total.length>rows.length?' (first '+rows.length+' displayed)':'');
   $('interactionNetwork').innerHTML=rows.length?network(rows):'<p class="interaction-no-record">No explicit multi-society records match this selection.</p>';
   $('interactionStories').innerHTML=rows.length?rows.slice(0,24).map(storyCard).join(''):'<p class="interaction-no-record">No linked stories for this period and filter.</p>';
   $('interactionNetwork').hidden=state.mode!=='network';
@@ -122,28 +173,33 @@
   const focus=$('interactionFocus');
   focus.textContent=state.focus?'Focusing: '+societies.get(state.focus).name+' ×':'Explore all societies';
   detail(chosen);
-  const query=new URLSearchParams();if(state.era==='window')query.set('year',String(state.year));else query.set('era',state.era);if(state.focus)query.set('civ',state.focus);
+  const query=new URLSearchParams();if(state.era==='window')query.set('year',String(state.year));else query.set('era',state.era);if(state.focus)query.set('civ',state.focus);if(state.partner)query.set('with',state.partner);if(state.mode==='stories')query.set('view','stories');
   history.replaceState(null,'',location.pathname+'?'+query.toString());
   root.AtlasCrossLinks?.refresh();
  }
  function change(patch){Object.assign(state,patch);render()}
+ $('interactionSociety').addEventListener('change',e=>change({focus:e.target.value,partner:'',event:null}));
  $('interactionType').addEventListener('change',e=>change({type:e.target.value,event:null}));
  $('interactionEra').addEventListener('change',e=>change({era:e.target.value,event:null}));
  $('interactionSearch').addEventListener('input',e=>change({search:e.target.value,event:null}));
  $('interactionYear').addEventListener('input',e=>change({year:Number(e.target.value),era:'window',event:null}));
- $('interactionFocus').addEventListener('click',()=>change({focus:'',event:null}));
+ $('interactionFocus').addEventListener('click',()=>change({focus:'',partner:'',event:null}));
+ $('interactionClearPartner').addEventListener('click',()=>change({partner:'',event:null}));
+ $('interactionTimeRibbon').addEventListener('click',e=>{const b=e.target.closest('[data-interaction-year]');if(b&&!b.disabled)change({year:Number(b.dataset.interactionYear),era:'window',event:null});});
  document.querySelectorAll('[data-interaction-mode]').forEach(b=>b.addEventListener('click',()=>change({mode:b.dataset.interactionMode})));
  document.addEventListener('click',e=>{
+  const p=e.target.closest('[data-interaction-partner],[data-network-partner]');
+  if(p){const id=p.dataset.interactionPartner||p.dataset.networkPartner;if(state.focus&&societies.has(id))change({partner:state.partner===id?'':id,event:null});return;}
   const ev=e.target.closest('[data-interaction-event],[data-network-event]');
   if(ev){const key=ev.dataset.interactionEvent||ev.dataset.networkEvent;if(records.some(x=>x.key===key))change({event:key});return;}
   const civ=e.target.closest('[data-interaction-civ],[data-network-civ]');
-  if(civ){const id=civ.dataset.interactionCiv||civ.dataset.networkCiv;if(societies.has(id))change({focus:id,event:null});}
+  if(civ){const id=civ.dataset.interactionCiv||civ.dataset.networkCiv;if(societies.has(id))change({focus:id,partner:'',event:null});}
  });
  $('interactionNetwork').addEventListener('keydown',e=>{
   if(!['Enter',' '].includes(e.key))return;
-  const target=e.target.closest('[data-network-event],[data-network-civ]');
+  const target=e.target.closest('[data-network-event],[data-network-civ],[data-network-partner]');
   if(target){e.preventDefault();target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}
  });
  render();
- root.AtlasInteractions=Object.freeze({state,render,linkedRecords,sourceUrl,records});
+ root.AtlasInteractions=Object.freeze({state,render,linkedRecords,sourceUrl,records,partners:()=>state.focus?evidence.partners(contextualRecords(),state.focus,societies):[]});
 })(window);
