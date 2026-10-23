@@ -154,3 +154,40 @@ body.atlas-interactions{margin:0;background:radial-gradient(ellipse at 45% 0%,#2
  .interaction-focus-shelf,.interaction-time-panel{border-radius:15px}
 }
 @media(prefers-reduced-motion:reduce){.interaction-partner-chip{transition:none}}
+
+/* v0.36 — chronological evidence trail, legible mobile network and gentle transitions */
+.interaction-record-trail{display:flex;align-items:center;gap:9px;padding:10px 12px;margin:0 0 10px;border:1px solid #c49f6566;border-radius:14px;background:linear-gradient(115deg,#173644,#0b2633);min-width:0}
+.interaction-record-trail button{min-height:44px;min-width:44px;border:1px solid #d2ac6c76;border-radius:10px;background:#152e3b;color:#f1d49e;cursor:pointer;font-size:23px;flex:none}
+.interaction-record-trail button:not(:disabled):hover{background:#344d52;border-color:#e9c586}
+.interaction-record-trail button:disabled{opacity:.37;cursor:default}
+.interaction-trail-context{min-width:0;flex:1;display:flex;flex-direction:column;gap:3px}
+.interaction-trail-context span{color:#f3c987;font:10px/1.3 'DM Sans',Arial,sans-serif;letter-spacing:.03em}
+.interaction-trail-context strong{color:#f7e9cf;font:15px/1.35 Georgia,serif;font-weight:400;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#interactionPlayRecords{min-width:100px;padding:9px 12px;font:600 11px/1.4 'DM Sans',Arial,sans-serif;white-space:nowrap}
+#interactionPlayRecords[aria-pressed="true"]{border-color:#f6d38d;background:#4a4130}
+.interaction-network-hint{display:none}
+.interaction-mobile-evidence-link{display:none}
+.interaction-network-svg{animation:atlas-network-reveal .3s ease-out both}
+.interaction-edge.selected{stroke-opacity:1;stroke-dasharray:none;filter:drop-shadow(0 0 5px #f6dca1)}
+@keyframes atlas-network-reveal{from{opacity:.35;transform:scale(.99)}to{opacity:1;transform:scale(1)}}
+.interaction-detail-panel{scroll-margin-top:14px}
+@media(max-width:950px){
+ .interaction-mobile-evidence-link{display:block;margin:10px auto 3px;max-width:max-content;color:#f3d19b;font-size:12px;text-decoration:underline;text-underline-offset:4px}
+}
+@media(max-width:600px){
+ .interaction-record-trail{gap:6px;padding:8px 9px;flex-wrap:wrap}
+ .interaction-record-trail button{min-width:44px;min-height:44px}
+ .interaction-trail-context{flex:1 1 calc(100% - 115px);order:0}
+ #interactionPreviousRecord{order:-2}
+ #interactionNextRecord{order:-1}
+ #interactionPlayRecords{width:100%;order:2;font-size:12px}
+ .interaction-network{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-color:#ba9865 #0a2534;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+ .interaction-network-svg{width:760px;min-width:760px;max-width:none;min-height:425px}
+ .interaction-network-hint{display:block;margin:0 0 9px;color:#b8d0cb;font:11px/1.4 'DM Sans',Arial,sans-serif}
+ .interaction-network .interaction-node-name{font-size:15px}
+ .interaction-detail-panel{border-radius:17px}
+}
+@media(prefers-reduced-motion:reduce){
+ .interaction-network-svg{animation:none!important}
+ .interaction-edge,.interaction-node circle{transition:none!important}
+}
