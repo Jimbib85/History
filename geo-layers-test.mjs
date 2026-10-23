@@ -59,8 +59,8 @@ for(const file of [...html.matchAll(/<script src="([^"?]+)[^"]*"/g)].map(m=>m[1]
 vm.runInContext(app,context,{filename:'app.js'});
 const atlas=window.WorldHistoryAtlas;
 assert.equal(atlas.state.geoMode,'groups');
-assert.ok(elements.mapEvidence.innerHTML.includes('not a measured historical boundary'));
-assert.ok(elements.mapEvidence.innerHTML.includes('Background reading does not independently establish'));
+assert.ok(elements.mapEvidence.innerHTML.includes('Rome'),'Selected society remains visible in map context');
+assert.ok(!elements.mapEvidence.innerHTML.includes('geographic-caveat'),'Main map no longer renders boilerplate disclaimers');
 assert.match(elements.mapMarkers.innerHTML,/data-mapcluster=|data-mapciv=/);
 elements.toggleGrid.listeners.click();
 assert.equal(atlas.state.geoGrid,true);
