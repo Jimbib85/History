@@ -25,3 +25,27 @@ body.atlas-interactions .atlas-crossnav a[aria-current="page"]{box-shadow:inset 
  body :is(.atlas-crossnav a){transition:none!important}
  html{scroll-behavior:auto!important}
 }
+
+/* Editorial landing treatments for the four legacy reading experiences. */
+body:has(.story-intro),body:has(#journeys),body:has(#mapsSection),body:has(#resultsTitle){background-image:radial-gradient(ellipse 70% 340px at 80% 90px,rgba(189,149,91,.12),transparent 75%)}
+.story-intro,.shell > .hero,.shell > .hero:first-child{position:relative;isolation:isolate}
+.story-intro:before,.shell > .hero:before{content:"";position:absolute;z-index:-1;inset:-12px -14px auto auto;width:min(35vw,260px);height:170px;pointer-events:none;background:radial-gradient(circle at 50% 50%,rgba(189,149,91,.13),transparent 67%);border-radius:50%}
+.story-intro h1,.shell > .hero h1{max-width:20ch}
+.story-intro .eyebrow,.shell > .hero .eyebrow{letter-spacing:.18em}
+body:has(#journeys) .shell > section,body:has(#mapsSection) .shell > section,body:has(#resultsTitle) .shell > section{scroll-margin-top:20px}
+body:has(#journeys) :is(.journey-choices,.snapshot-cards),body:has(#mapsSection) .record-grid{min-width:0}
+body:has(#journeys) :is(.journey-choices > *, .snapshot-cards > *),body:has(#mapsSection) .record-grid > *{transition:transform .2s ease,box-shadow .2s ease}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ body:has(#journeys) :is(.journey-choices > *, .snapshot-cards > *):hover,body:has(#mapsSection) .record-grid > *:hover{transform:translateY(-2px)}
+}
+body:has(#mapsSection) .context-strip{border-inline-start:3px solid var(--atlas-gold)}
+body:has(#resultsTitle) .research-note{max-width:72ch}
+body:has(#resultsTitle) .sensitive-toggle{border-inline-start:3px solid #a95d52}
+body:has(#resultsTitle) .results-head{border-bottom:1px solid rgba(189,149,91,.25)}
+@media(max-width:700px){
+ .story-intro:before,.shell > .hero:before{width:120px;height:110px}
+ body:has(#journeys) .shell,body:has(#mapsSection) .shell,body:has(#resultsTitle) .shell{padding-inline:clamp(14px,4vw,22px)}
+ body:has(#journeys) :is(.section-top,.reader-head){gap:12px;flex-wrap:wrap}
+ body:has(#mapsSection) .control-row{gap:10px}
+ body:has(#resultsTitle) .filter-row{gap:10px}
+}
