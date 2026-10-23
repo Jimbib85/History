@@ -32,7 +32,7 @@ assert.equal((svg.match(/<path /g)||[]).length,2);
 assert.match(svg,/fill="#bd7656"/);
 assert.match(svg,/fill="#668db4"/);
 assert.doesNotMatch(svg,/<line\b|<polygon\b/,'No invented borders or routes');
-assert.match(svg,/not a historical border/);
+assert.match(svg,/Roman Empire/);
 const evidence=[
  {title:'Undated',id:'skip',societyIds:['rome','han']},
  {id:'rome-han-record',title:'Documented record',year:100,societyIds:['rome','han'],detail:'Co-mentioned'},
@@ -54,11 +54,11 @@ assert.ok(html.indexOf('geo-layers.js')<html.indexOf('atlas-presence.js'));
 assert.ok(html.indexOf('atlas-presence.js')<html.indexOf('app.js'));
 assert.ok(html.indexOf('app.js')<html.indexOf('atlas-presence-map.js'));
 assert.match(html,/atlas-presence\.css/);
-assert.match(html,/Not historical borders/);
+assert.match(html,/Society locations/);
 assert.match(linkUI,/&interaction='\+encodeURIComponent\(e\.key\)/);
 assert.match(mapUI,/state\.view==='actual'/);
 assert.match(mapUI,/new root\.MutationObserver\(render\)\.observe\(markers/);
-assert.match(mapUI,/clouds\.length/);
+assert.match(mapUI,/note\.hidden/);
 assert.match(mapUI,/representative map points/);
 assert.match(css,/pointer-events:none/,'Cloud overlays must not block map marker interaction');
 assert.match(interactionHtml,/id="interactionDetailPanel"/);
