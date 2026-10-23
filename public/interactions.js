@@ -58,13 +58,13 @@
  function visibleRecords(){return linkedRecords().slice(0,80)}
  function artwork(e){
   const asset=root.AtlasVisualAssets?.forSociety(e.participants.find(id=>root.AtlasVisualAssets.forSociety(id)));
-  if(asset)return '<div class="interaction-object">'+root.AtlasVisualAssets.html(asset,'card')+'<div class="interaction-art-caption">Related period object, not a depiction of this event</div></div>';
-  return '<div class="interaction-object interaction-object-empty" aria-label="Original decorative motif, not a historical depiction"><img src="assets/atlas-compass.svg" alt="" loading="lazy"/><span>Decorative illustration · not historical evidence</span></div>';
+  if(asset)return '<div class="interaction-object">'+root.AtlasVisualAssets.html(asset,'card')+'</div>';
+  return '<div class="interaction-object interaction-object-empty" aria-label="Decorative motif"><img src="assets/atlas-compass.svg" alt="" loading="lazy"/></div>';
  }
  function focusedNetwork(rows){
   const focal=societies.get(state.focus);
   const partners=evidence.partners(rows,state.focus,societies).slice(0,12);
-  if(!focal||!partners.length)return '<p class="interaction-no-record">No societies share an explicit research record in this selection. Try a wider period or clear the paired society.</p>';
+  if(!focal||!partners.length)return '<p class="interaction-no-record">No connections in this period. Try another date or category.</p>';
   const anchor={x:500,y:277},radiusX=343,radiusY=193;
   const positions=partners.map((item,i)=>{
    const angle=-Math.PI/2+i*Math.PI*2/partners.length;
@@ -74,14 +74,14 @@
    const selected=state.partner===item.id;
    const colour=item.types.length===1?(palettes[item.types[0]]||palettes.Other):'#d4b886';
    const midX=(anchor.x+item.x)/2,midY=(anchor.y+item.y)/2-14;
-   return '<path data-network-partner="'+esc(item.id)+'" role="button" tabindex="0" class="interaction-edge interaction-focus-edge'+(selected?' selected':'')+'" d="M'+anchor.x+' '+anchor.y+' Q'+midX.toFixed(1)+' '+midY.toFixed(1)+' '+item.x.toFixed(1)+' '+item.y.toFixed(1)+'" stroke="'+colour+'" stroke-width="'+Math.min(5,2+Math.sqrt(item.count)).toFixed(1)+'" aria-label="'+esc(item.count+' shared research records naming '+focal.name+' and '+item.name)+'"><title>'+esc(item.count+' shared records · '+focal.name+' / '+item.name+' · Co-mention does not prove contact')+'</title></path>';
+   return '<path data-network-partner="'+esc(item.id)+'" role="button" tabindex="0" class="interaction-edge interaction-focus-edge'+(selected?' selected':'')+'" d="M'+anchor.x+' '+anchor.y+' Q'+midX.toFixed(1)+' '+midY.toFixed(1)+' '+item.x.toFixed(1)+' '+item.y.toFixed(1)+'" stroke="'+colour+'" stroke-width="'+Math.min(5,2+Math.sqrt(item.count)).toFixed(1)+'" aria-label="'+esc(item.count+' shared research records naming '+focal.name+' and '+item.name)+'"><title>'+esc(item.count+' shared records · '+focal.name+' / '+item.name+'')+'</title></path>';
   }).join('');
   const nodes=positions.map(item=>{
    const chosen=state.partner===item.id;
    const name=item.name.length>24?item.name.slice(0,21)+'…':item.name;
    return '<g data-network-partner="'+esc(item.id)+'" class="interaction-node interaction-partner-node'+(chosen?' selected':'')+'" role="button" tabindex="0" aria-label="Show '+esc(item.count+' shared records involving '+item.name)+'"><circle cx="'+item.x.toFixed(1)+'" cy="'+item.y.toFixed(1)+'" r="27" fill="#102e3a" stroke="'+(chosen?'#fff0ba':'#d7b67c')+'" stroke-width="'+(chosen?4:2)+'"/><text x="'+item.x.toFixed(1)+'" y="'+(item.y+5).toFixed(1)+'" class="interaction-node-glyph" text-anchor="middle">'+esc(item.count)+'</text><text x="'+item.x.toFixed(1)+'" y="'+(item.y+44).toFixed(1)+'" class="interaction-node-name" text-anchor="middle">'+esc(name)+'</text></g>';
   }).join('');
-  return '<svg class="interaction-network-svg" viewBox="0 0 1000 560" role="group" aria-label="Focused evidence network for '+esc(focal.name)+'. Lines indicate shared research records, not proven routes or bilateral contact"><circle cx="500" cy="277" r="207" fill="#17404a" fill-opacity=".28" stroke="#c9a66a" stroke-opacity=".2" stroke-dasharray="2 10"/><g class="interaction-net-lines">'+edges+'</g><g class="interaction-net-nodes">'+nodes+'<g class="interaction-focus-anchor"><circle cx="500" cy="277" r="57" fill="#0d2a39" stroke="#f1c786" stroke-width="3"/><text x="500" y="272" text-anchor="middle">'+esc(focal.name.length>20?focal.name.slice(0,17)+'…':focal.name)+'</text><text x="500" y="293" text-anchor="middle">FOCUS SOCIETY</text></g></g></svg>';
+  return '<svg class="interaction-network-svg" viewBox="0 0 1000 560" role="group" aria-label="Connections for '+esc(focal.name)"><circle cx="500" cy="277" r="207" fill="#17404a" fill-opacity=".28" stroke="#c9a66a" stroke-opacity=".2" stroke-dasharray="2 10"/><g class="interaction-net-lines">'+edges+'</g><g class="interaction-net-nodes">'+nodes+'<g class="interaction-focus-anchor"><circle cx="500" cy="277" r="57" fill="#0d2a39" stroke="#f1c786" stroke-width="3"/><text x="500" y="272" text-anchor="middle">'+esc(focal.name.length>20?focal.name.slice(0,17)+'…':focal.name)+'</text><text x="500" y="293" text-anchor="middle">FOCUS SOCIETY</text></g></g></svg>';
  }
  function network(rows){
   if(state.focus)return focusedNetwork(rows);
@@ -112,13 +112,13 @@
    const c=societies.get(id),p=positions.get(id),selected=id===state.focus;
    return '<g class="interaction-node'+(selected?' selected':'')+'" data-network-civ="'+esc(id)+'" role="button" tabindex="0" aria-label="Focus on '+esc(c.name)+'"><circle cx="'+p.x+'" cy="'+p.y+'" r="24" fill="#0e2636" stroke="'+(selected?'#f9da9d':'#e2b975')+'" stroke-width="'+(selected?4:2)+'"/><circle cx="'+p.x+'" cy="'+p.y+'" r="15" fill="#d1a75d" fill-opacity=".18"/><text x="'+p.x+'" y="'+(p.y+4)+'" text-anchor="middle" class="interaction-node-glyph">'+(c.kind==='empire'?'♜':'✦')+'</text><text x="'+p.x+'" y="'+(p.y+42)+'" text-anchor="middle" class="interaction-node-name">'+esc(c.name.length>26?c.name.slice(0,23)+'…':c.name)+'</text></g>';
   }).join('');
-  return '<svg class="interaction-network-svg" viewBox="0 0 1000 560" role="group" aria-label="Schematic network of societies sharing specific evidence records; not plotted geographic routes"><defs><radialGradient id="interactionSea"><stop stop-color="#23545a" stop-opacity=".26"/><stop offset="1" stop-color="#07202b" stop-opacity=".05"/></radialGradient></defs><circle cx="500" cy="270" r="240" fill="url(#interactionSea)"/><g class="interaction-net-lines">'+lines+'</g><g class="interaction-net-nodes">'+nodes+'</g><g class="interaction-net-centre"><circle cx="500" cy="270" r="53" fill="#112d3b" stroke="#d6ab6a" stroke-width="1.5" stroke-dasharray="3 7"/><text x="500" y="264" text-anchor="middle">RECORDED</text><text x="500" y="280" text-anchor="middle">ENCOUNTERS</text></g></svg>';
+  return '<svg class="interaction-network-svg" viewBox="0 0 1000 560" role="group" aria-label="Explore society connections"><defs><radialGradient id="interactionSea"><stop stop-color="#23545a" stop-opacity=".26"/><stop offset="1" stop-color="#07202b" stop-opacity=".05"/></radialGradient></defs><circle cx="500" cy="270" r="240" fill="url(#interactionSea)"/><g class="interaction-net-lines">'+lines+'</g><g class="interaction-net-nodes">'+nodes+'</g><g class="interaction-net-centre"><circle cx="500" cy="270" r="53" fill="#112d3b" stroke="#d6ab6a" stroke-width="1.5" stroke-dasharray="3 7"/><text x="500" y="264" text-anchor="middle">RECORDED</text><text x="500" y="280" text-anchor="middle">ENCOUNTERS</text></g></svg>';
  }
  function storyCard(e){
   const actors=e.participants.map(id=>societies.get(id).name),url=sourceUrl(e),selected=e.key===state.event;
   const art=root.AtlasVisualAssets?.forSociety(e.participants[0]);
   const thumb=art?'<img class="atlas-object-image" src="'+esc(art.imageUrl)+'" alt="" loading="lazy" decoding="async"/>':'<span class="interaction-icon-art" aria-hidden="true">✧</span>';
-  return '<article class="interaction-story'+(selected?' selected':'')+'"><div class="interaction-story-thumb">'+thumb+'<span>Context, not event depiction</span></div><div class="interaction-story-copy"><div class="interaction-story-meta"><b>'+esc(dates(e))+'</b><em style="--kind-colour:'+palettes[e.type]+'">'+esc(e.type)+'</em></div><h3>'+esc(e.title)+'</h3><p>'+esc(actors.slice(0,4).join(' · '))+'</p><button type="button" data-interaction-event="'+esc(e.key)+'">Explore evidence →</button></div></article>';
+  return '<article class="interaction-story'+(selected?' selected':'')+'"><div class="interaction-story-thumb">'+thumb+'</div><div class="interaction-story-copy"><div class="interaction-story-meta"><b>'+esc(dates(e))+'</b><em style="--kind-colour:'+palettes[e.type]+'">'+esc(e.type)+'</em></div><h3>'+esc(e.title)+'</h3><p>'+esc(actors.slice(0,4).join(' · '))+'</p><button type="button" data-interaction-event="'+esc(e.key)+'">Explore story →</button></div></article>';
  }
  function geographicPreview(e){
   const geo=root.WorldAtlasGeo;
@@ -132,16 +132,15 @@
    return '<g class="interaction-geo-dot" aria-hidden="true"><circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="10" fill="'+colour+'" stroke="#f9e5c3" stroke-width="2"/><text x="'+(x+14).toFixed(1)+'" y="'+(y-13).toFixed(1)+'">'+esc(c.name.length>26?c.name.slice(0,23)+'…':c.name)+'</text></g>';
   }).join('');
   return '<section class="interaction-geographic-preview" aria-label="Reference locations of societies named in the record"><div class="interaction-geo-head"><strong>THE SOCIETIES ON THE WORLD MAP</strong><span>'+mapped.length+' of '+named.length+' mapped</span></div>'+
-   '<svg viewBox="0 0 1200 590" role="img" aria-label="Modern geographical reference with '+mapped.length+' named society locations, no routes or borders"><image href="world-cinematic.svg" x="0" y="0" width="1200" height="590"/>'+dots+'</svg>'+
-   '<p>These are representative locations, not proof of where the encounter occurred, reconstructed territories, or historical routes.'+
-   (missing.length?' No verified map point for: '+esc(missing.map(c=>c.name).join(', '))+'.':'')+'</p>'+
+   '<svg viewBox="0 0 1200 590" role="img" aria-label="World map with '+mapped.length+' society locations"><image href="world-cinematic.svg" x="0" y="0" width="1200" height="590"/>'+dots+'</svg>'+
+
    '<a href="index.html?year='+encodeURIComponent(e.year)+'&civ='+encodeURIComponent(state.focus||e.participants[0])+'&interaction='+encodeURIComponent(e.key)+'">Open societies on the World Map ↗</a></section>';
  }
  function detail(e){
   const item=$('interactionDetail');
-  if(!e){item.innerHTML='<div class="interaction-no-record"><strong>No matching documented multi-society records</strong><p>Change the date, type or search terms. An empty result reflects atlas coverage, not proof that societies were isolated.</p></div>';return;}
+  if(!e){item.innerHTML='<div class="interaction-no-record"><strong>No matching documented multi-society records</strong><p>Try another date, type or search.</p></div>';return;}
   const names=e.participants.map(id=>societies.get(id)?.name).filter(Boolean),url=sourceUrl(e);
-  item.innerHTML='<div class="interaction-detail-overline">SELECTED HISTORICAL RECORD</div>'+artwork(e)+'<div class="interaction-detail-date">'+esc(dates(e))+' · '+esc(e.type)+'</div><h2>'+esc(e.title)+'</h2><p>'+esc(e.detail||'No further summary is attached to this record.')+'</p>'+geographicPreview(e)+'<h3>Societies named in this record</h3><div class="interaction-actors">'+e.participants.map(id=>'<button type="button" data-interaction-civ="'+esc(id)+'">'+esc(societies.get(id).name)+' ↗</button>').join('')+'</div><div class="interaction-evidence"><strong>Evidence boundaries</strong><p>These societies are explicitly linked to the same research record. This does not on its own prove direct bilateral contact, a travelled route, or equal involvement.</p><span>Editorial confidence: '+esc(e.confidence||'not rated')+' · Not independently re-verified for this visual layer</span></div><div class="interaction-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Open linked source ↗</a>':'<span>No claim-specific source URL attached</span>')+'<a href="compare.html?year='+encodeURIComponent(e.year)+'&mode=events&event='+encodeURIComponent(e.key)+'&civ='+encodeURIComponent(state.focus||e.participants[0])+'">See in Compare ↗</a><a href="index.html?year='+encodeURIComponent(e.year)+'&civ='+encodeURIComponent(state.focus||e.participants[0])+'&interaction='+encodeURIComponent(e.key)+'">Explore on World Map ↗</a><a href="story.html?year='+encodeURIComponent(e.year)+'&entity='+encodeURIComponent(state.focus||e.participants[0])+'">Follow society timeline ↗</a></div>';
+  item.innerHTML='<div class="interaction-detail-overline">SELECTED HISTORICAL RECORD</div>'+artwork(e)+'<div class="interaction-detail-date">'+esc(dates(e))+' · '+esc(e.type)+'</div><h2>'+esc(e.title)+'</h2><p>'+esc(e.detail||'No further summary is attached to this record.')+'</p>'+geographicPreview(e)+'<h3>Societies named in this record</h3><div class="interaction-actors">'+e.participants.map(id=>'<button type="button" data-interaction-civ="'+esc(id)+'">'+esc(societies.get(id).name)+' ↗</button>').join('')+'</div><div class="interaction-evidence"><strong>Evidence boundaries</strong><p>These societies are explicitly linked to the same research record. This does not on its own prove direct bilateral contact, a travelled route, or equal involvement.</p><span>Editorial confidence: '+esc(e.confidence||'not rated')+' · Not independently re-verified for this visual layer</span></div><div class="interaction-actions">'+(url?'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">Sources ↗</a>':'')+'<a href="compare.html?year='+encodeURIComponent(e.year)+'&mode=events&event='+encodeURIComponent(e.key)+'&civ='+encodeURIComponent(state.focus||e.participants[0])+'">See in Compare ↗</a><a href="index.html?year='+encodeURIComponent(e.year)+'&civ='+encodeURIComponent(state.focus||e.participants[0])+'&interaction='+encodeURIComponent(e.key)+'">Explore on World Map ↗</a><a href="story.html?year='+encodeURIComponent(e.year)+'&entity='+encodeURIComponent(state.focus||e.participants[0])+'">Follow society timeline ↗</a></div>';
   root.AtlasVisualAssets?.bindImages(item);
  }
  const availableSocieties=new Set(records.flatMap(e=>e.participants));
@@ -155,12 +154,12 @@
   if(state.focus){
    const focusRows=contextualRecords(),partners=evidence.partners(focusRows,state.focus,societies);
    $('interactionFocusTitle').textContent=societies.get(state.focus).name+' in the historical record';
-   $('interactionFocusSummary').textContent=focusRows.length+' dated shared records with '+partners.length+' other societies in the selected period. Shared mentions are not automatically direct contact.';
+   $('interactionFocusSummary').textContent=focusRows.length+' connections in this period · '+partners.length+' other societies';
    $('interactionClearPartner').hidden=!state.partner;
    $('interactionPartners').innerHTML=partners.length?partners.slice(0,30).map(item=>{
     const chosen=state.partner===item.id;
     return '<button type="button" class="interaction-partner-chip'+(chosen?' selected':'')+'" data-interaction-partner="'+esc(item.id)+'" aria-pressed="'+chosen+'"><strong>'+esc(item.name)+'</strong><span>'+item.count+' shared '+(item.count===1?'record':'records')+'</span></button>';
-   }).join(''):'<p class="interaction-partner-empty">No shared dated records for this society under these filters. Try another period or category.</p>';
+   }).join(''):'<p class="interaction-partner-empty">No connections here. Try another period or category.</p>';
   }
   const bins=evidence.timeline(total,range.start,range.end,12),peak=Math.max(1,...bins.map(b=>b.count));
   $('interactionTimeSummary').textContent=total.length+' dated records in this selection';
@@ -182,10 +181,10 @@
   $('interactionType').value=state.type;
   $('interactionSearch').value=state.search;
   $('interactionRangeLabel').textContent=r.label+' · '+rows.length+(total.length>rows.length?' of '+total.length:'')+' linked records';
-  $('interactionCount').textContent=rows.length+' sourced cross-society records'+(total.length>rows.length?' (first '+rows.length+' displayed)':'');
+  $('interactionCount').textContent=rows.length+' records'+(total.length>rows.length?' (first '+rows.length+' displayed)':'');
   const networkRows=state.focus?contextualRecords():rows;
   const networkScroller=$('interactionNetwork'),previousX=networkScroller.scrollLeft;
-  networkScroller.innerHTML=networkRows.length?network(networkRows):'<p class="interaction-no-record">No explicit multi-society records match this selection.</p>';
+  networkScroller.innerHTML=networkRows.length?network(networkRows):'<p class="interaction-no-record">No connections match this selection.</p>';
   networkScroller.scrollLeft=state.focus&&previouslyFocusedSociety!==state.focus?
    Math.max(0,(networkScroller.scrollWidth-networkScroller.clientWidth)/2):previousX;
   previouslyFocusedSociety=state.focus;
