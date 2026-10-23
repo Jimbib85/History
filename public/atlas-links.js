@@ -54,7 +54,7 @@ const isDetail=!!ctx.event;
 rail.innerHTML='<div class="atlas-journey-copy"><span class="atlas-journey-kicker">YOUR CONNECTED EXPLORATION</span><strong>'+society.replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]))+'</strong>'+
 (labelYear?'<span>'+labelYear+'</span>':'')+(isDetail?'<span>· Research record selected</span>':'')+'</div>'+
 '<nav aria-label="Follow the same historical context across Atlas pages">'+
-[['map','World Map'],['interactions','Interactions'],['compare','Compare'],['story','Story']].map(([view,label])=>'<a href="'+href(view,ctx)+'"'+(root.location?.pathname?.endsWith(VIEWS[view])?' aria-current="page"':'')+'>'+label+' ↗</a>').join('')+'</nav>';
+[['map','World Map'],['interactions','Interactions'],['compare','Compare'],['story','Story']].map(([view,label])=>'<a href="'+href(view,ctx)+'"'+(nav.querySelector('[aria-current="page"]')?.dataset.atlasView===view?' aria-current="page"':'')+'>'+label+' ↗</a>').join('')+'</nav>';
 }
 function refresh(){
 if(typeof document==='undefined')return;
