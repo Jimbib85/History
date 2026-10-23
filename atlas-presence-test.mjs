@@ -54,7 +54,7 @@ assert.ok(html.indexOf('geo-layers.js')<html.indexOf('atlas-presence.js'));
 assert.ok(html.indexOf('atlas-presence.js')<html.indexOf('app.js'));
 assert.ok(html.indexOf('app.js')<html.indexOf('atlas-presence-map.js'));
 assert.match(html,/atlas-presence\.css/);
-assert.match(html,/not historical borders/);
+assert.match(html,/Not historical borders/);
 assert.match(linkUI,/&interaction='\+encodeURIComponent\(e\.key\)/);
 assert.match(mapUI,/state\.view==='actual'/);
 assert.match(mapUI,/new root\.MutationObserver\(render\)\.observe\(markers/);
