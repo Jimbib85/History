@@ -84,11 +84,11 @@
   }
   function sourceHTML(e) {
     const links=e.sourceURLs.map(url=>'<a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer">'+esc(new URL(url).hostname)+' ↗</a>').join('');
-    return '<div class="source-list"><strong>SOURCES & PROVENANCE</strong>'+(links||'<p>No claim-level source link is attached to this original atlas record.</p>')+(!links&&e.backgroundURL?'<a href="'+esc(e.backgroundURL)+'" target="_blank" rel="noopener noreferrer">Society background (not a claim-level citation) ↗</a>':'')+'<p>'+esc(e.batch)+(e.sourceIds.length?' · '+esc(e.sourceIds.join(', ')):'')+'</p></div>';
+    return '<div class="source-list"><strong>SOURCES</strong>'+(links||'<p>No source link available.</p>')+(!links&&e.backgroundURL?'<a href="'+esc(e.backgroundURL)+'" target="_blank" rel="noopener noreferrer">Society background ↗</a>':'')+'<p>'+esc(e.batch)+(e.sourceIds.length?' · '+esc(e.sourceIds.join(', ')):'')+'</p></div>';
   }
   function detailHTML(e) {
-    const caveat=e.precision!=='year'&&e.precision!=='exact'?'Date precision: '+e.precision+'. Read the source interval as given; the timeline group is only a browsing aid.':'';
-    return '<p>'+esc(e.summary||'No explanatory text is attached to this record.')+'</p>'+(globalThis.AtlasHistoryStories?.forEvent({...e,year:e.start})||'')+'<div class="record-metadata"><span>'+esc(e.originalCategory)+'</span><span>'+esc(e.originalRegion)+'</span><span>'+esc(e.confidence)+' research confidence</span></div>'+(caveat?'<p class="evidence-warning">'+esc(caveat)+'</p>':'')+(e.notes?'<p class="evidence-warning">'+esc(e.notes)+'</p>':'')+
+
+    return '<p>'+esc(e.summary||'No explanatory text is attached to this record.')+'</p>'+(globalThis.AtlasHistoryStories?.forEvent({...e,year:e.start})||'')+'<div class="record-metadata"><span>'+esc(e.originalCategory)+'</span><span>'+esc(e.originalRegion)+'</span></div>'+(caveat?'':'')+(e.notes?'<p class="record-note">'+esc(e.notes)+'</p>':'')+
       '<div class="record-entities">'+e.entityIds.map(id=>'<a href="'+esc(M.link('index.html',{...e,primaryId:id}))+'">'+esc(data.entities.get(id).name)+' ↗</a>').join('')+'</div>'+sourceHTML(e)+
       (e.variants.length?'<details class="variant-details"><summary>'+e.variants.length+' additional imported record'+(e.variants.length===1?'':'s')+' with the same title and dates</summary>'+e.variants.map(v=>'<p>'+esc(v.batch)+' · '+esc(v.confidence)+'<br>'+esc(v.summary)+'</p>').join('')+'</details>':'')+
       '<div class="record-links">'+(e.id.startsWith('gc-')?'<a href="conflicts.html?record='+encodeURIComponent(e.id.slice(3))+'">Explore conflict evidence ↗</a>':'')+'<a href="'+esc(M.link('compare.html',e))+'">Compare this date</a><a href="'+esc(M.link('index.html',e))+'">Open world map</a><a href="'+esc(M.link('index.html',e))+'#technology">Technology explorer</a></div>';
