@@ -15,12 +15,12 @@
    const contact=Array.isArray(row.society_ids)?row.society_ids.join(', '):'';
    const href=eligible(row,type)?'<a href="story.html?year='+row.start_year+'">Explore this historical year ↗</a>':'';
    const citations=source.map((u,i)=>'<a href="'+esc(u)+'" rel="noopener noreferrer" target="_blank">Source '+(i+1)+' ↗</a>').join('');
-   const interpretation=['EVIDENCE_WINDOW','CONFLICT_COMPLEX','OBSERVATION_WINDOW','DURATION','ESTIMATE','PERIOD'].includes(row.temporal_kind)?'This is a research or event interval, not a single-year occurrence.':'';
+   const interpretation=['EVIDENCE_WINDOW','CONFLICT_COMPLEX','OBSERVATION_WINDOW','DURATION','ESTIMATE','PERIOD'].includes(row.temporal_kind)?'':'';
    return '<details class="expansion-card"><summary><span>'+esc(type.replaceAll('_',' '))+' · source-linked revision v2</span><strong>'+esc(label(row))+'</strong><small>'+esc(year)+'</small></summary><div class="expansion-detail">'+
-     '<p>'+esc(row.summary||row.description||row.scope||row.notes||'Source-linked reference, not an independently audited historical account.')+'</p>'+
-     '<p><b>Evidence meaning:</b> '+esc(row.temporal_kind||'Context record without a sourced complete lifespan')+'. '+esc(interpretation)+'</p>'+
+     '<p>'+esc(row.summary||row.description||row.scope||row.notes||'No summary available.')+'</p>'+
+     ''+
      (contact?'<p><b>Linked actors:</b> '+esc(contact)+' (actor references are not automatically political map bars)</p>':'')+
-     '<p><b>Review:</b> '+esc(row.review_status||'Not specified')+'; confidence '+esc(row.confidence||'not assessed')+'. Independently corroborated: '+(row.independently_corroborated===true?'recorded as yes':'not established')+'.</p>'+
+     ''+
      (row.content_level?'<p><b>Content note:</b> '+esc(row.content_level)+'</p>':'')+
      (claims.length?'<details><summary>Source-scoped claims ('+claims.length+')</summary>'+claims.slice(0,8).map(c=>'<p><b>'+esc(c.id)+':</b> '+esc(c.claim_text)+'</p>').join('')+'</details>':'')+
      '<div class="expansion-sources">'+citations+href+'</div>'+
@@ -30,7 +30,7 @@
    if(!pack)return;
    const type=$('modernV2Type').value||'events';
    const answer=model.list(pack,{type,search:$('modernV2Search').value,limit,includeSensitive:$('modernV2Sensitive').checked});
-   $('modernV2Status').textContent=answer.count+' '+type.replaceAll('_',' ')+' matching. '+answer.rows.length+' shown. Source text, abstract and search extracts differ in review depth; none is independently corroborated by this import.';
+   $('modernV2Status').textContent=answer.count+' '+type.replaceAll('_',' ')+' matching. '+answer.rows.length+' shown. ';
    $('modernV2Cards').innerHTML=answer.rows.map(r=>record(type,r)).join('')||'<p>No matching records in this revision. Other research packs may contain relevant evidence.</p>';
    $('modernV2More').hidden=answer.count<=answer.rows.length;
  }
