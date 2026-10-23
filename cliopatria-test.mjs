@@ -54,7 +54,7 @@ const pages=['index','story','compare','interactions','worldview','discover','co
 for(const p of pages){
  const page=read(p+'.html');
  assert.match(page,/atlas-journey\.css/,'Shared contextual styling missing: '+p);
- assert.match(page,/atlas-links\.js\?v=0\.41\.0/,'Cross-page reader not updated: '+p);
+ assert.match(page,/atlas-links\.js\?v=0\.42\.0/,'Cross-page reader not updated: '+p);
 }
 const generated=JSON.parse(fs.readFileSync(new URL('./public/seshat/index.json',import.meta.url),'utf8'));
 assert.equal(generated.schema,1);
