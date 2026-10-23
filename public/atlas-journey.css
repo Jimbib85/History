@@ -23,3 +23,6 @@ body :is(.atlas-crossnav,.atlas-journey-rail nav){-webkit-overflow-scrolling:tou
  .atlas-journey-rail nav a{flex:0 0 auto;min-height:42px;padding:9px 13px}
 }
 @media(prefers-reduced-motion:reduce){.atlas-journey-rail nav a{transition:none}}
+
+/* An active context trail link keeps each screen oriented without extra panels. */
+.atlas-journey-rail nav a[aria-current="page"]{background:#4c533f;border-color:#f9d39c;color:#fff0cb!important;box-shadow:inset 0 -2px #f9d39c}
