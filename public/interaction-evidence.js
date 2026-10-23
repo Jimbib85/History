@@ -47,5 +47,12 @@
    .filter(r=>!needle||[r.title,r.detail,r.kind,...(r.participants||[]).map(id=>societyNames?.get(id)?.name||id)].join(' ').toLocaleLowerCase().includes(needle))
    .sort((a,b)=>a.year-b.year||String(a.title).localeCompare(String(b.title)));
  }
- root.AtlasInteractionEvidence=Object.freeze({partners,timeline,filter});
+ function move(rows,currentKey,direction){
+  if(!Array.isArray(rows)||!rows.length)return null;
+  const index=rows.findIndex(r=>r.key===currentKey);
+  const forward=direction>=0;
+  if(index<0)return forward?rows[0]:rows[rows.length-1];
+  return rows[Math.min(rows.length-1,Math.max(0,index+(forward?1:-1)))];
+ }
+ root.AtlasInteractionEvidence=Object.freeze({partners,timeline,filter,move});
 })(typeof window!=='undefined'?window:globalThis);
