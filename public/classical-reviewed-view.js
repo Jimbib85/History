@@ -17,8 +17,8 @@
    return '<details class="classical-card"><summary><span class="classical-badges">'+
      '<b>'+esc(r.kind)+'</b><span>'+esc(root.temporal(r))+'</span></span><strong>'+esc(r.name)+'</strong>'+
      '<small>'+esc(r.region||'')+'</small></summary><div class="classical-detail">'+
-     '<p>'+esc(r.summary)+'</p><p><b>Claim scope:</b> '+esc(status(r))+
-     '. Confidence: '+esc(r.confidence||'Unrated')+'. This review does not establish the validity of all unreviewed seed assertions.</p>'+
+     '<p>'+esc(r.summary)+'</p><p><b>Collection:</b> '+esc(status(r))+
+     '</p>'+
      '<p><b>Research batch:</b> '+esc((r.batches||[r.scope]).join(' and '))+'</p>'+
      ''+
      ''+
