@@ -30,7 +30,7 @@ assert.match(html,/id="interactionPreviousRecord"/);
 assert.match(html,/id="interactionNextRecord"/);
 assert.match(html,/id="interactionPlayRecords"/);
 assert.match(html,/id="interactionDetailPanel"/);
-assert.match(html,/Read selected evidence/);
+assert.match(html,/See details/);
 assert.match(css,/interaction-network-svg\s*\{width:760px;min-width:760px/,'Mobile SVG network remains scrollable and legible');
 assert.match(css,/prefers-reduced-motion:reduce/);
 assert.match(ui,/state\.focus\?contextualRecords\(\):rows/,'Partner filtering must not hide the wider focused network');
