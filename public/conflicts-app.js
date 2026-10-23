@@ -14,37 +14,37 @@
   const pageSize=12;
   const sourceLinks=row=>row.sources.map(s=>{
     const href=url(s.url);
-    return href?`<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(s.title||s.id)} ↗<small>${esc(s.access_status||'Access unknown')} · ${esc(s.limitations||'Consult the original evidence')}</small></a>`:'';
+    return href?`<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${esc(s.title||s.id)} ↗</a>`:'';
   }).join('');
   function directLink(row){
     const p=new URLSearchParams({record:row.id,kind:M.kindOf(row)});
     return 'conflicts.html?'+p.toString();
   }
   function detail(row){
-    const ongoing=row.endStatus==='ONGOING'?'This record was ongoing at its research cutoff. The observed-through date is not an end date.':'';
-    const unknown=row.endStatus==='UNKNOWN'?'The source does not establish an ending date.':'';
+    const ongoing=row.endStatus==='ONGOING'?'Ongoing at last record':'';
+    const unknown=row.endStatus==='UNKNOWN'?'End date unknown':'';
     const messages=[ongoing,unknown,...(row.notes||[])].filter(Boolean);
     const related=M.related(row,D.records),available=related.filter(r=>state.sensitive||!r.sensitive),hidden=related.length-available.length;
     const participants=row.participations||[],casualties=row.casualties||[];
     const yearLink=Number.isInteger(row.start)?`<a href="story.html?year=${row.start}&subject=conflict">Story timeline near ${esc(M.label(row.start))} ↗</a><a href="compare.html?year=${row.start}&mode=events">Compare this year ↗</a>`:'';
     return `<div class="details">
       <p>${esc(row.summary)}</p>
-      <div class="tagline"><span class="tag">${esc((row.hierarchy||row.type).replaceAll('_',' '))}</span><span class="tag">${esc(row.confidence)} research confidence</span><span class="tag">${esc(row.review)} review status</span><span class="tag">${esc(row.datePrecision||'Date uncertain')}</span></div>
-      ${messages.map(x=>`<p class="warning">${esc(x)}</p>`).join('')}
-      <p><strong>Original source date:</strong> ${esc(row.dateText||'Not established')}</p>
-      ${row.observedThrough?`<p><strong>Evidence observed through:</strong> ${esc(row.observedThrough)}</p>`:''}
-      ${row.outcome?`<p><strong>Outcome described in research:</strong> ${esc(row.outcome)}</p>`:''}
-      ${row.anecdoteStatus?`<p class="warning">Story status: ${esc(row.anecdoteStatus)}. Do not treat an unsupported tradition as a verified fact.</p>`:''}
-      ${participants.length?`<h3 class="extra-title">Participants and roles</h3>${participants.map(p=>`<div class="entry"><strong>${esc(p.name)}</strong>${esc(p.role||'Role unknown')}<small>${esc(p.scope||'Involvement dates require separate evidence.')}</small></div>`).join('')}`:''}
-      ${casualties.length?`<h3 class="extra-title">Scoped casualty observations — not additive</h3>${casualties.map(c=>`<div class="entry"><strong>${esc(c.title)}</strong>${c.estimate===null?'Estimate not established':esc(c.estimate)}<small>${esc(c.population_scope)} · ${esc(c.method)}</small></div>`).join('')}<p class="warning">Figures may overlap or describe different populations. Do not sum them into an unsupported total.</p>`:''}
-      ${available.length?`<h3 class="extra-title">Explore connected evidence</h3><div class="related-records">${available.slice(0,12).map(r=>`<button type="button" data-focus-record="${esc(r.id)}"><span>${esc(r.title)}</span><small>${esc(M.label(r.start))} · ${esc(names[M.kindOf(r)]||r.type)}</small></button>`).join('')}</div>`:''}
-      ${hidden&&!state.sensitive?`<p class="notes">${hidden} related record${hidden===1?' is':'s are'} hidden until you enable sensitive research.</p>`:''}
-      <h3 class="extra-title">Sources and access limitations</h3><div class="sources">${sourceLinks(row)||'<p>No source URL supplied.</p>'}</div>
+      <div class="tagline"><span class="tag">${esc((row.hierarchy||row.type).replaceAll('_',' '))}</span><span class="tag">${esc(row.datePrecision||'Date uncertain')}</span></div>
+      ${messages.map(x=>`<p class="record-note">${esc(x)}</p>`).join('')}
+      <p><strong>Date:</strong> ${esc(row.dateText||'Not established')}</p>
+      ${row.observedThrough?`<p><strong>Last recorded:</strong> ${esc(row.observedThrough)}</p>`:''}
+      ${row.outcome?`<p><strong>Outcome:</strong> ${esc(row.outcome)}</p>`:''}
+      ${row.anecdoteStatus?`<p class="record-note">Status: ${esc(row.anecdoteStatus)}</p>`:''}
+      ${participants.length?`<h3 class="extra-title">Participants and roles</h3>${participants.map(p=>`<div class="entry"><strong>${esc(p.name)}</strong>${esc(p.role||'Role unknown')}<small>${esc(p.scope||'Date unknown')}</small></div>`).join('')}`:''}
+      ${casualties.length?`<h3 class="extra-title">Casualty estimates</h3>${casualties.map(c=>`<div class="entry"><strong>${esc(c.title)}</strong>${c.estimate===null?'Estimate not established':esc(c.estimate)}<small>${esc(c.population_scope)} · ${esc(c.method)}</small></div>`).join('')}`:''}
+      ${available.length?`<h3 class="extra-title">Related events</h3><div class="related-records">${available.slice(0,12).map(r=>`<button type="button" data-focus-record="${esc(r.id)}"><span>${esc(r.title)}</span><small>${esc(M.label(r.start))} · ${esc(names[M.kindOf(r)]||r.type)}</small></button>`).join('')}</div>`:''}
+      ${hidden&&!state.sensitive?`<p class="notes">${hidden} more record${hidden===1?'':'s'} available under Sensitive topics.</p>`:''}
+      <h3 class="extra-title">Sources</h3><div class="sources">${sourceLinks(row)||'<p>No source URL supplied.</p>'}</div>
       <div class="record-actions">${yearLink}<a href="${esc(directLink(row))}" aria-label="Permalink to ${esc(row.title)}">Share this record ↗</a></div>
     </div>`;
   }
   function card(row){const active=row.id===state.record;
-    return `<div class="card-row" id="record-${esc(row.id)}" data-record-id="${esc(row.id)}"><div class="date-col">${esc(M.label(row.start))}</div><details class="milestone" data-kind="${esc(row.type)}" ${active?'open':''}><summary><span class="icon-disc" aria-hidden="true">${esc(icons[row.type]||'◇')}</span><span class="summary-copy"><strong>${esc(row.title)}</strong><small>${esc(row.region)} · ${esc(row.dateText||'Uncertain date')}${row.review==='NEEDS_REVIEW'?' · Needs review':''}</small></span><span class="plus" aria-hidden="true">+</span></summary>${active?detail(row):'<div class="details-placeholder">Open to see participants, sources and related events.</div>'}</details></div>`;
+    return `<div class="card-row" id="record-${esc(row.id)}" data-record-id="${esc(row.id)}"><div class="date-col">${esc(M.label(row.start))}</div><details class="milestone" data-kind="${esc(row.type)}" ${active?'open':''}><summary><span class="icon-disc" aria-hidden="true">${esc(icons[row.type]||'◇')}</span><span class="summary-copy"><strong>${esc(row.title)}</strong><small>${esc(row.region)} · ${esc(row.dateText||'Uncertain date')}</small></span><span class="plus" aria-hidden="true">+</span></summary>${active?detail(row):'<div class="details-placeholder">Open to see participants, sources and related events.</div>'}</details></div>`;
   }
   // Lazily populate collapsed cards so full evidence markup is only drawn when asked for.
   function attachLazyDetails(){for(const el of $('results').querySelectorAll('.milestone'))el.addEventListener('toggle',()=>{
