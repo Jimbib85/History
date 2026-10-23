@@ -88,7 +88,7 @@
   }
   function detailHTML(e) {
 
-    return '<p>'+esc(e.summary||'No explanatory text is attached to this record.')+'</p>'+(globalThis.AtlasHistoryStories?.forEvent({...e,year:e.start})||'')+'<div class="record-metadata"><span>'+esc(e.originalCategory)+'</span><span>'+esc(e.originalRegion)+'</span></div>'+(caveat?'':'')+(e.notes?'<p class="record-note">'+esc(e.notes)+'</p>':'')+
+    return '<p>'+esc(e.summary||'No explanatory text is attached to this record.')+'</p>'+(globalThis.AtlasHistoryStories?.forEvent({...e,year:e.start})||'')+'<div class="record-metadata"><span>'+esc(e.originalCategory)+'</span><span>'+esc(e.originalRegion)+'</span></div>'+(e.notes?'<p class="record-note">'+esc(e.notes)+'</p>':'')+
       '<div class="record-entities">'+e.entityIds.map(id=>'<a href="'+esc(M.link('index.html',{...e,primaryId:id}))+'">'+esc(data.entities.get(id).name)+' ↗</a>').join('')+'</div>'+sourceHTML(e)+
       (e.variants.length?'<details class="variant-details"><summary>'+e.variants.length+' additional imported record'+(e.variants.length===1?'':'s')+' with the same title and dates</summary>'+e.variants.map(v=>'<p>'+esc(v.batch)+' · '+esc(v.confidence)+'<br>'+esc(v.summary)+'</p>').join('')+'</details>':'')+
       '<div class="record-links">'+(e.id.startsWith('gc-')?'<a href="conflicts.html?record='+encodeURIComponent(e.id.slice(3))+'">Explore conflict evidence ↗</a>':'')+'<a href="'+esc(M.link('compare.html',e))+'">Compare this date</a><a href="'+esc(M.link('index.html',e))+'">Open world map</a><a href="'+esc(M.link('index.html',e))+'#technology">Technology explorer</a></div>';
