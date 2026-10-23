@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="atlas-nav.css?v=0.19.0">
 <link rel="stylesheet" href="atlas-cinematic.css?v=0.26.0">
 <link rel="stylesheet" href="atlas-artwork.css?v=0.30.0">
-<link rel="stylesheet" href="interactions.css?v=0.33.0">
+<link rel="stylesheet" href="interactions.css?v=0.36.0">
 <link rel="stylesheet" href="atlas-design-system.css?v=0.34.0">
 </head>
 <body class="atlas-interactions">
@@ -48,11 +48,19 @@
  <div class="interaction-workspace">
   <div class="interaction-main">
    <div class="interaction-controls"><div><span id="interactionCount" role="status">Historical interactions</span><h2>Connections across time</h2></div><div class="interaction-switch" role="group" aria-label="Interaction display"><button type="button" class="active" data-interaction-mode="network" aria-pressed="true">◉ Network</button><button type="button" data-interaction-mode="stories" aria-pressed="false">▤ Stories</button></div></div>
-   <div id="interactionNetwork" class="interaction-network" tabindex="-1" aria-label="Interactive, non-geographic historical interaction network"></div>
+   <div class="interaction-record-trail" aria-label="Explore dated evidence in sequence">
+    <button type="button" id="interactionPreviousRecord" aria-label="Previous dated research record" title="Previous record">‹</button>
+    <div class="interaction-trail-context"><span id="interactionTrailPosition" role="status" aria-live="polite">Choose a historical record</span><strong id="interactionTrailTitle">Follow the dated evidence</strong></div>
+    <button type="button" id="interactionNextRecord" aria-label="Next dated research record" title="Next record">›</button>
+    <button type="button" id="interactionPlayRecords" aria-pressed="false" title="Play the dated research records in sequence">▶ Play records</button>
+   </div>
+   <p class="interaction-network-hint">Select a line or society to explore its evidence. On smaller screens, swipe sideways to inspect the network, or use the society chips above.</p>
+   <div id="interactionNetwork" class="interaction-network" tabindex="0" aria-label="Interactive, non-geographic historical interaction network. Swipe horizontally on small screens."></div>
+   <a class="interaction-mobile-evidence-link" href="#interactionDetailPanel">Read selected evidence ↓</a>
    <div id="interactionStories" class="interaction-stories" hidden aria-label="Linked historical interaction stories"></div>
    <div class="interaction-legend"><span><i style="--swatch:#edc16c"></i>Trade</span><span><i style="--swatch:#f17a75"></i>Conflict</span><span><i style="--swatch:#67c9e7"></i>Diplomacy</span><span><i style="--swatch:#ba98f0"></i>Knowledge</span><span><i style="--swatch:#76d4ad"></i>Migration</span><span><i style="--swatch:#e6a279"></i>Political change</span></div>
   </div>
-  <aside class="interaction-detail-panel" aria-label="Selected record and evidence"><div id="interactionDetail" aria-live="polite"></div></aside>
+  <aside id="interactionDetailPanel" class="interaction-detail-panel" aria-label="Selected record and evidence"><div id="interactionDetail" aria-live="polite"></div></aside>
  </div>
  <footer class="interaction-footer"><p>This is a deliberately selective research network, not a complete history of human connections. Missing records do not mean a society was isolated. Images are authentic objects or clearly marked decorative illustrations; dates and source access have varying uncertainty.</p><a href="compare.html">Explore shared timelines ↗</a></footer>
 </main>
@@ -108,6 +116,6 @@
 <script src="atlas-master-core-apply.js?v=0.29.0"></script>
 <script src="atlas-visual-assets.js?v=0.33.0"></script>
 <script src="interaction-evidence.js?v=0.35.0"></script>
-<script src="interactions.js?v=0.35.0"></script>
+<script src="interactions.js?v=0.36.0"></script>
 <script src="atlas-links.js?v=0.33.0"></script>
 </body></html>
