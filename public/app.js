@@ -204,24 +204,24 @@
     updateGeoCount();
     updateTransform();
     $('mapYear').textContent=compactYear(state.year);
-    $('mapStatus').textContent=state.view==='known'?'◉ Illustrative contact points · not a complete known world':historical?'◉ Historical cartography · read dating carefully':`◉ ${CIVILISATIONS.filter(c=>activeAt(c,state.year)&&regionMatch(c,state.region)&&(state.catalogue==='all'||c.kind===state.catalogue)).length} charted entries in this selection`;
+    $('mapStatus').textContent=state.view==='known'?'◉ Places they knew':historical?'◉ Historical map':`◉ ${CIVILISATIONS.filter(c=>activeAt(c,state.year)&&regionMatch(c,state.region)&&(state.catalogue==='all'||c.kind===state.catalogue)).length} charted entries in this selection`;
     const selectedMap=MAPS[civ.mapId];
     const worldviewParams=new URLSearchParams({year:String(state.year),civ:state.civ});
     $('worldviewLink').href='worldview.html?'+worldviewParams.toString();
     const entityURL=safeURL(civ.source);
     const evidenceSummary='<strong>'+escapeHtml(civ.name)+'</strong> · '+escapeHtml(civ.location||'Location not specified')+
-      ' · '+escapeHtml(life(civ))+(Number.isFinite(civ.lon)&&Number.isFinite(civ.lat)?'. This point is an illustrative location, not a measured historical boundary or a documented territorial centre.':'. No verified map point is available for this research entry; its region is descriptive, not a plotted historical border.')+
+      ' · '+escapeHtml(life(civ))+''+
       (entityURL?' <a href="'+escapeHtml(entityURL)+'" target="_blank" rel="noopener noreferrer">Background ↗</a>':'')+
       '<span class="geographic-caveat"> Background reading does not independently establish the precise marker coordinates.</span>';
-    $('mapEvidence').innerHTML=historical&&selectedMap?'<strong>'+escapeHtml(selectedMap.title)+'</strong> · '+escapeHtml(selectedMap.date)+' · '+escapeHtml(selectedMap.type)+' · <a href="'+escapeHtml(selectedMap.page)+'" target="_blank" rel="noopener noreferrer">Source ↗</a>':state.view==='known'?'Illustrative contact points, not a complete known world. '+evidenceSummary:evidenceSummary;
-    $('mapAboutText').textContent=historical?(selectedMap?selectedMap.description:'No appropriate period map is curated for this selection yet. Missing evidence does not mean people lacked geographical knowledge.'):state.view==='known'?(civ.knownText||'The examples show documented places or networks where available. They do not represent the knowledge of every inhabitant.'):'Markers identify representative locations where documented. They do not depict territorial extent or historical borders. Select a marker to explore its records.';
-    $('mapHelp').textContent=state.view==='actual'?'Select a marker to read its story ↗':state.view==='known'?'Example places and networks, not knowledge boundaries':'Maps are historical artefacts, not satellite views';
+    $('mapEvidence').innerHTML=historical&&selectedMap?'<strong>'+escapeHtml(selectedMap.title)+'</strong> · '+escapeHtml(selectedMap.date)+' · '+escapeHtml(selectedMap.type)+' · <a href="'+escapeHtml(selectedMap.page)+'" target="_blank" rel="noopener noreferrer">Source ↗</a>':state.view==='known'?evidenceSummary:evidenceSummary;
+    $('mapAboutText').textContent=historical?(selectedMap?selectedMap.description:'No map available for this period.'):state.view==='known'?(civ.knownText||'Explore places and routes from historical accounts.'):'Select a society to explore.';
+    $('mapHelp').textContent=state.view==='actual'?'Select a marker to read its story ↗':state.view==='known'?'Explore places and connections':'Explore a historical map';
     $('mapLegend').style.display=historical?'none':'';
     $('zoomIn').disabled=historical;$('zoomOut').disabled=historical;$('resetMap').disabled=historical;
     document.querySelectorAll('[data-view]').forEach(b=>{const yes=b.dataset.view===state.view;b.classList.toggle('active',yes);b.setAttribute('aria-selected',String(yes));});
     if(historical){
       const m=MAPS[civ.mapId];
-      $('historicalMap').innerHTML=m?`<img src="${escapeHtml(m.image)}" alt="${escapeHtml(m.title)}" referrerpolicy="no-referrer"><div class="historic-overlay">${escapeHtml(m.title)} · ${escapeHtml(m.date)} · ${escapeHtml(m.type)} · <a href="${escapeHtml(m.page)}" target="_blank" rel="noopener noreferrer">Source ↗</a></div>`:`<div class="map-note"><div class="section-kicker">NO RELIABLE PERIOD MAP CURATED YET</div><h3>Not every world has a surviving map.</h3><p>We haven't added a suitable historical map for <strong>${escapeHtml(civ.name)}</strong> yet. That does not mean its people lacked sophisticated geographical knowledge.</p><a href="${escapeHtml(civ.source)}" target="_blank" rel="noopener noreferrer">Explore background reading ↗</a></div>`;
+      $('historicalMap').innerHTML=m?`<img src="${escapeHtml(m.image)}" alt="${escapeHtml(m.title)}" referrerpolicy="no-referrer"><div class="historic-overlay">${escapeHtml(m.title)} · ${escapeHtml(m.date)} · ${escapeHtml(m.type)} · <a href="${escapeHtml(m.page)}" target="_blank" rel="noopener noreferrer">Source ↗</a></div>`:`<div class="map-note"><div class="section-kicker">HISTORICAL MAPS</div><h3>No map available for this period.</h3><a href="${escapeHtml(civ.source)}" target="_blank" rel="noopener noreferrer">Explore background reading ↗</a></div>`;
       const img=$('historicalMap').querySelector('img');
       if(img){img.addEventListener('error',()=>{$('historicalMap').innerHTML=`<div class="map-note"><h3>The archived map could not load.</h3><p>It is hosted by Wikimedia Commons and needs an internet connection. The rest of the atlas works offline.</p><a href="${escapeHtml(m.page)}" target="_blank" rel="noopener noreferrer">Open the source map ↗</a></div>`;});}
     }
@@ -284,10 +284,10 @@
       const note=row.detail||row.summary||row.description||row.evidence_basis||row.content_scope||'';
       const date=recordDate(row);
       const qualifier=[row.kind||row.role||row.practice_type||row.theme||row.relationship_type||row.map_kind||row.representation_type||row.knowledge_level||row.evidence_layer,
-        row.datePrecision||row.date_precision||row.dating,row.confidence?row.confidence+' confidence':''].filter(Boolean).map(readable).join(' · ');
+        row.datePrecision||row.date_precision||row.dating,].filter(Boolean).map(readable).join(' · ');
       const caveats=[row.evidenceNote,row.evidence_note,row.evidence_status,row.evidenceStatus,row.scope_warning,row.comparison_caveat,row.worldview_caution,row.notes,row.direction_evidence,row.evidence_class,row.object_date_note].filter(Boolean);
-      const html=(note?'<p>'+escapeHtml(note)+'</p>':'')+caveats.map(x=>'<p class="evidence-note">'+escapeHtml(readable(x))+'</p>').join('')+extra+
-        (urls.length?urls.map(url=>'<a class="story-link" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">Read record source ↗</a>').join(''):'<p class="evidence-note">No claim-level source attached to this record. The Sources section includes entity background reading.</p>')+(row.catalogueId?'<a class="story-link" href="catalogue.html?record='+encodeURIComponent(row.catalogueId)+'">Full research record ↗</a>':'')+
+      const html=(note?'<p>'+escapeHtml(note)+'</p>':'')+(caveats.length?'<details class="record-context"><summary>More details</summary>'+caveats.map(x=>'<p>'+escapeHtml(readable(x))+'</p>').join('')+'</details>':'')+extra+
+        (urls.length?urls.map(url=>'<a class="story-link" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer">Read record source ↗</a>').join(''):'')+(row.catalogueId?'<a class="story-link" href="catalogue.html?record='+encodeURIComponent(row.catalogueId)+'">Full research record ↗</a>':'')+
         (Number.isFinite(row.year)?'<button type="button" class="moment-chip" data-story-year="'+row.year+'">Explore '+compactYear(row.year)+' →</button>':'');
       groups[group].push({id,title,meta:[date,qualifier].filter(Boolean).join(' · '),html,search:[title,date,qualifier,note,...caveats].join(' '),year:row.year??row.start_year??row.birth_year??row.earliest_birth_year});
     }
@@ -336,11 +336,11 @@
       if(raw.c==='figures'||raw.c==='cultural_practices'||raw.c==='social_impacts')add('people',row,{},'');
       else if(raw.c==='geographical_knowledge'||raw.c==='visual_assets')add('maps',row,{},'');
       else if(raw.c==='relationships'||raw.c==='technology_transmission')add('connections',row,{},'');
-      else if(raw.c==='connections')add('meanwhile',row,{},'', '<p class="evidence-note">This is a thematic comparison, not evidence of contact.</p>');
+      else if(raw.c==='connections')add('meanwhile',row,{},'', '');
     }
     const m=MAPS[c.mapId];
     if(m){add('maps',{id:'display-map',title:m.title,dateLabel:m.date,kind:m.type,detail:m.description,source:m.page}, {},'', '<p class="evidence-note">Displayed cartographic example: '+escapeHtml(m.type)+'.</p>');}
-    if(c.knownText)add('maps',{id:'known-world-overview',title:'Geographical knowledge overview',detail:c.knownText,kind:'Entity overview; illustrative contact points',source:c.source}, {},'', '<p class="evidence-note">Representative places and networks do not define a complete known world or political boundaries.</p>');
+    if(c.knownText)add('maps',{id:'known-world-overview',title:'Geographical knowledge overview',detail:c.knownText,kind:'Entity overview; illustrative contact points',source:c.source}, {},'', '');
     for(const group of ['events','people','maps','connections'])groups[group].sort((a,b)=>Math.abs((a.year??state.year)-state.year)-Math.abs((b.year??state.year)-state.year));
     groups.sources=[...sourceRows.values()];
     return groups;
@@ -366,7 +366,7 @@
       const limit=Math.max(reading.limits[key]||8,selectedAt<0?0:Math.ceil((selectedAt+1)/8)*8),open=q?rows.length>0:reading.topics.has(key);
       const chosen=rows.slice(0,limit);
       return '<details class="reader-topic" data-reader-topic="'+key+'"'+(open?' open':'')+'><summary><span aria-hidden="true" class="topic-icon">'+icon+'</span><span>'+label+'</span><span class="topic-count">'+(q?rows.length+' / ':'')+all.length+'</span></summary><div class="reader-topic-body">'+
-        (key==='connections'?'<p class="reader-hint">Documented relationships, with the evidence and its limits. Dates may differ from the selected year.</p>':key==='sources'?'<p class="reader-hint">Background reading and sources attached to individual records. Source presence does not independently verify every claim.</p>':key==='meanwhile'?'<p class="reader-hint">Parallel histories; sharing a date does not itself establish contact.</p>':'')+
+        (key==='connections'?'<p class="reader-hint">Explore relationships and encounters.</p>':key==='sources'?'<p class="reader-hint">Sources and further reading.</p>':key==='meanwhile'?'<p class="reader-hint">Explore other societies from this period.</p>':'')+
         (chosen.length?chosen.map(r=>'<details class="reader-record" name="map-reader-'+key+'" data-reader-record="'+escapeHtml(r.id)+'"'+(reading.records[key]===r.id?' open':'')+'><summary><strong>'+escapeHtml(r.title)+'</strong>'+(r.meta?'<small>'+escapeHtml(r.meta)+'</small>':'')+'</summary><div class="reader-record-body">'+r.html+'</div></details>').join(''):'<p class="reader-empty">'+(q?'No records match this search.':'No linked records in this atlas yet.')+'</p>')+
         (rows.length>chosen.length?'<button class="reader-more" type="button" data-reader-more="'+key+'">Show '+Math.min(8,rows.length-chosen.length)+' more <span>'+chosen.length+' of '+rows.length+'</span></button>':'')+'</div></details>';
     }
@@ -388,7 +388,7 @@
     const others=CIVILISATIONS.filter(x=>x.id!==c.id&&activeAt(x,state.year));
     const regions=[...new Set(others.map(x=>x.region))];
     const picks=[];for(const r of regions){const x=others.find(e=>e.region===r);if(x)picks.push(x.name);if(picks.length>=3)break;}
-    return picks.length?`In ${compactYear(state.year)}, ${picks.join(', ')} ${picks.length===1?'was':'were'} also part of the human story. Being contemporary does not by itself indicate contact.`:'There are no additional contemporary societies in this starter dataset for this year. That is a gap in the atlas, not in human history.';
+    return picks.length?`In ${compactYear(state.year)}, ${picks.join(', ')} ${picks.length===1?'was':'were'} also part of the human story. `:'No other societies are listed for this year.';
   }
   function renderMoments(){
     $('moments').innerHTML=MOMENTS.map(m=>`<button type="button" data-moment="${m.year}" class="moment-chip ${Math.abs(state.year-m.year)<10?'active':''}" title="${escapeHtml(m.title)}">${compactYear(m.year)}</button>`).join('');
