@@ -38,5 +38,8 @@ assert.match(ui,/query\.set\('event',state\.event\)/,'Individual record context 
 assert.match(ui,/motionReduced\(\)/,'Reduced-motion users do not get autoplay');
 assert.match(ui,/document\.hidden/,'Playback stops when the tab becomes hidden');
 assert.match(ui,/scrollIntoView/,'Selected mobile records bring evidence into view');
+assert.match(ui,/networkScroller\.scrollLeft/,'Mobile network position is preserved between evidence selections');
+assert.match(ui,/previouslyFocusedSociety!==state\.focus/,'Changing society recentres the mobile network');
+assert.match(ui,/event:params\.get\('event'\)/,'Shared direct links restore their selected record');
 new vm.Script(ui,{filename:'interactions.js'});
 console.log('PASS interaction time trail: chronology, boundary handling, wider network context, mobile reading and safe playback');
