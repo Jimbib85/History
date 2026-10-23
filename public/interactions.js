@@ -7,6 +7,7 @@
   if(typeof document==='undefined'||typeof document.getElementById!=='function')return;
  const $=id=>document.getElementById(id);
  const societies=new Map(CIVILISATIONS.filter(c=>c.kind!=='overview').map(c=>[c.id,c]));
+ const evidence=root.AtlasInteractionEvidence;
  const allSources=[
   ...(typeof ATLAS_RESEARCH_EVENTS!=='undefined'?ATLAS_RESEARCH_EVENTS:[]),
   ...(typeof ATLAS_MEDIEVAL_EVENTS!=='undefined'?ATLAS_MEDIEVAL_EVENTS:[]),
@@ -33,7 +34,9 @@
  const palettes={'Trade':'#edc16c','Conflict':'#f17a75','Diplomacy':'#67c9e7','Knowledge':'#ba98f0','Migration':'#76d4ad','Political change':'#e6a279','Other':'#afc5c9'};
  const params=new URLSearchParams(location.search);
  const eraList={medieval:{start:850,end:1500,label:'850–1500 CE'},classical:{start:-499,end:500,label:'500 BCE–500 CE'},earlymodern:{start:1450,end:1800,label:'1450–1800 CE'},modern:{start:1800,end:2026,label:'1800–2026 CE'},all:{start:-9999,end:2026,label:'All recorded history'}};
- const state={era:eraList[params.get('era')]?params.get('era'):'medieval',year:Number.isFinite(Number(params.get('year')))&&params.has('year')?Math.max(-9999,Math.min(2026,Number(params.get('year')))):1200,type:'All',search:'',focus:societies.has(params.get('civ'))?params.get('civ'):'',event:null,mode:'network'};
+ const initialFocus=societies.has(params.get('civ'))?params.get('civ'):'';
+ const initialPartner=initialFocus&&societies.has(params.get('with'))&&params.get('with')!==initialFocus?params.get('with'):'';
+ const state={era:eraList[params.get('era')]?params.get('era'):'medieval',year:Number.isFinite(Number(params.get('year')))&&params.has('year')?Math.max(-9999,Math.min(2026,Number(params.get('year')))):1200,type:'All',search:'',focus:initialFocus,partner:initialPartner,event:null,mode:params.get('view')==='stories'?'stories':'network'};
  if(params.has('year'))state.era='window';
  const records=[...new Map(allSources.filter(e=>e&&Number.isFinite(e.year)&&e.title).map((e,i)=>{
   const participants=[...new Set((e.societyIds||e.allSocietyIds||[]).filter(id=>societies.has(id)))];
@@ -49,14 +52,9 @@
   return null;
  };
  const dates=e=>e.humanDate||e.dateLabel||e.original_date_text||(/approx|circa|century/i.test(e.datePrecision||'')?'c. ':'')+year(e.year);
- const linkedRecords=()=>{
-  const r=timeWindow(),q=state.search.trim().toLocaleLowerCase();
-  return records.filter(e=>e.year>=r.start&&e.year<=r.end&&(!e.endExclusive||e.endExclusive>r.start))
-   .filter(e=>state.type==='All'||e.type===state.type)
-   .filter(e=>!state.focus||e.participants.includes(state.focus))
-   .filter(e=>!q||[e.title,e.detail,e.kind,...e.participants.map(id=>societies.get(id)?.name)].join(' ').toLocaleLowerCase().includes(q))
-   .sort((a,b)=>a.year-b.year||a.title.localeCompare(b.title));
- };
+ const filterFor=(partner='')=>{const r=timeWindow();return evidence.filter(records,{start:r.start,end:r.end,type:state.type,focus:state.focus,partner,search:state.search,societyNames:societies});};
+ const linkedRecords=()=>filterFor(state.partner);
+ const contextualRecords=()=>filterFor('');
  function visibleRecords(){return linkedRecords().slice(0,80)}
  function artwork(e){
   const asset=root.AtlasVisualAssets?.forSociety(e.participants.find(id=>root.AtlasVisualAssets.forSociety(id)));
