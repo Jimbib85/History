@@ -212,7 +212,7 @@
     const evidenceSummary='<strong>'+escapeHtml(civ.name)+'</strong> · '+escapeHtml(civ.location||'Location not specified')+
       ' · '+escapeHtml(life(civ))+''+
       (entityURL?' <a href="'+escapeHtml(entityURL)+'" target="_blank" rel="noopener noreferrer">Background ↗</a>':'')+
-      '<span class="geographic-caveat"> Background reading does not independently establish the precise marker coordinates.</span>';
+      '';
     $('mapEvidence').innerHTML=historical&&selectedMap?'<strong>'+escapeHtml(selectedMap.title)+'</strong> · '+escapeHtml(selectedMap.date)+' · '+escapeHtml(selectedMap.type)+' · <a href="'+escapeHtml(selectedMap.page)+'" target="_blank" rel="noopener noreferrer">Source ↗</a>':state.view==='known'?evidenceSummary:evidenceSummary;
     $('mapAboutText').textContent=historical?(selectedMap?selectedMap.description:'No map available for this period.'):state.view==='known'?(civ.knownText||'Explore places and routes from historical accounts.'):'Select a society to explore.';
     $('mapHelp').textContent=state.view==='actual'?'Select a marker to read its story ↗':state.view==='known'?'Explore places and connections':'Explore a historical map';
@@ -349,7 +349,7 @@
     const c=civById[state.civ];
     if(reading.civ!==c.id){reading.civ=c.id;reading.search='';reading.topics=new Set();reading.records={};reading.limits={};}
     if(state.region!=='All regions'&&!regionMatch(c,state.region)&&!CIVILISATIONS.some(e=>activeAt(e,state.year)&&regionMatch(e,state.region))){
-      $('storyPanel').innerHTML='<div class="story-overline">NO ENTRIES FOR THIS DATE</div><h2 class="story-title">'+escapeHtml(state.region)+'</h2><p class="story-description">This atlas currently has no dated societies or empires in '+escapeHtml(state.region)+' for '+compactYear(state.year)+'. That is a gap in the atlas data, not a claim that the region was uninhabited.</p><p>Try changing the date or selecting another region.</p>';return;
+      $('storyPanel').innerHTML='<div class="story-overline">NO ENTRIES FOR THIS DATE</div><h2 class="story-title">'+escapeHtml(state.region)+'</h2><p class="story-description">No societies in '+escapeHtml(state.region)+' match '+compactYear(state.year)+'.</p><p>Try changing the date or selecting another region.</p>';return;
     }
     const overview=c.kind==='overview',active=activeAt(c,state.year),records=storyRecords(c),q=reading.search.trim().toLowerCase();
     const artwork=window.AtlasVisualAssets?.forSociety(c.id);
