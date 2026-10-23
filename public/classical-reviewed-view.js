@@ -16,12 +16,12 @@
      '<a href="story.html?year='+r.year+'">Explore this year on Story ↗</a>':'';
    return '<details class="classical-card"><summary><span class="classical-badges">'+
      '<b>'+esc(r.kind)+'</b><span>'+esc(root.temporal(r))+'</span></span><strong>'+esc(r.name)+'</strong>'+
-     '<small>'+esc(status(r))+' · '+esc(r.region||'Region not specified')+'</small></summary><div class="classical-detail">'+
+     '<small>'+esc(r.region||'')+'</small></summary><div class="classical-detail">'+
      '<p>'+esc(r.summary)+'</p><p><b>Claim scope:</b> '+esc(status(r))+
      '. Confidence: '+esc(r.confidence||'Unrated')+'. This review does not establish the validity of all unreviewed seed assertions.</p>'+
      '<p><b>Research batch:</b> '+esc((r.batches||[r.scope]).join(' and '))+'</p>'+
-     '<p><b>Checked claim IDs:</b> '+esc((r.claimIds||[]).join(', '))+'</p>'+
-     '<p><b>Source IDs:</b> '+esc((r.sourceIds||[]).join(', '))+'</p>'+
+     ''+
+     ''+
      '<div class="classical-source-links">'+(sources||'<span>No direct source URL in this imported excerpt.</span>')+toTimeline+'</div></div></details>';
  }
  function matches(){
@@ -34,9 +34,9 @@
    if(!records.length)return;
    const rows=matches(),slice=rows.slice(0,shown);
    $('classicalCards').innerHTML=slice.map(card).join('')||
-     '<p class="classical-empty">No reviewed claim excerpt matches these filters. This does not imply the evidence is absent.</p>';
+     '<p class="classical-empty">No matches. Try adjusting the filters.</p>';
    $('classicalStatus').textContent=rows.length+' distinct reviewed records in this selection · '+slice.length+
-    ' visible · no uncertain-window records placed as exact points';
+    ' visible';
    $('classicalMore').hidden=shown>=rows.length;
    $('classicalMore').textContent='Show more reviewed records ('+(rows.length-shown)+' remaining)';
  }
