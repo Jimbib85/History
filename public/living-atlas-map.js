@@ -49,7 +49,7 @@
    document.addEventListener('click',event=>{if(layerTools.open&&!layerTools.contains(event.target))layerTools.open=false;});
  }
  const caution=document.getElementById('livingMapExplanation');
- if(caution)caution.classList.add('atlas-geography-disclaimer');
+ if(caution)caution.hidden=true;
  const evidence=document.getElementById('mapEvidence');
  if(evidence){
    const drawer=document.createElement('details');drawer.className='atlas-map-source-drawer';
