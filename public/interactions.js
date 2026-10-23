@@ -106,7 +106,7 @@
   const lines=edges.map(({e,a,b},i)=>{
    const p=positions.get(a),q=positions.get(b);
    const mx=(p.x+q.x)/2,my=(p.y+q.y)/2-(i%2?21:-21);
-   return '<path data-network-event="'+esc(e.key)+'" class="interaction-edge" d="M'+p.x.toFixed(1)+' '+p.y.toFixed(1)+' Q'+mx.toFixed(1)+' '+my.toFixed(1)+' '+q.x.toFixed(1)+' '+q.y.toFixed(1)+'" stroke="'+palettes[e.type]+'" stroke-width="2.5" tabindex="0" role="button" aria-label="Read '+esc(e.title)+', '+esc(dates(e))+'"><title>'+esc(e.title+' — '+dates(e))+'</title></path>';
+   return '<path data-network-event="'+esc(e.key)+'" class="interaction-edge'+(e.key===state.event?' selected':'')+'" d="M'+p.x.toFixed(1)+' '+p.y.toFixed(1)+' Q'+mx.toFixed(1)+' '+my.toFixed(1)+' '+q.x.toFixed(1)+' '+q.y.toFixed(1)+'" stroke="'+palettes[e.type]+'" stroke-width="2.5" tabindex="0" role="button" aria-label="Read '+esc(e.title)+', '+esc(dates(e))+'"><title>'+esc(e.title+' — '+dates(e))+'</title></path>';
   }).join('');
   const nodes=leaders.map((id,i)=>{
    const c=societies.get(id),p=positions.get(id),selected=id===state.focus;
