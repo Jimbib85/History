@@ -39,7 +39,7 @@ assert.match(html,/id="interactionSociety"/);
 assert.match(html,/id="interactionPartners"/);
 assert.match(html,/id="interactionTimeRibbon"/);
 assert.ok(html.indexOf('interaction-evidence.js')<html.indexOf('interactions.js'));
-assert.match(html,/Co-mention alone does not establish bilateral contact/);
+assert.match(html,/Choose a society to explore its connections/);
 assert.match(ui,/data-network-partner/);
 assert.match(ui,/interactionTimeRibbon.*addEventListener/);
 assert.match(ui,/query\.set\('with',state\.partner\)/);
