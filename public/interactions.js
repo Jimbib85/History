@@ -36,7 +36,7 @@
  const eraList={medieval:{start:850,end:1500,label:'850–1500 CE'},classical:{start:-499,end:500,label:'500 BCE–500 CE'},earlymodern:{start:1450,end:1800,label:'1450–1800 CE'},modern:{start:1800,end:2026,label:'1800–2026 CE'},all:{start:-9999,end:2026,label:'All recorded history'}};
  const initialFocus=societies.has(params.get('civ'))?params.get('civ'):'';
  const initialPartner=initialFocus&&societies.has(params.get('with'))&&params.get('with')!==initialFocus?params.get('with'):'';
- const state={era:eraList[params.get('era')]?params.get('era'):'medieval',year:Number.isFinite(Number(params.get('year')))&&params.has('year')?Math.max(-9999,Math.min(2026,Number(params.get('year')))):1200,type:'All',search:'',focus:initialFocus,partner:initialPartner,event:null,mode:params.get('view')==='stories'?'stories':'network'};
+ const state={era:eraList[params.get('era')]?params.get('era'):'medieval',year:Number.isFinite(Number(params.get('year')))&&params.has('year')?Math.max(-9999,Math.min(2026,Number(params.get('year')))):1200,type:'All',search:'',focus:initialFocus,partner:initialPartner,event:params.get('event')||null,mode:params.get('view')==='stories'?'stories':'network'};
  if(params.has('year'))state.era='window';
  const records=[...new Map(allSources.filter(e=>e&&Number.isFinite(e.year)&&e.title).map((e,i)=>{
   const participants=[...new Set((e.societyIds||e.allSocietyIds||[]).filter(id=>societies.has(id)))];
@@ -157,7 +157,7 @@
  function render(){
   const r=timeWindow(),total=linkedRecords(),rows=total.slice(0,80);
   renderEvidenceNavigation(total,r);
-  const chosen=rows.find(e=>e.key===state.event)||rows[0]||null;
+  const chosen=total.find(e=>e.key===state.event)||total[0]||null;
   if(chosen)state.event=chosen.key;else state.event=null;
   $('interactionYear').value=state.year;
   $('interactionEra').value=state.era;
@@ -165,7 +165,8 @@
   $('interactionSearch').value=state.search;
   $('interactionRangeLabel').textContent=r.label+' · '+rows.length+(total.length>rows.length?' of '+total.length:'')+' linked records';
   $('interactionCount').textContent=rows.length+' sourced cross-society records'+(total.length>rows.length?' (first '+rows.length+' displayed)':'');
-  $('interactionNetwork').innerHTML=rows.length?network(rows):'<p class="interaction-no-record">No explicit multi-society records match this selection.</p>';
+  const networkRows=state.focus?contextualRecords():rows;
+  $('interactionNetwork').innerHTML=networkRows.length?network(networkRows):'<p class="interaction-no-record">No explicit multi-society records match this selection.</p>';
   $('interactionStories').innerHTML=rows.length?rows.slice(0,24).map(storyCard).join(''):'<p class="interaction-no-record">No linked stories for this period and filter.</p>';
   $('interactionNetwork').hidden=state.mode!=='network';
   $('interactionStories').hidden=state.mode!=='stories';
@@ -173,11 +174,55 @@
   const focus=$('interactionFocus');
   focus.textContent=state.focus?'Focusing: '+societies.get(state.focus).name+' ×':'Explore all societies';
   detail(chosen);
-  const query=new URLSearchParams();if(state.era==='window')query.set('year',String(state.year));else query.set('era',state.era);if(state.focus)query.set('civ',state.focus);if(state.partner)query.set('with',state.partner);if(state.mode==='stories')query.set('view','stories');
+  const position=chosen?total.findIndex(e=>e.key===chosen.key):-1;
+  $('interactionTrailPosition').textContent=chosen?'Record '+(position+1)+' of '+total.length+' · '+dates(chosen):'No records for this selection';
+  $('interactionTrailTitle').textContent=chosen?chosen.title:'Expand the year or change the society to discover more';
+  $('interactionPreviousRecord').disabled=position<=0;
+  $('interactionNextRecord').disabled=position<0||position>=total.length-1;
+  $('interactionPlayRecords').disabled=total.length<2;
+  $('interactionPlayRecords').setAttribute('aria-pressed',String(playing));
+  $('interactionPlayRecords').textContent=playing?'Ⅱ Pause':'▶ Play records';
+  const query=new URLSearchParams();if(state.era==='window')query.set('year',String(state.year));else query.set('era',state.era);if(state.focus)query.set('civ',state.focus);if(state.partner)query.set('with',state.partner);if(state.event)query.set('event',state.event);if(state.mode==='stories')query.set('view','stories');
   history.replaceState(null,'',location.pathname+'?'+query.toString());
   root.AtlasCrossLinks?.refresh();
  }
- function change(patch){Object.assign(state,patch);render()}
+ let playback=null,playing=false;
+ const motionReduced=()=>!!root.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+ function stopPlayback(){
+  if(playback!==null){root.clearInterval(playback);playback=null;}
+  if(playing){playing=false;$('interactionPlayRecords').setAttribute('aria-pressed','false');$('interactionPlayRecords').textContent='▶ Play records';}
+ }
+ function moveRecord(direction){
+  const rows=linkedRecords(),next=evidence.move(rows,state.event,direction);
+  if(!next)return false;
+  if(next.key===state.event)return false;
+  state.event=next.key;
+  render();
+  return true;
+ }
+ function change(patch){
+  if(playing&&(!Object.prototype.hasOwnProperty.call(patch,'event')||patch.event!==state.event))stopPlayback();
+  Object.assign(state,patch);render();
+ }
+ $('interactionPreviousRecord').addEventListener('click',()=>{stopPlayback();moveRecord(-1);});
+ $('interactionNextRecord').addEventListener('click',()=>{stopPlayback();moveRecord(1);});
+ $('interactionPlayRecords').addEventListener('click',()=>{
+  if(playing){stopPlayback();return;}
+  if(motionReduced()){
+   $('interactionTrailPosition').textContent='Automatic playback disabled by your reduced-motion preference. Use the arrow buttons to move between records.';
+   return;
+  }
+  const rows=linkedRecords();
+  if(rows.length<2)return;
+  if(state.event===rows[rows.length-1].key){state.event=rows[0].key;render();}
+  playing=true;render();
+  playback=root.setInterval(()=>{
+   if(document.hidden||!moveRecord(1)){stopPlayback();return;}
+   if(state.event===linkedRecords().at(-1)?.key)stopPlayback();
+  },2800);
+ });
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPlayback();});
+ root.addEventListener?.('pagehide',stopPlayback);
  $('interactionSociety').addEventListener('change',e=>change({focus:e.target.value,partner:'',event:null}));
  $('interactionType').addEventListener('change',e=>change({type:e.target.value,event:null}));
  $('interactionEra').addEventListener('change',e=>change({era:e.target.value,event:null}));
@@ -191,7 +236,9 @@
   const p=e.target.closest('[data-interaction-partner],[data-network-partner]');
   if(p){const id=p.dataset.interactionPartner||p.dataset.networkPartner;if(state.focus&&societies.has(id))change({partner:state.partner===id?'':id,event:null});return;}
   const ev=e.target.closest('[data-interaction-event],[data-network-event]');
-  if(ev){const key=ev.dataset.interactionEvent||ev.dataset.networkEvent;if(records.some(x=>x.key===key))change({event:key});return;}
+  if(ev){const key=ev.dataset.interactionEvent||ev.dataset.networkEvent;if(records.some(x=>x.key===key)){change({event:key});
+   if(root.matchMedia?.('(max-width: 950px)')?.matches)$('interactionDetailPanel').scrollIntoView({behavior:motionReduced()?'auto':'smooth',block:'start'});
+  }return;}
   const civ=e.target.closest('[data-interaction-civ],[data-network-civ]');
   if(civ){const id=civ.dataset.interactionCiv||civ.dataset.networkCiv;if(societies.has(id))change({focus:id,partner:'',event:null});}
  });
@@ -201,5 +248,5 @@
   if(target){e.preventDefault();target.dispatchEvent(new MouseEvent('click',{bubbles:true}));}
  });
  render();
- root.AtlasInteractions=Object.freeze({state,render,linkedRecords,sourceUrl,records,partners:()=>state.focus?evidence.partners(contextualRecords(),state.focus,societies):[]});
+ root.AtlasInteractions=Object.freeze({state,render,linkedRecords,sourceUrl,records,partners:()=>state.focus?evidence.partners(contextualRecords(),state.focus,societies):[],moveRecord,stopPlayback});
 })(window);
