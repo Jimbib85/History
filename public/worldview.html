@@ -20,8 +20,8 @@
  <section class="hero">
   <div class="eyebrow">CARTOGRAPHY · KNOWLEDGE · EXCHANGE</div>
   <h1>The world <em>through their eyes</em></h1>
-  <p>What can surviving maps, written accounts and research actually tell us about how people understood the world around them? Follow the evidence — and see where it stops.</p>
-  <p class="hero-note">Not a reconstructed view of what every person knew. Maps made by particular people, dated objects, surviving descriptions and carefully qualified links.</p>
+  <p>Explore how different societies imagined, mapped and understood the world.</p>
+  
  </section>
  <section class="controls" aria-label="Choose historical evidence">
   <div class="control-row">
@@ -30,35 +30,30 @@
     <label>Historical year <input type="text" id="worldYear" value="1200 CE" inputmode="text" placeholder="e.g. 500 BCE"></label>
   </div>
   <div class="control-row search-row">
-    <label class="control-wide">Find a map, place, society or relationship <input type="search" id="worldSearch" placeholder="Search evidence…"></label>
+    <label class="control-wide">Find a map, place, society or relationship <input type="search" id="worldSearch" placeholder="Search maps and places…"></label>
     <button type="button" id="resetWorld">Browse all research</button>
   </div>
   <div class="period-presets" aria-label="Jump to a research period"><button type="button" data-preset="-170">Han China</button><button type="button" data-preset="200">Classical world</button><button type="button" data-preset="1154">Al-Idrisi</button><button type="button" data-preset="1402">Kangnido</button><button type="button" data-preset="1602">Ricci</button></div>
   <p id="worldContext" class="control-caption" role="status"></p>
  </section>
- <section class="context-strip" aria-label="Evidence principles">
-  <span><b>Object date</b> is not the same as original composition</span>
-  <span><b>Elite accounts</b> do not describe everyone's knowledge</span>
-  <span><b>Contemporaneous</b> does not mean connected</span>
- </section>
- <div id="records">
+  <div id="records">
   <details class="evidence-section" id="mapsSection" open>
-    <summary><span><b>01</b><strong>Maps and surviving artefacts</strong><small>Original objects, later copies and research catalogue entries</small></span><em id="mapsCount">0</em></summary>
+    <summary><span><b>01</b><strong>Maps and surviving artefacts</strong><small>Maps, manuscripts and artefacts</small></span><em id="mapsCount">0</em></summary>
     <div id="mapsRecords" class="record-grid"></div><div id="mapsMore" class="more-row"></div>
   </details>
   <details class="evidence-section" id="knowledgeSection">
-    <summary><span><b>02</b><strong>What sources say people knew</strong><small>Distinguish attested, inferred and unsupported geographic claims</small></span><em id="knowledgeCount">0</em></summary>
-    <p class="reader-warning">Unsupported geographical reconstructions are excluded by default. An attested record can still describe only a court, navigator, author or community — not everybody.</p>
+    <summary><span><b>02</b><strong>What sources say people knew</strong><small>Explore places described in historical accounts</small></span><em id="knowledgeCount">0</em></summary>
+    
     <div id="knowledgeRecords" class="record-grid"></div><div id="knowledgeMore" class="more-row"></div>
   </details>
   <details class="evidence-section" id="connectionsSection">
-    <summary><span><b>03</b><strong>Connections and encounters</strong><small>Political, diplomatic, conflict and exchange records — not speculative routes</small></span><em id="connectionsCount">0</em></summary>
-    <p class="reader-warning">A relationship record may describe direct contact, an indirect network or merely contemporaneity. The evidence label on each entry matters.</p>
+    <summary><span><b>03</b><strong>Connections and encounters</strong><small>Trade, diplomacy, travel and exchange</small></span><em id="connectionsCount">0</em></summary>
+    
     <div id="connectionsRecords" class="record-grid"></div><div id="connectionsMore" class="more-row"></div>
   </details>
-<details class="evidence-section" id="uploadedMapCollection"><summary><span><b>04</b><strong>Supplied maps and visual references</strong><small>Historical objects, later reconstructions and hypothetical scenarios</small></span><em>14</em></summary><p class="reader-warning">Four historical reproductions are viewable. Fra Mauro and Kangnido are alternatives to existing map identities. Ten references have metadata only pending rights/provenance review. None supply verified political geometry.</p><div class="uploaded-map-filters"><label>Map type<select id="uploadedMapKind"><option value="all">All supplied references</option><option value="historical">Historical reproductions</option><option value="retrospective">Later atlas plates</option><option value="speculative">Hypothetical scenarios</option><option value="reconstruction">Modern reconstructions</option><option value="unverified">Unverified decorative maps</option><option value="software">Software screenshot</option></select></label><label>Find a map<input type="search" id="uploadedMapSearch" placeholder="Fra Mauro, Alexander, 1937..." maxlength="150"></label></div><p id="uploadedMapCount" role="status">Open to inspect the map collection.</p><div id="uploadedMapCards" class="uploaded-map-grid"></div></details> </div>
+<details class="evidence-section" id="uploadedMapCollection"><summary><span><b>04</b><strong>Supplied maps and visual references</strong><small>Historical objects, later reconstructions and hypothetical scenarios</small></span><em>14</em></summary><div class="uploaded-map-filters"><label>Map type<select id="uploadedMapKind"><option value="all">All supplied references</option><option value="historical">Historical reproductions</option><option value="retrospective">Later atlas plates</option><option value="speculative">Hypothetical scenarios</option><option value="reconstruction">Modern reconstructions</option><option value="unverified">Unverified decorative maps</option><option value="software">Software screenshot</option></select></label><label>Find a map<input type="search" id="uploadedMapSearch" placeholder="Fra Mauro, Alexander, 1937..." maxlength="150"></label></div><p id="uploadedMapCount" role="status">Open to inspect the map collection.</p><div id="uploadedMapCards" class="uploaded-map-grid"></div></details> </div>
  <div class="footer-links"><a href="discover.html?classical=1#classicalEvidence">Classical review notes and archaeological sources ↗</a><a id="returnMap" href="index.html">← Return to the selected world's map</a><a id="returnCompare" href="compare.html">Compare these centuries ↗</a></div>
- <footer>Historical atlas research is selective. Missing evidence is not evidence that people lacked geographical knowledge. Original items and their reproduction permissions remain with their respective collections.</footer>
+ <footer><a href="discover.html">Keep exploring ↗</a></footer>
 <a class="expansion-entry-link" href="discover.html?research=1#researchExpansion">New early &amp; modern research &#8599;</a>
 </main>
 <dialog id="mapImageDialog" class="map-image-dialog" aria-labelledby="mapImageTitle"><header class="map-image-header"><h3 id="mapImageTitle">Map reproduction</h3><form method="dialog"><button aria-label="Close enlarged map">&#215;</button></form></header><div class="map-image-tools"><label for="mapImageZoom">Zoom</label><input id="mapImageZoom" type="range" min="100" max="300" step="25" value="100"><button id="mapImageFit" type="button">Fit width</button><span>Scroll to explore.</span></div><div class="map-image-viewport" tabindex="0" aria-label="Scrollable enlarged map"><img id="mapImageFull" alt=""></div><p id="mapImageCaption"></p></dialog><script src="worldview-slim-data.js?v=0.21.0"></script>
