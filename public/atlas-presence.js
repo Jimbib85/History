@@ -54,8 +54,7 @@
   const byId=new Map(civs.filter(c=>c&&typeof c.id==='string').map(c=>[c.id,c]));
   // Match exact raw event identity resolution in the Interactions view.
   let record=null;
-  sources.forEach((e,i)=>{
-   if(!e||!Number.isFinite(e.year)||!e.title)return;
+  sources.filter(e=>e&&Number.isFinite(e.year)&&e.title).forEach((e,i)=>{
    const ids=[...new Set((e.societyIds||e.allSocietyIds||[]).filter(id=>byId.has(id)))];
    if(ids.length<2)return;
    const id=e.id||'multi-'+i;
