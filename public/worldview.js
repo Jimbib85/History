@@ -43,21 +43,21 @@
   function entry(row){
     const names=row.associated.map(id=>allNames.get(id)||model.societies.get(id)||id).join(' · ');
     const image=row.recordKind==='map'&&row.image
-      ?'<figure class="artefact-image"><img loading="lazy" src="'+escape(row.image)+'" alt="Curated reference reproduction of '+escape(row.title)+'"><figcaption>Curated external image reference; check item-level reproduction rights and source description. <a href="'+escape(row.imagePage)+'" target="_blank" rel="noopener noreferrer">Original catalogue ↗</a></figcaption></figure>':'';
+      ?'<figure class="artefact-image"><img loading="lazy" src="'+escape(row.image)+'" alt="Curated reference reproduction of '+escape(row.title)+'"><figcaption> <a href="'+escape(row.imagePage)+'" target="_blank" rel="noopener noreferrer">Original catalogue ↗</a></figcaption></figure>':'';
     const metadata=row.recordKind==='map'
       ?'<p><b>Object or copy:</b> '+escape(row.objectDate)+'</p>'+(row.contentDate?'<p><b>Composition context:</b> '+escape(row.contentDate)+'</p>':'')+
-        '<p><b>Catalogue location:</b> '+escape(row.place)+'</p><p><b>Important limitation:</b> '+escape(row.warning)+'</p>'
+        '<p><b>Catalogue location:</b> '+escape(row.place)+'</p>'
       :row.recordKind==='knowledge'
-      ?'<p><b>Geographic scope:</b> '+escape(row.area)+'</p><p><b>Interpretation:</b> '+escape(row.caveat)+'</p>'
-      :'<p><b>Evidence classification:</b> '+escape(row.assessment)+'</p><p>Do not read this as a reconstructed travel route or continuous territorial boundary.</p>';
+      ?'<p><b>Geographic scope:</b> '+escape(row.area)+'</p>'
+      :'<p><b>Evidence classification:</b> '+escape(row.assessment)+'</p>';
     const duplicate=(window.AtlasMapIntake||[]).find(m=>m.existingId===row.rawId);
     const variant=duplicate?'<p><a href="#uploadedMapCollection">Supplied alternative reproduction catalogued below; same map identity.</a></p>':'';
     const seen=row.recordKind==='map'?'MAP RECORD':row.recordKind==='knowledge'?'GEOGRAPHIC ACCOUNT':'RELATIONSHIP RECORD';
     return '<details class="evidence-card"><summary><span class="record-type">'+seen+'</span><strong>'+escape(row.title)+'</strong>'+
-      '<span class="record-tags">'+tags(row)+'</span>'+(names?'<small class="associated">Linked in research: '+escape(names)+'</small>':'')+
+      '<span class="record-tags">'+tags(row)+'</span>'+(names?'<small class="associated">Societies: '+escape(names)+'</small>':'')+
       '<i class="disclosure-indicator" aria-hidden="true">⌄</i></summary><div class="evidence-detail">'+
       image+'<p class="record-description">'+escape(row.description)+'</p>'+metadata+
-      '<p class="confidence"><b>Research confidence:</b> '+escape(row.confidence)+'. This is the source pack’s research assessment, not independent verification by the website.</p>'+
+      ''+
       variant+rowSources(row)+'</div></details>';
   }
   function records(section,items,limitKey){
@@ -65,7 +65,7 @@
     $(section+'Count').textContent=String(list.length);
     const container=$(section+'Records');
     container.innerHTML=list.length?list.slice(0,state.limits[limitKey]).map(entry).join(''):
-      '<div class="empty-state"><b>No matching evidence in this research catalogue.</b><p>This is a gap in our present sources, not proof that the society lacked maps, knowledge or relationships. Broaden the filters to see other records.</p><button type="button" data-reset-society>Browse all societies</button></div>';
+      '<div class="empty-state"><b>No matches.</b><p>Try another society, year or search.</p><button type="button" data-reset-society>Browse all societies</button></div>';
     const more=$(section+'More');
     const n=state.limits[limitKey];
     more.innerHTML=n<list.length?'<button type="button" data-more="'+limitKey+'">Show '+Math.min(8,list.length-n)+' more of '+list.length+' records ↓</button>':
