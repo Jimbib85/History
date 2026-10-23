@@ -36,7 +36,7 @@
    const places=r.societyIds.length?r.societyIds.join(', ').replaceAll('_',' '):r.region||'Society not linked in this source record';
    const sourcesLink=first?'<a href="'+esc(first.url)+'" target="_blank" rel="noopener noreferrer">Read registered source ↗</a>':'';
    const storyLink=href?'<a href="'+esc(href)+'">Explore associated society ↗</a>':'';
-   const dateNote=r.start===null?'<p class="dated-note">The research provides no specific start/end dates for this practice. Its research batch does not establish the date.</p>':'';
+   const dateNote=r.start===null?'<p class="dated-note">Date unknown</p>':'';
    return '<article class="entry-card'+(compact?' compact':'')+'"><div class="entry-kicker"><span>'+esc(r.scope)+' research</span><span>'+esc(r.topic.replaceAll('_',' '))+'</span><span>'+esc(when)+'</span></div>'+
       '<h4>'+esc(r.title)+'</h4><p>'+esc(summary)+'</p>'+dateNote+
       '<p class="confidence">Linked research: '+esc(places)+' · Confidence from source pack: '+esc(r.confidence)+' (not independently verified)</p>'+
