@@ -191,3 +191,15 @@ body.atlas-interactions{margin:0;background:radial-gradient(ellipse at 45% 0%,#2
  .interaction-network-svg{animation:none!important}
  .interaction-edge,.interaction-node circle{transition:none!important}
 }
+
+/* v0.39 · geographic companion to the sourced interaction trail */
+.interaction-geographic-preview{margin:15px 0 19px;border:1px solid #d9b57b88;border-radius:15px;padding:10px;background:linear-gradient(155deg,#123846,#081e2c)}
+.interaction-geo-head{display:flex;align-items:center;justify-content:space-between;gap:7px;flex-wrap:wrap;padding:5px 3px 9px}
+.interaction-geo-head strong{color:#ebc888;font:700 10px 'DM Sans',Arial,sans-serif;letter-spacing:.1em}
+.interaction-geo-head span{color:#c4d4d0;font:10px 'DM Sans',Arial,sans-serif}
+.interaction-geographic-preview svg{width:100%;height:auto;display:block;aspect-ratio:1200/590;background:#102f3e;border:1px solid #b99a6963;border-radius:12px}
+.interaction-geo-dot text{fill:#fff0d6;stroke:#061926;stroke-width:3px;paint-order:stroke;stroke-linejoin:round;font:21px Georgia,serif}
+.interaction-geographic-preview p{font-size:10px;line-height:1.55;margin:10px 3px!important;color:#cbd9d4}
+.interaction-geographic-preview>a{display:inline-block;min-height:40px;padding:10px 12px;margin:3px 0 1px;border:1px solid #ddb7768c;border-radius:11px;font-size:11px;text-decoration:none;color:#ffe1a6;background:#1c3d48}
+.interaction-geographic-preview>a:hover{background:#345461}
+@media(max-width:600px){.interaction-geographic-preview{padding:7px}.interaction-geo-dot text{font-size:25px}}
