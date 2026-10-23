@@ -4,6 +4,7 @@
  */
 (function(root){
  'use strict';
+ const BASE_NAMES=Object.freeze({"sumer":"Sumerian city-states","old-egypt":"Old Kingdom of Egypt","indus":"Indus civilisation","minoans":"Minoan civilisation","shang":"Shang dynasty","olmec":"Olmec cultures","kush":"Kingdom of Kush","persia":"Achaemenid Persian Empire","athens":"Classical Athens","maurya":"Maurya Empire","han":"Han dynasty","rome":"Roman Empire","maya":"Classic Maya city-states","teotihuacan":"Teotihuacan","aksum":"Kingdom of Aksum","gupta":"Gupta Empire","byzantium":"Eastern Roman Empire","ghana":"Ghana Empire","tang":"Tang dynasty","abbasid":"Abbasid Caliphate","angkor":"Khmer Empire / Angkor","great-zim":"Great Zimbabwe","mali":"Mali Empire","mongols":"Mongol Empire","maori":"Māori societies in Aotearoa","aboriginal":"Aboriginal Australian societies","ottomans":"Ottoman Empire","ming":"Ming dynasty","joseon":"Joseon Korea","inca":"Inca Empire","aztec":"Aztec Triple Alliance","songhai":"Songhai Empire","europe-navigation":"Iberian maritime expansion","british":"British Empire","usa":"United States","australia":"Commonwealth of Australia","soviet":"Soviet Union","prc":"People’s Republic of China"});
  const VIEWS=Object.freeze({
    story:'story.html',map:'index.html',compare:'compare.html',
    technology:'index.html',interactions:'interactions.html',worldview:'worldview.html',
@@ -39,7 +40,7 @@
    const header=nav?.closest?.('header');
    if(!header)return;
    let rail=document.getElementById?.('atlas-journey-rail');
-   if(!ctx.civ&&!ctx.event){if(rail)rail.hidden=true;return;}
+   if(!ctx.civ&&!ctx.event&&ctx.year===null){if(rail)rail.hidden=true;return;}
    if(!rail){
      rail=document.createElement('div');rail.id='atlas-journey-rail';
      rail.className='atlas-journey-rail';
@@ -50,14 +51,14 @@
    const contextKey=JSON.stringify([ctx.year,ctx.civ,ctx.event]);
    if(rail.dataset?.context===contextKey)return;
    if(rail.dataset)rail.dataset.context=contextKey;
-   const known=root.WorldHistoryAtlas?.civilisations||[];
-   const society=known.find?.(x=>x.id===ctx.civ)?.name||String(ctx.civ||'the selected historical record').replace(/[-_]/g,' ');
+   const known=root.WorldHistoryAtlas?.civilisations||(typeof CIVILISATIONS!=='undefined'?CIVILISATIONS:[]);
+   const society=known.find?.(x=>x.id===ctx.civ)?.name||BASE_NAMES[ctx.civ]||String(ctx.civ||'The world').replace(/[-_]/g,' ');
    const labelYear=ctx.year===null?'':ctx.year<=0?(1-ctx.year)+' BCE':ctx.year+' CE';
    const isDetail=!!ctx.event;
    rail.innerHTML='<div class="atlas-journey-copy"><span class="atlas-journey-kicker">YOUR CONNECTED EXPLORATION</span><strong>'+society.replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]))+'</strong>'+
     (labelYear?'<span>'+labelYear+'</span>':'')+(isDetail?'<span>· Research record selected</span>':'')+'</div>'+
     '<nav aria-label="Follow the same historical context across Atlas pages">'+
-    [['map','World Map'],['interactions','Interactions'],['compare','Compare'],['story','Story']].map(([view,label])=>'<a href="'+href(view,ctx)+'">'+label+' ↗</a>').join('')+'</nav>';
+    [['map','World Map'],['interactions','Interactions'],['compare','Compare'],['story','Story']].map(([view,label])=>'<a href="'+href(view,ctx)+'"'+(root.location?.pathname?.endsWith(VIEWS[view])?' aria-current="page"':'')+'>'+label+' ↗</a>').join('')+'</nav>';
  }
  function refresh(){
    if(typeof document==='undefined')return;
