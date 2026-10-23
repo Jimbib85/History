@@ -28,7 +28,7 @@
     limits:{maps:8,knowledge:8,connections:8}};
   function rowSources(row){
     const valid=row.sources.filter(x=>x.url);
-    if(!valid.length)return '<p class="missing-source">No directly linked source URL in the current register. Treat this as a research lead, not verified evidence.</p>';
+    if(!valid.length)return '<p class="missing-source">No source link available.</p>';
     return '<div class="sources"><div class="micro-heading">REGISTERED SOURCES</div>'+
       valid.slice(0,8).map(s=>'<a href="'+escape(s.url)+'" target="_blank" rel="noopener noreferrer">'+
       '<strong>'+escape(s.title)+'</strong><small>'+escape(s.access.replaceAll('_',' '))+'</small></a>').join('')+'</div>';
