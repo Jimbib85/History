@@ -21,7 +21,7 @@ assert.doesNotMatch(reader,/Evidence boundaries/);
 assert.match(reader,/Sources ↗/);
 assert.match(get('app.js'),/record-context/,'Optional record annotations remain accessible on demand');
 assert.match(get('atlas-presence-map.js'),/note\.hidden/,'Non-actionable map notices are hidden');
-assert.match(get('atlas-cliopatria-map.js'),/historical regions/,'Compact geographical status remains');
+assert.match(get('atlas-cliopatria-map.js'),/status\.textContent=count/,'Compact geographical status remains');
 for(const p of ['app.js','atlas-presence.js','atlas-cliopatria.js','atlas-presence-map.js','atlas-cliopatria-map.js','interactions.js','story-app.js','compare.js','worldview.js','discovery.js','conflicts-app.js','technology-tree.js','technology-journey.js','research-expansion-view.js','modern-v2-view.js','classical-reviewed-view.js','map-intake-view.js']){
  new vm.Script(get(p),{filename:p});
 }
