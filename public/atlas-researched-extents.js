@@ -58,8 +58,7 @@
   const color=safeColour(colour);
   return shapes.map(d=>'<path class="atlas-researched-extent" d="'+esc(d)+'" fill="'+color+
    '" stroke="'+color+'" fill-opacity=".26" stroke-opacity=".95" stroke-width="2.5" fill-rule="evenodd"'+
-   '><title>'+esc(snapshot.name)+' · approximate GIS extent at '+snapshot.year+
-   ' CE only. Simplified and subject to contested border interpretations. University of Minnesota.</title></path>').join('');
+   '><title>'+esc(snapshot.name)+' · '+snapshot.year+' CE</title></path>').join('');
  }
  function linkedRecords(sources,civs){
   const byId=new Set(civs.map(c=>c.id)),seen=new Map();
