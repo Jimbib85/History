@@ -35,5 +35,5 @@ for(const [page,consumer] of [['compare.html','compare.js'],['index.html','app.j
 }
 // Story remains a standalone lightweight timeline, without the master bridge.
 assert.match(read('public/story.html'),/story-app\.js/);
-assert.match(read('public/story-app.js'),/AtlasHistoryStories/);
+assert.match(read('public/story-app.js'),/HistoryStory/);
 console.log('PASS enriched history stories: '+a.seeds.length+' curated topics, source references, Story/Map/Compare/Technology readers and fallback context');
