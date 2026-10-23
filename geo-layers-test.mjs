@@ -75,7 +75,7 @@ assert.equal(atlas.state.geoMode,'groups');
 assert.ok(!written.at(-1).includes('geo=points'),'Grouped default is removed from URL');
 elements.resetMap.listeners.click();
 assert.equal(atlas.state.zoom,1);
-assert.ok(elements.mapEvidence.innerHTML.includes('not a measured historical boundary'));
+assert.ok(!elements.mapEvidence.innerHTML.includes('geographic-caveat'),'Changed map mode must not restore boilerplate');
 atlas.go({view:'historical'});
 assert.equal(elements.geoControls.hidden,true,'No alignment controls on historical artwork');
 atlas.go({view:'actual'});
