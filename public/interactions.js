@@ -61,7 +61,30 @@
   if(asset)return '<div class="interaction-object">'+root.AtlasVisualAssets.html(asset,'card')+'<div class="interaction-art-caption">Related period object, not a depiction of this event</div></div>';
   return '<div class="interaction-object interaction-object-empty" aria-label="Original decorative motif, not a historical depiction"><img src="assets/atlas-compass.svg" alt="" loading="lazy"/><span>Decorative illustration · not historical evidence</span></div>';
  }
+ function focusedNetwork(rows){
+  const focal=societies.get(state.focus);
+  const partners=evidence.partners(rows,state.focus,societies).slice(0,12);
+  if(!focal||!partners.length)return '<p class="interaction-no-record">No societies share an explicit research record in this selection. Try a wider period or clear the paired society.</p>';
+  const anchor={x:500,y:277},radiusX=343,radiusY=193;
+  const positions=partners.map((item,i)=>{
+   const angle=-Math.PI/2+i*Math.PI*2/partners.length;
+   return {...item,x:anchor.x+Math.cos(angle)*radiusX,y:anchor.y+Math.sin(angle)*radiusY};
+  });
+  const edges=positions.map(item=>{
+   const selected=state.partner===item.id;
+   const colour=palettes[item.types[0]]||palettes.Other;
+   const midX=(anchor.x+item.x)/2,midY=(anchor.y+item.y)/2-14;
+   return '<path data-network-partner="'+esc(item.id)+'" role="button" tabindex="0" class="interaction-edge interaction-focus-edge'+(selected?' selected':'')+'" d="M'+anchor.x+' '+anchor.y+' Q'+midX.toFixed(1)+' '+midY.toFixed(1)+' '+item.x.toFixed(1)+' '+item.y.toFixed(1)+'" stroke="'+colour+'" stroke-width="'+Math.min(5,2+Math.sqrt(item.count)).toFixed(1)+'" aria-label="'+esc(item.count+' shared research records naming '+focal.name+' and '+item.name)+'"><title>'+esc(item.count+' shared records · '+focal.name+' / '+item.name+' · Co-mention does not prove contact')+'</title></path>';
+  }).join('');
+  const nodes=positions.map(item=>{
+   const chosen=state.partner===item.id;
+   const name=item.name.length>24?item.name.slice(0,21)+'…':item.name;
+   return '<g data-network-partner="'+esc(item.id)+'" class="interaction-node interaction-partner-node'+(chosen?' selected':'')+'" role="button" tabindex="0" aria-label="Show '+esc(item.count+' shared records involving '+item.name)+'"><circle cx="'+item.x.toFixed(1)+'" cy="'+item.y.toFixed(1)+'" r="27" fill="#102e3a" stroke="'+(chosen?'#fff0ba':'#d7b67c')+'" stroke-width="'+(chosen?4:2)+'"/><text x="'+item.x.toFixed(1)+'" y="'+(item.y+5).toFixed(1)+'" class="interaction-node-glyph" text-anchor="middle">'+esc(item.count)+'</text><text x="'+item.x.toFixed(1)+'" y="'+(item.y+44).toFixed(1)+'" class="interaction-node-name" text-anchor="middle">'+esc(name)+'</text></g>';
+  }).join('');
+  return '<svg class="interaction-network-svg" viewBox="0 0 1000 560" role="group" aria-label="Focused evidence network for '+esc(focal.name)+'. Lines indicate shared research records, not proven routes or bilateral contact"><circle cx="500" cy="277" r="207" fill="#17404a" fill-opacity=".28" stroke="#c9a66a" stroke-opacity=".2" stroke-dasharray="2 10"/><g class="interaction-net-lines">'+edges+'</g><g class="interaction-net-nodes">'+nodes+'<g class="interaction-focus-anchor"><circle cx="500" cy="277" r="57" fill="#0d2a39" stroke="#f1c786" stroke-width="3"/><text x="500" y="272" text-anchor="middle">'+esc(focal.name.length>20?focal.name.slice(0,17)+'…':focal.name)+'</text><text x="500" y="293" text-anchor="middle">FOCUS SOCIETY</text></g></g></svg>';
+ }
  function network(rows){
+  if(state.focus)return focusedNetwork(rows);
   const degrees=new Map();
   for(const e of rows)for(const id of e.participants)degrees.set(id,(degrees.get(id)||0)+1);
   const leaders=[...degrees.keys()].sort((a,b)=>(degrees.get(b)||0)-(degrees.get(a)||0)||societies.get(a).name.localeCompare(societies.get(b).name)).slice(0,13);
