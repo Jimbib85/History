@@ -34,7 +34,7 @@ const svg=cli.svg(cli.atYear(rome,117),geo,projector,'#aabbcc','rome');
 assert.match(svg,/class="atlas-cliopatria-extent"/);
 assert.match(svg,/fill-rule="evenodd"/);
 assert.match(svg,/Roman Empire/);
-assert.match(svg,/0 to 117/); // context labels preserve source interval
+assert.match(svg,/0–117/); // concise display retains source interval
 assert.equal(cli.svg(cli.atYear(rome,201),geo,projector,'#aabbcc','rome'),'');
 assert.equal(cli.svg(cli.atYear(rome,117),geo,projector,'url(javascript:alert(1))','rome').includes('url(javascript'),false);
 await cli.load('rome');
