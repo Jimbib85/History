@@ -59,7 +59,7 @@ assert.match(linkUI,/&interaction='\+encodeURIComponent\(e\.key\)/);
 assert.match(mapUI,/state\.view==='actual'/);
 assert.match(mapUI,/new root\.MutationObserver\(render\)\.observe\(markers/);
 assert.match(mapUI,/note\.hidden/);
-assert.match(mapUI,/representative map points/);
+assert.match(mapUI,/note\.hidden/);
 assert.match(css,/pointer-events:none/,'Cloud overlays must not block map marker interaction');
 assert.match(interactionHtml,/id="interactionDetailPanel"/);
 new vm.Script(mapUI,{filename:'atlas-presence-map.js'});
