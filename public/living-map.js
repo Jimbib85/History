@@ -35,8 +35,8 @@
    controls.querySelector('#livingConnectToggle')?.classList.toggle('is-on',ui.enabled);
    const caption=$('livingMapExplanation');
    if(caption)caption.textContent=ui.enabled?
-     'Exploration links: nearby societies active around the selected date. Illustrative, not documented travel or trade routes.':
-     'Connection illustration off. Select a society to explore its actual records.';
+     'Nearby societies at this date.':
+     'Connections hidden.';
    if(!visible)return;
    const rows=choices();
    for(const [i,row] of rows.entries()){
@@ -48,7 +48,7 @@
      path.setAttribute('class','living-arc living-arc-'+(i%4));
      path.style.setProperty('--arc-delay',(i*.17)+'s');
      const title=doc.createElementNS(SVG,'title');
-     title.textContent='Illustrative geographical proximity: '+atlas.civilisations.find(x=>x.id===state.civ)?.name+' and '+c.name;
+     title.textContent='Nearby societies: '+atlas.civilisations.find(x=>x.id===state.civ)?.name+' and '+c.name;
      path.appendChild(title);layer.appendChild(path);
    }
    const count=$('livingMapCount');if(count)count.textContent=rows.length+' nearby contemporaries';
