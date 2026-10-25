@@ -28,7 +28,7 @@ assert.equal(m.geometryPaths(multipolygon,geo).length,2);
 assert.equal(m.normalize({features:[{properties:{Name:'Not Rome'},geometry:polygon}]},rome,geo).length,0);
 assert.equal(m.normalize({features:[{properties:{Name:'Roman Empire'},geometry:polygon}]},rome,geo).length,1);
 assert.equal(m.normalize({features:[]},rome,geo).length,0);
-assert.equal(m.render(paths,rome,'#af805d').includes('University of Minnesota'),true);
+assert.equal(m.render(paths,rome,'#af805d').includes('Roman Empire'),true);
 assert.equal(m.render(paths,rome,'#af805d').includes('fill-rule="evenodd"'),true);
 const civs=[{id:'rome'},{id:'han'},{id:'mongols'}];
 const events=[
