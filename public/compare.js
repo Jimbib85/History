@@ -215,7 +215,7 @@
     if (!listed.length) return empty('No dated events match this period. Try another search or a wider time span.');
     const selectedIndex = listed.findIndex(e => e.key === state.event);
     if (selectedIndex >= ui.eventLimit) ui.eventLimit = Math.ceil((selectedIndex+1)/8)*8;
-    return '<p class="events-intro">Select a dated heading to read its evidence. The dots use the same time scale; opening a record keeps this window in place.</p><div class="timeline-scroll" tabindex="0" aria-label="Scrollable event timeline"><div class="timeline-canvas events-canvas">' + axis(r) + '<div class="event-lanes">' + listed.slice(0,ui.eventLimit).map(e => '<button type="button" class="event-lane' + (e.key === state.event ? ' selected' : '') + '" data-event-key="' + safe(e.key) + '" aria-pressed="' + (e.key === state.event) + '"><span class="event-year">' + safe(researchEventDate(e)) + '</span><span class="event-copy"><strong>' + safe(e.title) + '</strong><small>' + safe(eventMeta(e)) + '</small></span><span class="event-track" aria-hidden="true"><i style="left:' + pct(e.year,r).toFixed(3) + '%;background:' + colour(entities.get(e.civ) || {region:e.region}) + '"></i>' + marker(r) + '</span><span class="event-open" aria-hidden="true">›</span></button>').join('') + '</div></div></div>' + moreButton('events',ui.eventLimit,listed.length,'milestones');
+    return '<div class="timeline-scroll" tabindex="0" aria-label="Scrollable event timeline"><div class="timeline-canvas events-canvas">' + axis(r) + '<div class="event-lanes">' + listed.slice(0,ui.eventLimit).map(e => '<button type="button" class="event-lane' + (e.key === state.event ? ' selected' : '') + '" data-event-key="' + safe(e.key) + '" aria-pressed="' + (e.key === state.event) + '"><span class="event-year">' + safe(researchEventDate(e)) + '</span><span class="event-copy"><strong>' + safe(e.title) + '</strong><small>' + safe(eventMeta(e)) + '</small></span><span class="event-track" aria-hidden="true"><i style="left:' + pct(e.year,r).toFixed(3) + '%;background:' + colour(entities.get(e.civ) || {region:e.region}) + '"></i>' + marker(r) + '</span><span class="event-open" aria-hidden="true">›</span></button>').join('') + '</div></div></div>' + moreButton('events',ui.eventLimit,listed.length,'milestones');
   }
   function entityButton(c) {
     return '<button type="button" data-civ="' + safe(c.id) + '" class="concurrent"><i style="background:' + colour(c) + '"></i><span><b>' + safe(c.name) + '</b><small>' + safe(c.region + ' · ' + entityDates(c)) + '</small></span><em aria-hidden="true">›</em></button>';
@@ -286,7 +286,7 @@
     $('selectedSummary').textContent = evidence ? evidence.detail || '' : selected?.summary || '';
     const notes = [];
     if (evidence?.evidenceNote) notes.push(evidence.evidenceNote);
-    if (evidence?.evidenceStatus) notes.push('Evidence status: ' + evidence.evidenceStatus.replace(/_/g,' '));
+
     if (!evidence && selected && !active(selected,state.year)) notes.push('This entry is not dated as active in the selected year.');
     if (!evidence && selected?.datePrecision && !selected?.dating) notes.push('Dating: ' + selected.datePrecision.replace(/_/g,' '));
     $('selectedNotes').innerHTML = notes.map(note => '<p>' + safe(note) + '</p>').join('') + (evidence ? (globalThis.AtlasHistoryStories?.forEvent(evidence)||'') : selected ? (globalThis.AtlasHistoryStories?.forSociety(selected)||'') : '');
@@ -301,7 +301,7 @@
     const dateNote=pinned.length<2
       ? 'Pin at least two societies to compare them on their own shared ruler.'
       : sharedStart<=sharedEnd
-        ? 'Recorded overlap: '+yearText(sharedStart)+' – '+yearText(sharedEnd)+'. Contemporaneity is not evidence of contact.'
+        ? 'Recorded overlap: '+yearText(sharedStart)+' – '+yearText(sharedEnd)+'.'
         : 'No shared dated overlap among all pinned entries. Their time bands may still be compared.';
     $('pinnedCount').textContent=pinned.length+' / '+MAX_PINS+' pinned';
     $('pinSummary').textContent=dateNote;
@@ -360,7 +360,7 @@
         const hue=['gold','green','violet'][i],isSelected=c.id===state.selected;
         const artwork=media?.forSociety(c.id);
         const visual=artwork?media.html(artwork,'card'):'<div class="atlas-artwork atlas-artwork-empty" aria-label="Illustrated placeholder; no reviewed period image available"><div class="atlas-artwork-placeholder"><span aria-hidden="true">✧</span><small>Artwork being researched</small></div></div>';
-        return '<article class="cinematic-society '+hue+(isSelected?' current':'')+'" data-entity="'+safe(c.id)+'"><div class="cinematic-society-top"><span class="cinematic-glyph" aria-hidden="true">'+(c.kind==='empire'?'♜':'✥')+'</span><span class="cinematic-region">'+safe(c.region)+'</span></div><div class="cinematic-society-main"><div class="cinematic-society-copy"><h2>'+safe(c.name)+'</h2><div class="cinematic-society-life">'+safe(entityDates(c))+'</div><p>'+safe((c.summary||c.description||'Explore its surviving historical evidence.').slice(0,230))+'</p></div>'+visual+'</div><div class="cinematic-card-actions"><button type="button" data-deck-civ="'+safe(c.id)+'" '+(isSelected?'aria-current="true"':'')+'>Explore history →</button><button type="button" data-deck-pin="'+safe(c.id)+'" aria-pressed="'+state.pinned.includes(c.id)+'">'+(state.pinned.includes(c.id)?'★ Pinned':'☆ Pin')+'</button></div></article>';
+        return '<article class="cinematic-society '+hue+(isSelected?' current':'')+'" data-entity="'+safe(c.id)+'"><div class="cinematic-society-top"><span class="cinematic-glyph" aria-hidden="true">'+(c.kind==='empire'?'♜':'✥')+'</span><span class="cinematic-region">'+safe(c.region)+'</span></div><div class="cinematic-society-main"><div class="cinematic-society-copy"><h2>'+safe(c.name)+'</h2><div class="cinematic-society-life">'+safe(entityDates(c))+'</div><p>'+safe((c.summary||c.description||'Explore its history.').slice(0,230))+'</p></div>'+visual+'</div><div class="cinematic-card-actions"><button type="button" data-deck-civ="'+safe(c.id)+'" '+(isSelected?'aria-current="true"':'')+'>Explore history →</button><button type="button" data-deck-pin="'+safe(c.id)+'" aria-pressed="'+state.pinned.includes(c.id)+'">'+(state.pinned.includes(c.id)?'★ Pinned':'☆ Pin')+'</button></div></article>';
       }).join('')+'</div>'+
       '<div class="cinematic-flow-heading"><div><strong>Histories in parallel</strong><span>Recorded periods, positioned on one chronological scale</span></div><span>'+safe(yearText(r.start))+' — '+safe(yearText(r.end))+'</span></div>'+
       '<div class="cinematic-flow-tracks">'+ordered.map((c,i)=>{
@@ -379,7 +379,7 @@
       overlap:['OVERLAPPING HISTORIES','A world of overlapping stories','Bars share one time scale. Select an entry to read its history.'],
       eras:['BIG-PICTURE COMPARISON','Eight windows across time','Explore every entry in a broad time window.'],
       regions:['REGIONAL COMPARISON','Different regions, same time','Open a region and compare its entries on the shared ruler.'],
-      events:['HISTORICAL MILESTONES','Important moments in context','Dated headings first, supporting evidence when you select one.']
+      events:['HISTORICAL MILESTONES','Important moments in context','Explore milestones across time.']
     };
     $('compareWorkspace').classList.toggle('mode-eras',state.mode==='eras');
     $('compareWorkspace').classList.toggle('show-era-reader',Boolean(ui.cell||ui.userRead));
