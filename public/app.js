@@ -158,7 +158,7 @@
     return groups.map(g=>g.count>1?clusterMarker(g):marker(g.items[0],g.selected)).join('');
   }
   function clusterMarker(group){
-    const label=group.count+' nearby reference points; zoom to inspect. Not a territory.';
+    const label=group.count+' nearby societies; zoom to inspect.';
     return '<g class="map-marker cluster-marker" data-mapcluster="'+escapeHtml(group.id)+'" tabindex="0" role="button" aria-label="'+escapeHtml(label)+'"><title>'+escapeHtml(label)+'</title><circle class="cluster-halo" cx="'+group.x+'" cy="'+group.y+'" r="18"/><circle class="cluster-core" cx="'+group.x+'" cy="'+group.y+'" r="14"/><text class="cluster-count" x="'+group.x+'" y="'+(group.y+4)+'" text-anchor="middle">'+group.count+'</text></g>';
   }
   function marker(c,selected){
@@ -189,7 +189,7 @@
     const n=markerGroups.reduce((sum,g)=>sum+g.count,0);
     $('mapClusterCount').textContent=state.view==='actual'
       ?(state.geoMode==='groups'&&n ? n+' reference points grouped into '+markerGroups.length+' clusters' : 'Showing individual reference points')
-      :state.view==='known'?'Illustrative contact locations':'Historical map image';
+      :state.view==='known'?'Society locations':'Historical map image';
   }
   function renderMap(){
     const civ=civById[state.civ];const historical=state.view==='historical';
@@ -311,7 +311,7 @@
       if(!pack)continue;
       const linked=x=>[...(x.society_ids||[]),...(x.associated_society_ids||[]),x.society_id,x.associated_society_id,x.society_a_id,x.society_b_id,x.source_society_id,x.target_society_id].filter(Boolean).some(id=>(aliases[id]||id)===c.id);
       for(const row of [...(pack.figures||[]),...(pack.cultural_practices||[])].filter(linked))add('people',row,sources,prefix);
-      for(const row of (pack.historical_maps||[]).filter(linked))add('maps',row,sources,prefix,'<p class="evidence-note">Catalogue record; no reproduction image bundled. '+escapeHtml(row.reproduction_status||row.copyright_reuse||'Check the item record for reproduction rights.')+'</p>');
+      for(const row of (pack.historical_maps||[]).filter(linked))add('maps',row,sources,prefix,'');
       for(const row of (pack.geographical_knowledge||[]).filter(linked))add('maps',row,sources,prefix);
       for(const row of (pack.relationships||[]).filter(linked))add('connections',row,sources,prefix);
       const linkedEvents=new Set((pack.events||[]).filter(linked).map(x=>x.id));
@@ -319,7 +319,7 @@
         const related=linked(row)||(row.event_ids||[row.event_a_id,row.event_b_id]).some(id=>linkedEvents.has(id));
         const start=row.display_year??row.start_year??row.date_a;
         const end=row.end_year_exclusive??(Number.isFinite(start)?start+1:null);
-        if(related||(Number.isFinite(start)&&Number.isFinite(end)&&start<=state.year&&state.year<end))add('meanwhile',row,sources,prefix,'<p class="evidence-note">Contemporaneity is a comparison, not evidence of contact.</p>');
+        if(related||(Number.isFinite(start)&&Number.isFinite(end)&&start<=state.year&&state.year<end))add('meanwhile',row,sources,prefix,'');
       }
     }
     // The master archive contributes people, cultural practices, geographical
@@ -339,7 +339,7 @@
       else if(raw.c==='connections')add('meanwhile',row,{},'', '');
     }
     const m=MAPS[c.mapId];
-    if(m){add('maps',{id:'display-map',title:m.title,dateLabel:m.date,kind:m.type,detail:m.description,source:m.page}, {},'', '<p class="evidence-note">Displayed cartographic example: '+escapeHtml(m.type)+'.</p>');}
+    if(m){add('maps',{id:'display-map',title:m.title,dateLabel:m.date,kind:m.type,detail:m.description,source:m.page}, {},'', '');}
     if(c.knownText)add('maps',{id:'known-world-overview',title:'Geographical knowledge overview',detail:c.knownText,kind:'Entity overview; illustrative contact points',source:c.source}, {},'', '');
     for(const group of ['events','people','maps','connections'])groups[group].sort((a,b)=>Math.abs((a.year??state.year)-state.year)-Math.abs((b.year??state.year)-state.year));
     groups.sources=[...sourceRows.values()];
