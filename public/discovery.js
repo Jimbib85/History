@@ -39,10 +39,10 @@
    const dateNote=r.start===null?'<p class="dated-note">Date unknown</p>':'';
    return '<article class="entry-card'+(compact?' compact':'')+'"><div class="entry-kicker"><span>'+esc(r.scope)+' research</span><span>'+esc(r.topic.replaceAll('_',' '))+'</span><span>'+esc(when)+'</span></div>'+
       '<h4>'+esc(r.title)+'</h4><p>'+esc(summary)+'</p>'+dateNote+
-      '<p class="confidence">Linked research: '+esc(places)+' · Confidence from source pack: '+esc(r.confidence)+' (not independently verified)</p>'+
+      ''+
       '<div class="record-actions">'+sourcesLink+storyLink+
       '<small>'+(first?esc(first.access.replaceAll('_',' ')):'No linked source URL in this excerpt. This remains a research lead.')+
-      (href&&r.start===null?' · Society link opens an overview, not a dated version of this record.':'')+'</small></div></article>';
+      ''+'</small></div></article>';
  }
  function syncURL(){
    const q=new URLSearchParams({journey:state.journey,step:String(state.step),year:String(state.year)});
@@ -61,7 +61,7 @@
    const journey=M.journey(state.journey),row=journey.steps[state.step];
    $('guideTitle').textContent=journey.title;
    $('guideNote').textContent=journey.note;
-   $('guideProgress').textContent='STOP '+(state.step+1)+' OF '+journey.steps.length+' · EDITORIAL READING ORDER';
+   $('guideProgress').textContent='STOP '+(state.step+1)+' OF '+journey.steps.length;
    $('guideStep').innerHTML=entry(row);
    $('prevStep').disabled=state.step===0;
    $('nextStep').disabled=state.step===journey.steps.length-1;
@@ -72,8 +72,8 @@
    document.querySelectorAll('[data-snapshot]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.snapshot)===state.year)));
    const rows=M.peers(state.year);
    $('snapshotSummary').textContent=rows.length?
-      'Research intervals include '+M.year(state.year)+'. Showing '+rows.length+' records from distinct societies where possible. Broad intervals do not prove each activity occurred in that exact year, and overlap is not evidence of contact.':
-      'No individually dated cultural-practice entries in this research index for '+M.year(state.year)+'. Undated records are not silently assigned to this year.';
+      rows.length+' stories around '+M.year(state.year)+'.':
+      'No stories found around '+M.year(state.year)+'.';
    $('snapshotCards').innerHTML=rows.length?rows.map(r=>entry(r,{compact:true})).join(''):
      '<div class="empty">No sourced comparison for this particular year. Try 200 CE, 1600 CE or 1800 CE, or follow one of the curated journeys instead.</div>';
  }
