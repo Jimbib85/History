@@ -42,7 +42,7 @@ assert.deepEqual([...compare.state.pinned],['abbasid','tang']);
 assert.equal(compare.state.focusPinned,true);
 assert.deepEqual(rows().sort(),['abbasid','tang'].sort(),'Focused ruler displays only pinned society tracks');
 assert.match(chart.innerHTML,/class="axis"/,'Pinned lanes retain shared date ruler');
-assert.match(nodes.get('pinSummary').textContent,/Recorded overlap:.*Contemporaneity/);
+assert.match(nodes.get('pinSummary').textContent,/Recorded overlap:.*750 CE.*907 CE/);
 assert.match(nodes.get('pinnedComparison').innerHTML,/data-unpin="tang"/);
 assert.match(String(written.at(-1)),/pins=abbasid%2Ctang/);
 assert.match(store.get('world-history-atlas-compare-pins-v1'),/tang/);
